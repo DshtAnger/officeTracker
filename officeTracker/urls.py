@@ -19,5 +19,6 @@ from server.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('office/<str:watermark>', index),
+    path('index/<str:watermark>', index),
+    path('notify/task/<str:task_id>/<str:file_watermark>', notify),
 ]
