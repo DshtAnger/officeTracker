@@ -23,8 +23,11 @@ def notify(request,file_watermark):
     if not os.path.exists(file_path):
         os.mkdir(file_path)
 
-    rsp = requests.get(download_url)
-    with open(file_path+file_name, 'wb') as f:
-        f.write(rsp.content)
+    try:
+        rsp = requests.get(download_url)
+        with open(file_path+file_name, 'wb') as f:
+            f.write(rsp.content)
+        return HttpResponse(f"download watermarked file finished.")
+    except:
+        return HttpResponse(f"download watermarked file failed.")
 
-    return HttpResponse(f"download watermarked file finished.")
