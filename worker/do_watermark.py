@@ -33,7 +33,7 @@ def handle_exception(exc_type, exc_value, exc_traceback):
     logging.info("--------------------Uncaught Exception--------------------",exc_info=(exc_type, exc_value, exc_traceback))
 sys.excepthook = handle_exception
 
-async def watermark(task_id,task_time,file_watermark,download_url):
+async def watermark(file_watermark,task_time,download_url):
 
     file_name = download_url.split('/')[-1]
 
@@ -76,15 +76,15 @@ async def watermark(task_id,task_time,file_watermark,download_url):
 
     proc = await asyncio.create_subprocess_shell(' '.join(Scribbles_args),stdout=asyncio.subprocess.PIPE,stderr=asyncio.subprocess.PIPE)
     stdout, stderr = await proc.communicate()
-    logging.info(f'[+][{get_current_time()}][{task_id}] program stdout : {stdout}')
+    logging.info(f'[+][{get_current_time()}][{file_watermark}] program stdout : {stdout}')
 
     redis_result_data = {'task_status': '1', 'task_time': task_time, 'failed_info': '', 'file_watermark': file_watermark, 'download_url': f'http://172.18.18.28:8080/{file_watermark}/{file_name}'}
-    await redis.hmset(task_id, redis_result_data)
-    logging.info(f'[+][{get_current_time()}][{task_id}] Done task : {redis_result_data}')
+    await redis.hmset(file_watermark, redis_result_data)
+    logging.info(f'[+][{get_current_time()}][{file_watermark}] Done task : {redis_result_data}')
 
     try:
-        rsp = await AsyncHTTPClient().fetch(f'http://{hostServerName}/notify/task/{task_id}/{file_watermark}')
-        logging.info(f'[+][{get_current_time()}][{task_id}] Server {rsp.body}')
+        rsp = await AsyncHTTPClient().fetch(f'http://{hostServerName}/notify/task/{file_watermark}')
+        logging.info(f'[+][{get_current_time()}][{file_watermark}] Server {rsp.body}')
     except:
         pass
 
@@ -101,14 +101,13 @@ async def run():
         data = await redis.lpop(QUEUE)
         data = json.loads(data.decode('utf-8'))
 
-        task_id = data.get('task_id')
         task_time = data.get('task_time')
         download_url = data.get('download_url')
         file_watermark = data.get('file_watermark')
 
         logging.info(f'[+][{get_current_time()}][{task_id}] Get task : {data}')
 
-        await watermark(task_id,task_time,file_watermark,download_url)
+        await watermark(file_watermark,task_time,download_url)
 
         #add_async_task(watermark,False,[task_id,task_time,file_watermark,download_url])
 

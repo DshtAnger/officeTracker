@@ -14,10 +14,9 @@ def index(request,file_watermark="123"):
 
     return HttpResponse(f"Hello, world. file_watermark: {file_watermark}")
 
-def notify(request,task_id,file_watermark):
+def notify(request,file_watermark):
 
-    file_watermark = redis.hget(task_id,file_watermark)
-    download_url = redis.hget(task_id, 'download_url')
+    download_url = redis.hget(file_watermark, 'download_url').decode('utf-8')
 
     file_name = download_url.split('/')[-1]
     file_path = f'/root/download/{file_watermark}/'
