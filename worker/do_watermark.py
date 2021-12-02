@@ -101,11 +101,11 @@ async def run():
         data = await redis.lpop(QUEUE)
         data = json.loads(data.decode('utf-8'))
 
+        file_watermark = data.get('file_watermark')
         task_time = data.get('task_time')
         download_url = data.get('download_url')
-        file_watermark = data.get('file_watermark')
 
-        logging.info(f'[+][{get_current_time()}][{task_id}] Get task : {data}')
+        logging.info(f'[+][{get_current_time()}][{file_watermark}] Get task : {data}')
 
         await watermark(file_watermark,task_time,download_url)
 
