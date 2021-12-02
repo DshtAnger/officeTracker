@@ -80,11 +80,11 @@ async def watermark(file_watermark,task_time,download_url):
 
     redis_result_data = {'task_status': '1', 'task_time': task_time, 'failed_info': '', 'file_watermark': file_watermark, 'download_url': f'http://172.18.18.28:8080/{file_watermark}/{file_name}'}
     await redis.hmset(file_watermark, redis_result_data)
-    logging.info(f'[+][{get_current_time()}][{file_watermark}] Done task : {redis_result_data}')
+    logging.info(f'[+][{get_current_time()}][{file_watermark}] Done task and return redis Hash data: {redis_result_data}')
 
     try:
         rsp = await AsyncHTTPClient().fetch(f'http://{hostServerName}/notify/task/{file_watermark}')
-        logging.info(f'[+][{get_current_time()}][{file_watermark}] Server {rsp.body}')
+        logging.info(f'[+][{get_current_time()}][{file_watermark}] Server {rsp.body.decode("utf-8")}')
     except:
         pass
 
