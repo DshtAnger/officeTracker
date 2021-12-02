@@ -16,7 +16,12 @@ def index(request,file_watermark="123"):
 
 def notify(request,file_watermark):
 
-    download_url = redis.hget(file_watermark, 'download_url').decode('utf-8')
+    download_url = redis.hget(file_watermark, 'download_url')
+
+    if download_url == None:
+        return HttpResponse(f"No task {file_watermark}")
+    else:
+        download_url = download_url.decode('utf-8')
 
     file_name = download_url.split('/')[-1]
     file_path = f'/root/download/{file_watermark}/'
