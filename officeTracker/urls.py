@@ -16,9 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from server.views import *
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('index/<str:file_watermark>', index),
+    path('', index),
+    path('index/', index),
     path('notify/task/<str:file_watermark>', notify),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

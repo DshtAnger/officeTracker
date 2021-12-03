@@ -1,0 +1,16 @@
+body{
+  background: url('../images/banner.jpg')repeat;
+  padding:0px 0px 100px 0px;
+  font-size: 100%;
+}
+
+#top{
+  margin: 0px 0px 0px 0px;
+  font-size: 10px;
+}
+
+#wrapper{    
+  margin-top:1.8rem;
+  margin-left:2rem;
+  margin-right:2rem;
+}

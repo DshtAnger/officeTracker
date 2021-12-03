@@ -1,0 +1,933 @@
+{% load static %}
+{% load myfilter %}
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Exam Page</title>
+    <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
+    <link rel="stylesheet" href="{% static 'css/semantic.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+
+</head>
+
+<body>
+    <div class="ui fixed inverted main menu" id="top">
+      <div class="fluid large ui black button" id='sid'>{{ student_id }}</div>
+      <div class="fluid large ui black button">Modern Cryptography TestSys</div>
+      <div class="fluid large ui black button">
+        <b>score:{{ score }}</b>
+      </div>
+    </div>
+
+    <div class="fluid black ui buttons">
+      <div class="ui button"></div>
+      <div class="ui button"></div>
+      <div class="ui button">
+        <b>your score:</b> 
+      </div>
+    </div>
+
+    <div class="ui segment" id="wrapper">
+        
+<!--
+                    Multiple choice I
+-->
+
+        <div class="ui compact segment">
+            <h2 class="ui purple header">
+            Multiple choice I
+            <div class="sub header">one answer is correct.2 points each.</div>
+            </h2>
+        </div>
+
+        <div class="ui blue segment">
+
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;">{{ Single1.stem }}</label>
+                    <br>
+                    {% for option in Single1.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            {% ifequal forloop.counter|toString post_answer.Single1 %}
+                            <input type="radio" name="Single1" value="{{ forloop.counter }}" checked="true">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% else %}
+                            <input type="radio" name="Single1" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% endifequal %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            
+            <div class="ui big buttons">
+                <div class="positive ui button">Correct answer:{{ correct_answer.Single1|toOption }}</div>            
+            </div>
+            
+            <div class="ui big buttons">
+                {% if got_score.Single1 %}
+                <div class="positive ui button">You got that.</div>
+                {% else %}
+                <div class="negative ui button">You lost that.</div>
+                {% endif %}
+            </div>
+            
+        </div>
+
+
+        <div class="ui orange segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;"><b>{{ Single2.stem }}</b></label>
+                    <br>
+                    {% for option in Single2.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            {% ifequal forloop.counter|toString post_answer.Single2 %}
+                            <input type="radio" name="Single2" value="{{ forloop.counter }}" checked="true">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% else %}
+                            <input type="radio" name="Single2" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% endifequal %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="ui big buttons">
+                <div class="positive ui button">Correct answer:{{ correct_answer.Single2|toOption }}</div>            
+            </div>
+            
+            <div class="ui big buttons">
+                {% if got_score.Single2 %}
+                <div class="positive ui button">You got that.</div>
+                {% else %}
+                <div class="negative ui button">You lost that.</div>
+                {% endif %}
+            </div>
+
+        </div>
+
+
+        <div class="ui green segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;"><b>{{ Single3.stem }}</b></label>
+                    <br>
+                    {% for option in Single3.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            {% ifequal forloop.counter|toString post_answer.Single3 %}
+                            <input type="radio" name="Single3" value="{{ forloop.counter }}" checked="true">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% else %}
+                            <input type="radio" name="Single3" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% endifequal %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="ui big buttons">
+                <div class="positive ui button">Correct answer:{{ correct_answer.Single3|toOption }}</div>            
+            </div>
+            
+            <div class="ui big buttons">
+                {% if got_score.Single3 %}
+                <div class="positive ui button">You got that.</div>
+                {% else %}
+                <div class="negative ui button">You lost that.</div>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <div class="ui red segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;"><b>{{ Single4.stem }}</b></label>
+                    <br>
+                    {% for option in Single4.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            {% ifequal forloop.counter|toString post_answer.Single4 %}
+                            <input type="radio" name="Single4" value="{{ forloop.counter }}" checked="true">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% else %}
+                            <input type="radio" name="Single4" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% endifequal %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="ui big buttons">
+                <div class="positive ui button">Correct answer:{{ correct_answer.Single4|toOption }}</div>            
+            </div>
+            
+            <div class="ui big buttons">
+                {% if got_score.Single4 %}
+                <div class="positive ui button">You got that.</div>
+                {% else %}
+                <div class="negative ui button">You lost that.</div>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <div class="ui purple segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;"><b>{{ Single5.stem }}</b></label>
+                    <br>
+                    {% for option in Single5.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            {% ifequal forloop.counter|toString post_answer.Single5 %}
+                            <input type="radio" name="Single5" value="{{ forloop.counter }}" checked="true">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% else %}
+                            <input type="radio" name="Single5" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% endifequal %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="ui big buttons">
+                <div class="positive ui button">Correct answer:{{ correct_answer.Single5|toOption }}</div>            
+            </div>
+            
+            <div class="ui big buttons">
+                {% if got_score.Single5 %}
+                <div class="positive ui button">You got that.</div>
+                {% else %}
+                <div class="negative ui button">You lost that.</div>
+                {% endif %}
+            </div>
+
+        </div>
+
+
+        <div class="ui teal segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;"><b>{{ Single6.stem }}</b></label>
+                    <br>
+                    {% for option in Single6.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            {% ifequal forloop.counter|toString post_answer.Single6 %}
+                            <input type="radio" name="Single6" value="{{ forloop.counter }}" checked="true">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% else %}
+                            <input type="radio" name="Single6" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% endifequal %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="ui big buttons">
+                <div class="positive ui button">Correct answer:{{ correct_answer.Single6|toOption }}</div>            
+            </div>
+            
+            <div class="ui big buttons">
+                {% if got_score.Single6 %}
+                <div class="positive ui button">You got that.</div>
+                {% else %}
+                <div class="negative ui button">You lost that.</div>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <div class="ui purple segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;"><b>{{ Single7.stem }}</b></label>
+                    <br>
+                    {% for option in Single7.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            {% ifequal forloop.counter|toString post_answer.Single7 %}
+                            <input type="radio" name="Single7" value="{{ forloop.counter }}" checked="true">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% else %}
+                            <input type="radio" name="Single7" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% endifequal %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="ui big buttons">
+                <div class="positive ui button">Correct answer:{{ correct_answer.Single7|toOption }}</div>            
+            </div>
+            
+            <div class="ui big buttons">
+                {% if got_score.Single7 %}
+                <div class="positive ui button">You got that.</div>
+                {% else %}
+                <div class="negative ui button">You lost that.</div>
+                {% endif %}
+            </div>
+
+        </div>
+
+
+        <div class="ui red segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;"><b>{{ Single8.stem }}</b></label>
+                    <br>
+                    {% for option in Single8.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            {% ifequal forloop.counter|toString post_answer.Single8 %}
+                            <input type="radio" name="Single8" value="{{ forloop.counter }}" checked="true">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% else %}
+                            <input type="radio" name="Single8" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% endifequal %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="ui big buttons">
+                <div class="positive ui button">Correct answer:{{ correct_answer.Single8|toOption }}</div>            
+            </div>
+            
+            <div class="ui big buttons">
+                {% if got_score.Single8 %}
+                <div class="positive ui button">You got that.</div>
+                {% else %}
+                <div class="negative ui button">You lost that.</div>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <div class="ui green segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;"><b>{{ Single9.stem }}</b></label>
+                    <br>
+                    {% for option in Single9.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            {% ifequal forloop.counter|toString post_answer.Single9 %}
+                            <input type="radio" name="Single9" value="{{ forloop.counter }}" checked="true">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% else %}
+                            <input type="radio" name="Single9" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% endifequal %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="ui big buttons">
+                <div class="positive ui button">Correct answer:{{ correct_answer.Single9|toOption }}</div>            
+            </div>
+            
+            <div class="ui big buttons">
+                {% if got_score.Single9 %}
+                <div class="positive ui button">You got that.</div>
+                {% else %}
+                <div class="negative ui button">You lost that.</div>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <div class="ui orange segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;"><b>{{ Single10.stem }}</b></label>
+                    <br>
+                    {% for option in Single10.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            {% ifequal forloop.counter|toString post_answer.Single10 %}
+                            <input type="radio" name="Single10" value="{{ forloop.counter }}" checked="true">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% else %}
+                            <input type="radio" name="Single10" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% endifequal %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="ui big buttons">
+                <div class="positive ui button">Correct answer:{{ correct_answer.Single10|toOption }}</div>            
+            </div>
+            
+            <div class="ui big buttons">
+                {% if got_score.Single10 %}
+                <div class="positive ui button">You got that.</div>
+                {% else %}
+                <div class="negative ui button">You lost that.</div>
+                {% endif %}
+            </div>
+
+        </div>
+
+<!--
+                    Multiple choice II
+-->
+
+        <div class="ui divider"></div>
+        <div class="ui compact segment">
+            <h2 class="ui purple header">
+            Multiple choice II
+            <div class="sub header">more than one answer is correct.4 points each.</div>
+            </h2>
+        </div>
+
+
+        <div class="ui blue segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;"><b>{{ Multiple1.stem }}</b></label>
+                    <br>
+                    {% for option in Multiple1.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            {% if forloop.counter|toString in post_answer.Multiple1 %}
+                            <input type="checkbox" name="Multiple1" value="{{ forloop.counter }}" checked="true">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% else %}
+                            <input type="checkbox" name="Multiple1" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="ui big buttons">
+                <div class="positive ui button">Correct answer:{{ correct_answer.Multiple1|toOption }}</div>            
+            </div>
+            
+            <div class="ui big buttons">
+                {% if got_score.Multiple1 %}
+                <div class="positive ui button">You got that.</div>
+                {% else %}
+                <div class="negative ui button">You lost that.</div>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <div class="ui orange segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;"><b>{{ Multiple2.stem }}</b></label>
+                    <br>
+                    {% for option in Multiple2.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            {% if forloop.counter|toString in post_answer.Multiple2 %}
+                            <input type="checkbox" name="Multiple2" value="{{ forloop.counter }}" checked="true">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% else %}
+                            <input type="checkbox" name="Multiple2" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="ui big buttons">
+                <div class="positive ui button">Correct answer:{{ correct_answer.Multiple2|toOption }}</div>            
+            </div>
+            
+            <div class="ui big buttons">
+                {% if got_score.Multiple2 %}
+                <div class="positive ui button">You got that.</div>
+                {% else %}
+                <div class="negative ui button">You lost that.</div>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <div class="ui green segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;"><b>{{ Multiple3.stem }}</b></label>
+                    <br>
+                    {% for option in Multiple3.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            {% if forloop.counter|toString in post_answer.Multiple3 %}
+                            <input type="checkbox" name="Multiple3" value="{{ forloop.counter }}" checked="true">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% else %}
+                            <input type="checkbox" name="Multiple3" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="ui big buttons">
+                <div class="positive ui button">Correct answer:{{ correct_answer.Multiple3|toOption }}</div>            
+            </div>
+            
+            <div class="ui big buttons">
+                {% if got_score.Multiple3 %}
+                <div class="positive ui button">You got that.</div>
+                {% else %}
+                <div class="negative ui button">You lost that.</div>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <div class="ui red segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;"><b>{{ Multiple4.stem }}</b></label>
+                    <br>
+                    {% for option in Multiple4.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            {% if forloop.counter|toString in post_answer.Multiple4 %}
+                            <input type="checkbox" name="Multiple4" value="{{ forloop.counter }}" checked="true">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% else %}
+                            <input type="checkbox" name="Multiple4" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="ui big buttons">
+                <div class="positive ui button">Correct answer:{{ correct_answer.Multiple4|toOption }}</div>            
+            </div>
+            
+            <div class="ui big buttons">
+                {% if got_score.Multiple4 %}
+                <div class="positive ui button">You got that.</div>
+                {% else %}
+                <div class="negative ui button">You lost that.</div>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <div class="ui purple segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;"><b>{{ Multiple5.stem }}</b></label>
+                    <br>
+                    {% for option in Multiple5.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            {% if forloop.counter|toString in post_answer.Multiple5 %}
+                            <input type="checkbox" name="Multiple5" value="{{ forloop.counter }}" checked="true">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% else %}
+                            <input type="checkbox" name="Multiple5" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="ui big buttons">
+                <div class="positive ui button">Correct answer:{{ correct_answer.Multiple5|toOption }}</div>            
+            </div>
+            
+            <div class="ui big buttons">
+                {% if got_score.Multiple5 %}
+                <div class="positive ui button">You got that.</div>
+                {% else %}
+                <div class="negative ui button">You lost that.</div>
+                {% endif %}
+            </div>
+
+        </div>
+
+
+<!--
+                    True or false
+-->
+
+        <div class="ui divider"></div>
+        <div class="ui compact segment">
+            <h2 class="ui purple header">
+            True or false
+            <div class="sub header">one answer is correct.3 points each.</div>
+            </h2>
+        </div>
+
+        <div class="ui teal segment">
+
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;">{{ True1.stem }}</label>
+                    <br>
+                    {% for option in True1.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            {% if forloop.counter|toString in post_answer.True1 %}
+                            <input type="radio" name="True1" value="{{ forloop.counter }}" checked="true">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% else %}
+                            <input type="radio" name="True1" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="ui big buttons">
+                <div class="positive ui button">Correct answer:{{ correct_answer.True1|toOption }}</div>            
+            </div>
+            
+            <div class="ui big buttons">
+                {% if got_score.True1 %}
+                <div class="positive ui button">You got that.</div>
+                {% else %}
+                <div class="negative ui button">You lost that.</div>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <div class="ui purple segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;">{{ True2.stem }}</label>
+                    <br>
+                    {% for option in True2.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            {% if forloop.counter|toString in post_answer.True2 %}
+                            <input type="radio" name="True2" value="{{ forloop.counter }}" checked="true">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% else %}
+                            <input type="radio" name="True2" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="ui big buttons">
+                <div class="positive ui button">Correct answer:{{ correct_answer.True2|toOption }}</div>            
+            </div>
+            
+            <div class="ui big buttons">
+                {% if got_score.True2 %}
+                <div class="positive ui button">You got that.</div>
+                {% else %}
+                <div class="negative ui button">You lost that.</div>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <div class="ui red segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;">{{ True3.stem }}</label>
+                    <br>
+                    {% for option in True3.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            {% if forloop.counter|toString in post_answer.True3 %}
+                            <input type="radio" name="True3" value="{{ forloop.counter }}" checked="true">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% else %}
+                            <input type="radio" name="True3" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="ui big buttons">
+                <div class="positive ui button">Correct answer:{{ correct_answer.True3|toOption }}</div>            
+            </div>
+            
+            <div class="ui big buttons">
+                {% if got_score.True3 %}
+                <div class="positive ui button">You got that.</div>
+                {% else %}
+                <div class="negative ui button">You lost that.</div>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <div class="ui green segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;">{{ True4.stem }}</label>
+                    <br>
+                    {% for option in True4.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            {% if forloop.counter|toString in post_answer.True4 %}
+                            <input type="radio" name="True4" value="{{ forloop.counter }}" checked="true">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% else %}
+                            <input type="radio" name="True4" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="ui big buttons">
+                <div class="positive ui button">Correct answer:{{ correct_answer.True4|toOption }}</div>            
+            </div>
+            
+            <div class="ui big buttons">
+                {% if got_score.True4 %}
+                <div class="positive ui button">You got that.</div>
+                {% else %}
+                <div class="negative ui button">You lost that.</div>
+                {% endif %}
+            </div>
+
+        </div>
+
+
+<!--
+                    Fill in the blanks
+-->
+
+
+        <div class="ui divider"></div>
+        <div class="ui compact segment">
+            <h2 class="ui purple header">
+            Fill in the blanks
+            <div class="sub header">Please fill in the blank with the correct answer.4 points each.</div>
+            </h2>
+        </div>
+
+        <div class="ui orange segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;">{{ Fill1.stem }}</label>
+                    <br>
+                    <div class="field">
+                        <textarea id="Fill1">{{ post_answer.Fill1 }}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui big buttons">
+                <div class="positive ui button">Correct answer:{{ correct_answer.Fill1 }}</div>            
+            </div>
+            
+            <div class="ui big buttons">
+                {% if got_score.Fill1 %}
+                <div class="positive ui button">You got that.</div>
+                {% else %}
+                <div class="negative ui button">You lost that.</div>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <div class="ui blue segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;">{{ Fill2.stem }}</label>
+                    <br>
+                    <div class="field">
+                        <textarea id="Fill2">{{ post_answer.Fill2 }}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui big buttons">
+                <div class="positive ui button">Correct answer:{{ correct_answer.Fill2 }}</div>            
+            </div>
+            
+            <div class="ui big buttons">
+                {% if got_score.Fill2 %}
+                <div class="positive ui button">You got that.</div>
+                {% else %}
+                <div class="negative ui button">You lost that.</div>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <div class="ui teal segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;">{{ Fill3.stem }}</label>
+                    <br>
+                    <div class="field">
+                        <textarea id="Fill3">{{ post_answer.Fill3 }}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui big buttons">
+                <div class="positive ui button">Correct answer:{{ correct_answer.Fill3 }}</div>            
+            </div>
+            
+            <div class="ui big buttons">
+                {% if got_score.Fill3 %}
+                <div class="positive ui button">You got that.</div>
+                {% else %}
+                <div class="negative ui button">You lost that.</div>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <div class="ui green segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;">{{ Fill4.stem }}</label>
+                    <br>
+                    <div class="field">
+                        <textarea id="Fill4">{{ post_answer.Fill4 }}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui big buttons">
+                <div class="positive ui button">Correct answer:{{ correct_answer.Fill4 }}</div>            
+            </div>
+            
+            <div class="ui big buttons">
+                {% if got_score.Fill4 %}
+                <div class="positive ui button">You got that.</div>
+                {% else %}
+                <div class="negative ui button">You lost that.</div>
+                {% endif %}
+            </div>
+
+        </div>
+
+<!--
+                    Program question
+-->
+
+        <div class="ui divider"></div>
+        <div class="ui compact segment">
+            <h2 class="ui purple header">
+            Program question
+            <div class="sub header">You need solve the problem by programming and fill in the blank with the correct answer.16 points each.</div>
+            </h2>
+        </div>
+
+        <div class="ui blue segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;">{{ Program1.stem }}</label>
+                    <br>
+                    <div class="field">
+                        <textarea id="Program1">{{ post_answer.Program1 }}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui big buttons">
+                <div class="positive ui button">Correct answer:{{ correct_answer.Program1 }}</div>            
+            </div>
+            
+            <div class="ui big buttons">
+                {% if got_score.Program1 %}
+                <div class="positive ui button">You got that.</div>
+                {% else %}
+                <div class="negative ui button">You lost that.</div>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <div class="ui purple segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;">{{ Program2.stem }}</label>
+                    <br>
+                    <div class="field">
+                        <textarea id="Program2">{{ post_answer.Program2 }}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui big buttons">
+                <div class="positive ui button">Correct answer:{{ correct_answer.Program2 }}</div>            
+            </div>
+            
+            <div class="ui big buttons">
+                {% if got_score.Program2 %}
+                <div class="positive ui button">You got that.</div>
+                {% else %}
+                <div class="negative ui button">You lost that.</div>
+                {% endif %}
+            </div>
+
+        </div>
+
+    </div>
+
+<script>
+
+function stop()
+{
+return false;
+};
+
+document.oncontextmenu=stop;
+
+</script>
+
+
+</body>
+</html>

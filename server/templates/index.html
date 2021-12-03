@@ -1,0 +1,684 @@
+{% load static %}
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Exam Page</title>
+    <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
+    <link rel="stylesheet" href="{% static 'css/semantic.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+
+</head>
+
+<body>
+    <div class="ui fixed inverted main menu" id="top">
+      <div class="fluid large ui black button" id='sid'>{{ student_id }}</div>
+      <div class="fluid large ui black button">Modern Cryptography TestSys</div>
+      <div class="fluid large ui black button">
+        <b>Left time:</b>
+        <b id="mss"></b>
+      </div>
+    </div>
+
+    <div class="fluid black ui buttons">
+      <div class="ui button"></div>
+      <div class="ui button"></div>
+      <div class="ui button">
+        <b>Left time:</b> 
+      </div>
+    </div>
+
+    <div class="ui segment" id="wrapper">
+        
+<!--
+                    Multiple choice I
+-->
+
+        <div class="ui compact segment">
+            <h2 class="ui purple header">
+            Multiple choice I
+            <div class="sub header">one answer is correct.2 points each.</div>
+            </h2>
+        </div>
+
+        <div class="ui blue segment">
+
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;">{{ Single1.stem }}</label>
+                    <br>
+                    {% for option in Single1.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            <input type="radio" name="Single1" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+
+        <div class="ui orange segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;"><b>{{ Single2.stem }}</b></label>
+                    <br>
+                    {% for option in Single2.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            <input type="radio" name="Single2" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="ui green segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;"><b>{{ Single3.stem }}</b></label>
+                    <br>
+                    {% for option in Single3.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            <input type="radio" name="Single3" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="ui red segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;"><b>{{ Single4.stem }}</b></label>
+                    <br>
+                    {% for option in Single4.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            <input type="radio" name="Single4" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="ui purple segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;"><b>{{ Single5.stem }}</b></label>
+                    <br>
+                    {% for option in Single5.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            <input type="radio" name="Single5" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="ui teal segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;"><b>{{ Single6.stem }}</b></label>
+                    <br>
+                    {% for option in Single6.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            <input type="radio" name="Single6" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="ui purple segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;"><b>{{ Single7.stem }}</b></label>
+                    <br>
+                    {% for option in Single7.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            <input type="radio" name="Single7" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="ui red segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;"><b>{{ Single8.stem }}</b></label>
+                    <br>
+                    {% for option in Single8.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            <input type="radio" name="Single8" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="ui green segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;"><b>{{ Single9.stem }}</b></label>
+                    <br>
+                    {% for option in Single9.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            <input type="radio" name="Single9" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="ui orange segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;"><b>{{ Single10.stem }}</b></label>
+                    <br>
+                    {% for option in Single10.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            <input type="radio" name="Single10" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+<!--
+                    Multiple choice II
+-->
+
+        <div class="ui divider"></div>
+        <div class="ui compact segment">
+            <h2 class="ui purple header">
+            Multiple choice II
+            <div class="sub header">more than one answer is correct.4 points each.</div>
+            </h2>
+        </div>
+
+
+        <div class="ui blue segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;"><b>{{ Multiple1.stem }}</b></label>
+                    <br>
+                    {% for option in Multiple1.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                          <input type="checkbox" name="Multiple1" value="{{ forloop.counter }}">
+                          <label style="font-size:17px;">{{ option }}</label>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="ui orange segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;"><b>{{ Multiple2.stem }}</b></label>
+                    <br>
+                    {% for option in Multiple2.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                          <input type="checkbox" name="Multiple2" value="{{ forloop.counter }}">
+                          <label style="font-size:17px;">{{ option }}</label>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="ui green segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;"><b>{{ Multiple3.stem }}</b></label>
+                    <br>
+                    {% for option in Multiple3.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                          <input type="checkbox" name="Multiple3" value="{{ forloop.counter }}">
+                          <label style="font-size:17px;">{{ option }}</label>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="ui red segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;"><b>{{ Multiple4.stem }}</b></label>
+                    <br>
+                    {% for option in Multiple4.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                          <input type="checkbox" name="Multiple4" value="{{ forloop.counter }}">
+                          <label style="font-size:17px;">{{ option }}</label>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="ui purple segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;"><b>{{ Multiple5.stem }}</b></label>
+                    <br>
+                    {% for option in Multiple5.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                          <input type="checkbox" name="Multiple5" value="{{ forloop.counter }}">
+                          <label style="font-size:17px;">{{ option }}</label>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+
+<!--
+                    True or false
+-->
+
+        <div class="ui divider"></div>
+        <div class="ui compact segment">
+            <h2 class="ui purple header">
+            True or false
+            <div class="sub header">one answer is correct.3 points each.</div>
+            </h2>
+        </div>
+
+        <div class="ui teal segment">
+
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;">{{ True1.stem }}</label>
+                    <br>
+                    {% for option in True1.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            <input type="radio" name="True1" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="ui purple segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;">{{ True2.stem }}</label>
+                    <br>
+                    {% for option in True2.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            <input type="radio" name="True2" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="ui red segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;">{{ True3.stem }}</label>
+                    <br>
+                    {% for option in True3.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            <input type="radio" name="True3" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="ui green segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;">{{ True4.stem }}</label>
+                    <br>
+                    {% for option in True4.options %}
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            <input type="radio" name="True4" value="{{ forloop.counter }}">
+                            <label style="font-size:17px;">{{ option }}</label>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+
+<!--
+                    Fill in the blanks
+-->
+
+
+        <div class="ui divider"></div>
+        <div class="ui compact segment">
+            <h2 class="ui purple header">
+            Fill in the blanks
+            <div class="sub header">Please fill in the blank with the correct answer.4 points each.</div>
+            </h2>
+        </div>
+
+        <div class="ui orange segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;">{{ Fill1.stem }}</label>
+                    <br>
+                    <div class="field">
+                        <textarea id="Fill1"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui blue segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;">{{ Fill2.stem }}</label>
+                    <br>
+                    <div class="field">
+                        <textarea id="Fill2"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui teal segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;">{{ Fill3.stem }}</label>
+                    <br>
+                    <div class="field">
+                        <textarea id="Fill3"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui green segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;">{{ Fill4.stem }}</label>
+                    <br>
+                    <div class="field">
+                        <textarea id="Fill4"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<!--
+                    Program question
+-->
+
+        <div class="ui divider"></div>
+        <div class="ui compact segment">
+            <h2 class="ui purple header">
+            Program question
+            <div class="sub header">You need solve the problem by programming and fill in the blank with the correct answer.16 points each.</div>
+            </h2>
+        </div>
+
+        <div class="ui blue segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;">{{ Program1.stem }}</label>
+                    <br>
+                    <div class="field">
+                        <textarea id="Program1"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui purple segment">
+            <div class="ui form">
+                <div class="grouped fields">
+                    <label style="font-size:19px;">{{ Program2.stem }}</label>
+                    <br>
+                    <div class="field">
+                        <textarea id="Program2"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+<!--
+                    Submit button
+-->
+
+        <div class="ui center aligned segment">
+            <div class="ui massive buttons">
+                <div class="positive ui button" id="post_all" onclick="var if_confirm = confirm('Please confirm whether to submit the examination paper?');if(if_confirm) submit_paper();">Submit</div>                    
+            </div>
+        </div>
+
+
+
+    </div>
+
+<script>
+
+function stop()
+{
+return false;
+};
+
+document.oncontextmenu=stop;
+
+function sleep(numberMillis)
+{ 
+    var now = new Date(); 
+    var exitTime = now.getTime() + numberMillis; 
+    while (true) 
+    {
+        now = new Date();
+        if (now.getTime() > exitTime)
+            return; 
+    }
+};
+
+function get_Single(checkbox_name) {
+    var value  = $('input[name='+'"'+checkbox_name+'"]'+':checked').val();
+    return value?value:'';
+};
+
+function get_Multiple(checkbox_name) {
+
+    var obj = document.getElementsByName(checkbox_name);
+        var s = ''; 
+        for(var i=0 ; i<obj.length ; i++)
+        { 
+            if(obj[i].checked)
+                s += obj[i].value+',';
+        }
+        return s.substring(0,s.length-1);
+    
+};
+
+function get_Fills(checkbox_id) {
+    var inner_content = document.getElementById(checkbox_id).value;
+    return inner_content;
+};
+
+function submit_paper()
+{
+    var student_id = document.getElementById('sid').innerHTML;    
+    var da = {'student_id':student_id,
+                'Single1':get_Single('Single1'),
+                'Single2':get_Single('Single2'),
+                'Single3':get_Single('Single3'),
+                'Single4':get_Single('Single4'),
+                'Single5':get_Single('Single5'),
+                'Single6':get_Single('Single6'),
+                'Single7':get_Single('Single7'),
+                'Single8':get_Single('Single8'),
+                'Single9':get_Single('Single9'),
+                'Single10':get_Single('Single10'),
+                'Multiple1':get_Multiple('Multiple1'),
+                'Multiple2':get_Multiple('Multiple2'),
+                'Multiple3':get_Multiple('Multiple3'),
+                'Multiple4':get_Multiple('Multiple4'),
+                'Multiple5':get_Multiple('Multiple5'),
+                'True1':get_Single('True1'),
+                'True2':get_Single('True2'),
+                'True3':get_Single('True3'),
+                'True4':get_Single('True4'),
+                'Fill1':get_Fills('Fill1'),
+                'Fill2':get_Fills('Fill2'),
+                'Fill3':get_Fills('Fill3'),
+                'Fill4':get_Fills('Fill4'),
+                'Program1':get_Fills('Program1'),
+                'Program2':get_Fills('Program2'),
+                }
+    var url = '/result/'
+    $.ajax({
+        type: 'POST',
+        data:da,
+        url: url,
+        success: ShowScore,
+        dataType: 'html',
+        async: false
+    });
+
+    /*$.post("/result/",{'student_id':student_id,
+                    'Single1':get_Single('Single1'),
+                    'Single2':get_Single('Single2'),
+                    'Single3':get_Single('Single3'),
+                    'Single4':get_Single('Single4'),
+                    'Single5':get_Single('Single5'),
+                    'Single6':get_Single('Single6'),
+                    'Single7':get_Single('Single7'),
+                    'Single8':get_Single('Single8'),
+                    'Single9':get_Single('Single9'),
+                    'Single10':get_Single('Single10'),
+                    'Multiple1':get_Multiple('Multiple1'),
+                    'Multiple2':get_Multiple('Multiple2'),
+                    'Multiple3':get_Multiple('Multiple3'),
+                    'Multiple4':get_Multiple('Multiple4'),
+                    'Multiple5':get_Multiple('Multiple5'),
+                    'True1':get_Single('True1'),
+                    'True2':get_Single('True2'),
+                    'True3':get_Single('True3'),
+                    'True4':get_Single('True4'),
+                    'Fill1':get_Fills('Fill1'),
+                    'Fill2':get_Fills('Fill2'),
+                    'Fill3':get_Fills('Fill3'),
+                    'Fill4':get_Fills('Fill4'),
+                    'Program1':get_Fills('Program1'),
+                    'Program2':get_Fills('Program2'),
+                    }
+        );
+    sleep(2000);
+    window.location = '/score/';
+    */
+};
+
+function ShowScore()
+{
+    //sleep(1000);
+    window.location = '/score/';
+};
+
+</script>
+
+
+<script type="text/JavaScript">
+window.onload=function()
+{
+    daojishi();
+}
+
+
+function daojishi()
+{
+    var endtime = "{{ stop_exam_time }}";
+    //var endtime = "06-29-2016 00:46:00"
+    var startimer = new Date().getTime();
+    var endtimer = new Date(endtime).getTime();
+    var counttime = Math.round((endtimer - startimer)/1000);//总秒钟
+
+    if(counttime>0)
+    {
+        var ms = counttime%60;//余数 89%60==29秒
+        var mis = Math.floor(counttime/60);//分钟
+        if(mis>=60)
+        {
+            var hour=Math.floor(mis/60);
+            mis=Math.floor((counttime-hour*60*60)/60);
+            document.getElementById("mss").innerHTML=hour+"h "+mis+"min "+ms+"s";
+        }
+        else if(mis>=1)
+        {
+            document.getElementById("mss").innerHTML=mis+"min "+ms+"s"; 
+        }
+        else
+        {
+            document.getElementById("mss").innerHTML=ms+"s"; 
+        }
+
+        counttime--;
+        vartt =  window.setTimeout("daojishi()",1000);
+    }
+    else{
+        window.clearTimeout(vartt);
+        submit_paper();
+      
+   }   
+};
+
+</script>
+
+
+
+</body>
+</html>

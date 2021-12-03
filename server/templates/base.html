@@ -1,0 +1,81 @@
+{% load staticfiles %}
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{{ behaviour }}</title>
+    <link rel="icon" type="image/png" href="{% static "images/favicon.png" %}">
+    <link rel="stylesheet" href="{% static 'css/semantic.css' %}">
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/sha256.jquery.js' %}"></script>
+
+    <!-- 
+    <script src="http://cdn.hcharts.cn/jquery/jquery-1.8.3.min.js"></script>
+    <script src="{% static 'js/semantic.js' %}"></script>
+    <script src="{% static 'js/semantic.min.js' %}"></script>
+    -->
+<script>
+
+function stop(){
+return false;
+}
+
+document.oncontextmenu=stop;
+
+function checkForm() 
+{
+    var input_pwd = document.getElementById('input-password');
+    var sha256_pwd = document.getElementById('sha256-password');
+    var student_id = document.getElementById('student_id');
+    if (input_pwd.value.length>20)
+    {
+        alert('password is too long!');
+        return false;
+    }
+    else
+    {   salt = $.sha256(student_id.value).substring(18,38);
+        sha256_pwd.value = $.sha256((input_pwd.value)+salt);
+        return true;
+    }
+}
+
+</script>
+    
+</head>
+<body>
+
+<div class="logo">
+    <img class="ui medium centered image" src="{% static 'images/logo.png' %}">
+</div>
+
+<div class="login">
+    <h2>Modern Cryptography TestSys</h2>
+
+    <div class="login-top">
+        <h1>{{ behaviour }}</h1>
+        <form action="" method="post" onsubmit="return checkForm()">
+            <input type="text" id="student_id" name='student_id' placeholder="Student ID" onfocus="this.value = '';">
+            <input type="password" id="input-password" placeholder="password" onfocus="this.value = '';">
+            <input type="hidden" id="sha256-password" name="password">
+            <input type="submit" value="Submit">
+        </form>
+        <!--
+        onblur="if (this.value == '') {this.value = 'Student ID';}"
+        onblur="if (this.value == '') {this.value = 'password';}"
+        -->
+    </div>
+
+    <div class="login-bottom">
+        <h3>
+        {% if points_info %}
+            {% for item in points_info %}
+               <p>{{ item }}</p>
+            {% endfor %}
+        {% endif %}
+        </h3>
+    </div>
+
+</div>
+
+</body>
+</html>
