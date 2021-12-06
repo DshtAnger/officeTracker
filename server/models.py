@@ -42,13 +42,3 @@ class Track(models.Model):
     access_time = models.CharField(max_length=32)
     def __unicode__(self):
         return self.file_watermark
-
-
-class Problems(models.Model):
-    stem_type = models.CharField(max_length=30)
-    difficulty_degree = models.CharField(max_length=2)
-    stem = models.CharField(max_length=3000,verbose_name='stem')
-    options = models.CharField(max_length=1000,blank=True)
-    answer = models.CharField(max_length=1000)
-    def __unicode__(self):
-        return self.stem
