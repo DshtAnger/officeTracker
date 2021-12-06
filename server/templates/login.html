@@ -2,10 +2,12 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <meta name="theme-color" content="#000000" />
     <title>{{ behaviour }}</title>
     <link rel="icon" type="image/png" href="{% static "images/favicon.png" %}">
     <link rel="stylesheet" href="{% static 'css/semantic.css' %}">
     <link rel="stylesheet" href="{% static 'css/register.css' %}">
+
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/sha256.jquery.js' %}"></script>
 
@@ -16,11 +18,10 @@
     -->
 <script>
 
-function stop(){
+/*function stop(){
 return false;
 }
-
-document.oncontextmenu=stop;
+document.oncontextmenu=stop;*/
 
 function checkForm() 
 {
@@ -49,14 +50,15 @@ function checkForm()
 </div>
 
 <div class="login">
-    <h2>Modern Cryptography TestSys</h2>
+    <h2 class="top-text">文档溯源系统</h2>
 
     <div class="login-top">
         <h1>{{ behaviour }}</h1>
         <form action="" method="post" onsubmit="return checkForm()">
-            <input type="text" id="student_id" name='student_id' placeholder="Student ID" onfocus="this.value = '';">
-            <input type="password" id="input-password" placeholder="password" onfocus="this.value = '';">
-            <input type="hidden" id="sha256-password" name="password">
+            {% csrf_token %}
+            <input type="text" id="student_id" name='user_id' placeholder="RTX id" onfocus="this.value = '';">
+            <input type="password" id="input-password" placeholder="Password" onfocus="this.value = '';">
+            <input type="hidden"   id="sha256-password" name="user_passwd">
             <input type="submit" value="Submit">
         </form>
         <!--

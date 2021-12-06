@@ -36,14 +36,16 @@ img{max-width:100%;}
   }
 
 body{
-   background: url('../images/banner.jpg')repeat;
+   #background: url('../images/banner.jpg')repeat;
    padding:20px 0px 30px 0px;
    font-family: 'Roboto', sans-serif;
    font-size: 100%;
 }
 
 .logo {
-  margin: 10px 0px 25px 0px;
+  #margin: 10px 0px 25px 0px;
+  margin: 3rem 0 0 -3rem;
+  width: 100%;
 }
 
 .login {
@@ -52,13 +54,14 @@ body{
 }
 .login h2 {
   font-size: 30px;
-  font-weight: 700;
-  color: #fff;
+  font-weight: 600;
+  color: #0f0f10;
   text-align: center;
-  margin: 10px 0px 40px 0px;
+  margin: 2rem 0 0 -2rem;
   font-family: 'Droid Serif', serif;
 }
 .login-top {
+  margin: 3em;
   background: #E1E1E1;
   border-radius: 25px 25px 0px 0px;
   padding: 30px 50px;
@@ -132,14 +135,15 @@ body{
 }
 
 .login-bottom {
+  margin: -3em 3em 3em 3em;
   background: #E15748;
   padding: 30px 65px;
   border-radius: 0px 0px 25px 25px;
-  -webkit-border-radius:  0px 0px 25px 25px;
-  -moz-border-radius: 0px 0px 25px 25px;
-  -o-border-radius: 0px 0px 25px 25px;
-  text-align: left;
-  border-top: 2px solid #AD4337;
+  /*-webkit-border-radius:  0px 0px 25px 25px;*/
+  /*-moz-border-radius: 0px 0px 25px 25px;*/
+  /*-o-border-radius: 0px 0px 25px 25px;*/
+  /*text-align: left;*/
+  /*border-top: 2px solid #AD4337;*/
 }
 
 .login-bottom h3 {
@@ -175,146 +179,148 @@ body{
 /*--meadia quiries start here--*/
 
 
-@media(max-width:1440px){
-.login {
-  width: 35%;
-}
-}
-@media(max-width:1366px){
-.login {
-  width: 37%;
-}
-}
-@media(max-width:1280px){
-.login {
-  width: 40%;
-}
-}
-@media(max-width:1024px){
-.login {
-  width: 48%;
-}
-.copyright {
-  padding: 100px 0px 0px 0px;
-}
-}
-@media(max-width:768px){
-.login {
-  width: 65%;
-}
-.login-top h1 {
-  font-size: 25px;
-}
-.login-bottom h3 a {
-  font-size: 22px;
-}
-.copyright {
-  padding: 250px 0px 0px 0px;
-}
-body {
-  padding: 100px 0px 0px 0px;
-}
-.login h2 {
-  font-size: 28px;
-}
-}
-@media(max-width:640px){
-.login-top h1 {
-  font-size: 23px;
-}
-.forgot input[type="submit"] {
-  font-size: 15px;
-  width: 22%;
-}
-.login-top input[type="text"] {
-  padding: 12px 20px;
-}
-.login-top input[type="password"] {
-  padding: 12px 20px;
-}
-.login-bottom h3 a {
-  font-size: 19px;
-}
-.login-bottom h3 {
-  font-size: 13px;
-}
-.copyright {
-  padding: 110px 0px 0px 0px;
-}
-body {
-  padding: 110px 0px 0px 0px;
-}
-}
-@media(max-width:480px){
-.login {
-  width: 80%;
-}
-.login-top h1 {
-  font-size: 21px;
-}
-.login-top input[type="text"] {
-  width: 85%;
-}
-.login-top {
-  padding: 30px 40px;
-}
-.login-top input[type="password"] {
-  width: 85%;
-}
-.login h2 {
-  font-size: 25px;
-}
-}
-@media(max-width:320px){
-.login {
-  width: 90%;
-}
-.login-top {
-  padding: 20px 25px;
-}
-.login-top input[type="text"] {
-  width: 81%;
-  padding: 10px 20px;
-  font-size: 13px;
-  margin: 0px 0px 7px 0px;
-}
-.login-top input[type="password"] {
-  width: 81%;
-  padding: 10px 20px;
-  font-size: 13px;
-  margin: 0px 0px 7px 0px;
-}
-.forgot input[type="submit"] {
-  font-size: 11px;
-  width: 25%;
-  padding: 6px 7px;
-}
-.forgot  a {
-  font-size: 11px;
-}
-.login-bottom {
-  padding: 20px 25px;
-}
-.login-bottom h3 {
-  font-size: 11px;
-}
-.login-bottom h3 a {
-  font-size: 17px;
-}
-body {
-  padding: 50px 0px 0px 0px;
-}
-.copyright p {
-  font-size: 13px;
-}
-.copyright p a{
-  font-size: 13px;
-}
-.login h2 {
-  font-size: 23px;
-  margin:0px 0px 35px 0px;
-}
-.copyright {
-  padding: 75px 0px 0px 0px;
-}
-}
+
+
+/*@media(max-width:1440px){*/
+/*.login {*/
+/*  width: 35%;*/
+/*}*/
+/*}*/
+/*@media(max-width:1366px){*/
+/*.login {*/
+/*  width: 37%;*/
+/*}*/
+/*}*/
+/*@media(max-width:1280px){*/
+/*.login {*/
+/*  width: 40%;*/
+/*}*/
+/*}*/
+/*@media(max-width:1024px){*/
+/*.login {*/
+/*  width: 48%;*/
+/*}*/
+/*.copyright {*/
+/*  padding: 100px 0px 0px 0px;*/
+/*}*/
+/*}*/
+/*@media(max-width:768px){*/
+/*.login {*/
+/*  width: 65%;*/
+/*}*/
+/*.login-top h1 {*/
+/*  font-size: 25px;*/
+/*}*/
+/*.login-bottom h3 a {*/
+/*  font-size: 22px;*/
+/*}*/
+/*.copyright {*/
+/*  padding: 250px 0px 0px 0px;*/
+/*}*/
+/*body {*/
+/*  padding: 100px 0px 0px 0px;*/
+/*}*/
+/*.login h2 {*/
+/*  font-size: 28px;*/
+/*}*/
+/*}*/
+/*@media(max-width:640px){*/
+/*.login-top h1 {*/
+/*  font-size: 23px;*/
+/*}*/
+/*.forgot input[type="submit"] {*/
+/*  font-size: 15px;*/
+/*  width: 22%;*/
+/*}*/
+/*.login-top input[type="text"] {*/
+/*  padding: 12px 20px;*/
+/*}*/
+/*.login-top input[type="password"] {*/
+/*  padding: 12px 20px;*/
+/*}*/
+/*.login-bottom h3 a {*/
+/*  font-size: 19px;*/
+/*}*/
+/*.login-bottom h3 {*/
+/*  font-size: 13px;*/
+/*}*/
+/*.copyright {*/
+/*  padding: 110px 0px 0px 0px;*/
+/*}*/
+/*body {*/
+/*  padding: 110px 0px 0px 0px;*/
+/*}*/
+/*}*/
+/*@media(max-width:480px){*/
+/*.login {*/
+/*  width: 80%;*/
+/*}*/
+/*.login-top h1 {*/
+/*  font-size: 21px;*/
+/*}*/
+/*.login-top input[type="text"] {*/
+/*  width: 85%;*/
+/*}*/
+/*.login-top {*/
+/*  padding: 30px 40px;*/
+/*}*/
+/*.login-top input[type="password"] {*/
+/*  width: 85%;*/
+/*}*/
+/*.login h2 {*/
+/*  font-size: 25px;*/
+/*}*/
+/*}*/
+/*@media(max-width:320px){*/
+/*.login {*/
+/*  width: 90%;*/
+/*}*/
+/*.login-top {*/
+/*  padding: 20px 25px;*/
+/*}*/
+/*.login-top input[type="text"] {*/
+/*  width: 81%;*/
+/*  padding: 10px 20px;*/
+/*  font-size: 13px;*/
+/*  margin: 0px 0px 7px 0px;*/
+/*}*/
+/*.login-top input[type="password"] {*/
+/*  width: 81%;*/
+/*  padding: 10px 20px;*/
+/*  font-size: 13px;*/
+/*  margin: 0px 0px 7px 0px;*/
+/*}*/
+/*.forgot input[type="submit"] {*/
+/*  font-size: 11px;*/
+/*  width: 25%;*/
+/*  padding: 6px 7px;*/
+/*}*/
+/*.forgot  a {*/
+/*  font-size: 11px;*/
+/*}*/
+/*.login-bottom {*/
+/*  padding: 20px 25px;*/
+/*}*/
+/*.login-bottom h3 {*/
+/*  font-size: 11px;*/
+/*}*/
+/*.login-bottom h3 a {*/
+/*  font-size: 17px;*/
+/*}*/
+/*body {*/
+/*  padding: 50px 0px 0px 0px;*/
+/*}*/
+/*.copyright p {*/
+/*  font-size: 13px;*/
+/*}*/
+/*.copyright p a{*/
+/*  font-size: 13px;*/
+/*}*/
+/*.login h2 {*/
+/*  font-size: 23px;*/
+/*  margin:0px 0px 35px 0px;*/
+/*}*/
+/*.copyright {*/
+/*  padding: 75px 0px 0px 0px;*/
+/*}*/
+/*}*/
