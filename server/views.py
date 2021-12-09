@@ -271,7 +271,7 @@ def track(request,file_watermark):
     access_ip = request.META['REMOTE_ADDR']
     access_time = timezone.now()
 
-    if not access_time in work_server:
+    if not access_ip in work_server:
         Track.objects.create(file_watermark=file_watermark,access_ip=access_ip,access_time=access_time)
 
     return HttpResponse('')
