@@ -2,10 +2,11 @@ from django.shortcuts import render
 
 # Create your views here.
 
-from django.http import HttpResponse,HttpResponseRedirect
+from django.http import HttpResponse,HttpResponseRedirect,FileResponse
 from django.utils import timezone
 from django_redis import get_redis_connection
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
 from django import forms
 from server.models import *
 import requests
@@ -205,6 +206,18 @@ def upload(request):
         return HttpResponseRedirect('/login')
 
 
+def download(request,file_watermark,file_name):
+    if request.session.get("is_login", None):
+
+        file_path = f'{settings.BASE_DIR}/download/{file_watermark}/{file_name}'
+
+        file = open(file_path,'rb')
+        response = FileResponse(file)
+        response['Content-Type'] = 'application/octet-stream'
+        response['Content-Disposition'] = f'attachment;filename="{file_name}"'
+
+        return response
+
 
 def notify(request,file_watermark):
 
@@ -216,7 +229,7 @@ def notify(request,file_watermark):
         download_url = download_url.decode('utf-8')
 
     file_name = download_url.split('/')[-1]
-    file_path = f'/root/download/{file_watermark}/'
+    file_path = f'{settings.BASE_DIR}/download/{file_watermark}/'
 
     try:
         rsp = requests.get(download_url)

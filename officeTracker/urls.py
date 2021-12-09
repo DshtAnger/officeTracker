@@ -25,8 +25,9 @@ urlpatterns = [
     path('login/', login),
     path('index/', index),
     path('upload/',upload),
+    path('download/<str:file_watermark>',download),
     path('logout/',logout),
-    path('notify/task/<str:file_watermark>', notify),
+    path('notify/task/<str:file_watermark>/<str:file_name>', notify),
     path('track/<str:file_watermark>', track),
 ]
 
