@@ -188,6 +188,8 @@ def upload(request):
 
             for file in files:
 
+                print('file_name :',file.name)
+
                 file_hash = cala_file_hash(file)
                 upload_time = timezone.now()
                 file_watermark = cala_watermark(file_hash,upload_ip,timezone_to_string(upload_time),randbytes(8))
