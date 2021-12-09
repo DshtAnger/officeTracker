@@ -264,11 +264,14 @@ def notify(request,file_watermark):
     except:
         return HttpResponse(f"download watermarked file {file_name} failed.")
 
+work_server = ['119.29.129.79']
+
 def track(request,file_watermark):
 
     access_ip = request.META['REMOTE_ADDR']
     access_time = timezone.now()
 
-    Track.objects.create(file_watermark=file_watermark,access_ip=access_ip,access_time=access_time)
+    if not access_time in work_server:
+        Track.objects.create(file_watermark=file_watermark,access_ip=access_ip,access_time=access_time)
 
     return HttpResponse('')
