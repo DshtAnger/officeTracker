@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django import forms
 from server.models import *
 import requests
+import json
 import hashlib
 import random
 import time
@@ -193,7 +194,7 @@ def upload(request):
 
                 #向redis下发任务
                 task_data = {'file_watermark': file_watermark, 'task_time': timezone_to_string(upload_time), 'download_url':f'http://172.18.18.18:8080/{file.name}' }
-                redis.lpush('watermark_task1',task_data)
+                redis.lpush('watermark_task1',json.dumps(task_data))
 
                 result.append(f'{file.name} uploaded successfully.')
 
