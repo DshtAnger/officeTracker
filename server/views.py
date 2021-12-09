@@ -157,7 +157,7 @@ def index(request):
                     'file_hash': one_obj.file_hash,
                     'upload_time': timezone_to_string(one_obj.upload_time),
                     'upload_ip': one_obj.upload_ip,
-                    'download_path': one_obj.download_path,
+                    'file_watermark': one_obj.file_watermark,
                     'track': track_obj_data
                 }
             )
