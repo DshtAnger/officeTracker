@@ -195,8 +195,9 @@ def upload(request):
                                     file=file, upload_ip=upload_ip, upload_time=upload_time, file_watermark=file_watermark)
 
                 #向redis下发任务
+                taks_index = random.randint(0,9)
                 task_data = {'file_watermark': file_watermark, 'task_time': timezone_to_string(upload_time), 'download_url':f'http://172.18.18.18:8080/{file.name}' }
-                redis.lpush('watermark_task1',json.dumps(task_data))
+                redis.lpush(f'watermark_task{taks_index}',json.dumps(task_data))
 
                 result.append(f'{file.name} uploaded successfully.')
 
