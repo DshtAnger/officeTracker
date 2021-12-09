@@ -2,6 +2,7 @@
 
 mkdir ./upload
 mkdir ./download
+mkdir ./move
 
 sh ./install_requirements.sh
 
@@ -13,6 +14,7 @@ python3 ./manage.py migrate
 chmod 755 -R ../
 chown www-data:www-data -R ./upload/
 chown www-data:www-data -R ./download/
+chown www-data:www-data -R ./move/
 
 a2dissite officeTracker
 service apache2 reload

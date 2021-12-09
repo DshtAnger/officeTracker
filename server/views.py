@@ -15,6 +15,7 @@ import hashlib
 import random
 import time
 import os
+import shutil
 
 redis = get_redis_connection()
 VALID_CHARS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -246,6 +247,10 @@ def notify(request,file_watermark):
             file_obj = File.objects.get(file_watermark=file_watermark)
             file_obj.download_path = file_path + file_name
             file_obj.save()
+
+            move_file = f'{settings.BASE_DIR}/upload/{file_name}'
+
+            shutil.move(move_file, f'{settings.BASE_DIR}/move/')
 
             return HttpResponse(f"download watermarked file {file_name} finished.")
 
