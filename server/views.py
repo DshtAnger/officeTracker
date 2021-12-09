@@ -160,10 +160,6 @@ def index(request):
                 }
             )
 
-        a = File.objects.get(file_watermark='e0c46d91610cd90251d934aa441d089fc4db9fa8c8a7012c56f85cfd8fcf9b87')
-        print(a)
-
-
         context['user_id'] = user_id
 
         return render(request, "index.html", context)
