@@ -298,7 +298,7 @@
                                 {% if one_data.download_path %}
                                 <button class="ui inverted basic button">
                                     <img src="{% static 'images/download.png' %}" alt="download">
-                                    <a href="/download/{{ one_data.download_path }}/{{ one_data.file_name }}"></a>
+                                    <a href="/download/{{ one_data.file_watermark }}/{{ one_data.file_name }}"></a>
                                 </button>
                                 {% else %}
                                 <button class="ui inverted basic loading button">加载</button>
