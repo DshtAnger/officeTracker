@@ -25,7 +25,7 @@ class File(models.Model):
     upload_ip = models.CharField(max_length=32)
     upload_time = models.DateTimeField()
 
-    download_path = models.CharField(max_length=32)
+    download_path = models.CharField(max_length=1024)
     file_watermark = models.CharField(max_length=64)
 
     def __unicode__(self):
