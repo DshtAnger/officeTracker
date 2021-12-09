@@ -66,15 +66,19 @@ body{
   border-radius: 25px 25px 0px 0px;
   padding: 30px 50px;
 }
-.login-top h1 {
-  text-align: center;
-  font-size: 27px;
-  font-weight: 500;
-  color: #F45B4B;
-  margin: 0px 0px 20px 0px;
-}
+
+/*.login-top h1 {*/
+/*  text-align: center;*/
+/*  font-size: 27px;*/
+/*  font-weight: 500;*/
+/*  color: #F45B4B;*/
+/*  #margin: 0px 0px 20px 0px;*/
+/*  margin: 3em;*/
+/*}*/
+
+
 .login-top input[type="text"] {
-    outline: none;
+  outline: none;
   font-size: 15px;
   font-weight: 500;
   color: #818181;
@@ -90,7 +94,7 @@ body{
   -webkit-appearance: none;
 }
 .login-top input[type="password"]{
-    outline: none;
+  outline: none;
   font-size: 15px;
   font-weight: 500;
   color: #818181;
@@ -137,7 +141,7 @@ body{
 .login-bottom {
   margin: -3em 3em 3em 3em;
   background: #E15748;
-  padding: 30px 65px;
+  padding: 20px 0px;
   border-radius: 0px 0px 25px 25px;
   /*-webkit-border-radius:  0px 0px 25px 25px;*/
   /*-moz-border-radius: 0px 0px 25px 25px;*/
@@ -147,6 +151,7 @@ body{
 }
 
 .login-bottom h3 {
+  text-align: center;
   font-size: 15px;
   font-weight: 600;
   color: #fff;

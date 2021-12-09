@@ -1,0 +1,42 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ajax upload</title>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+</head>
+<body>
+
+<h1>jQuery+jQuery Manner ajax Upload submit</h1>
+<!--   Include necessary parameters for uploading files enctyoe -->
+{% csrf_token %}
+         <input id="Upfile" type="file"  multiple="multiple" >
+         <a id="FileSub">Submission</a>
+
+<script>
+    $("#FileSub").click(function() {
+
+        var f_obj = $("#Upfile")[0].files[0]; // get the upload file information
+        console.log("File object:",f_obj);
+        console.log("The file name is:",f_obj.name);
+        console.log("The file size is:",f_obj.size);
+
+        var data = new FormData();                                      //Create formdata objects to facilitate file transfer to the back end
+        data.append("file",f_obj)                                        //To add (encapsulate) a file object to a formdata object
+
+        $.ajax({
+            url:'/upload/',
+            type:'POST',
+            data:data,
+            cache: false,                                               //Upload files without caching
+            processData:false,                                          //Do not serialize data
+            contentType:false,                                          //No special connection type defined
+            success:function (arg) {
+                alert("The file has been uploaded successfully. Click OK to refresh the page");
+                location.reload();
+                                    }
+            })
+        });
+</script>
+</body>
+</html>

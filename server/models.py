@@ -1,4 +1,5 @@
 from django.db import models
+from django.forms import ModelForm
 
 # Create your models here.
 
@@ -16,10 +17,10 @@ class File(models.Model):
     file_size = models.CharField(max_length=9) #上传时要检测size不大于200M=209715200字节
     file_hash = models.CharField(max_length=64)
 
-    file_data = models.CharField(max_length=32)
+    file = models.FileField(upload_to='./upload')
 
     upload_ip = models.CharField(max_length=32)
-    upload_time = models.CharField(max_length=32)
+    upload_time = models.DateTimeField()
 
     download_path = models.CharField(max_length=32)
     file_watermark = models.CharField(max_length=64)
@@ -28,17 +29,15 @@ class File(models.Model):
         return self.file_watermark
 
 class Task(models.Model):
-    user_id = models.CharField(max_length=32)
     file_watermark = models.CharField(max_length=64)
-    task_time = models.CharField(max_length=32)
+    task_time = models.DateTimeField()
     taks_status = models.CharField(max_length=1)
     def __unicode__(self):
         return self.file_watermark
 
 class Track(models.Model):
-    user_id = models.CharField(max_length=32)
     file_watermark = models.CharField(max_length=64)
     access_ip = models.CharField(max_length=32)
-    access_time = models.CharField(max_length=32)
+    access_time = models.DateTimeField()
     def __unicode__(self):
         return self.file_watermark

@@ -21,9 +21,13 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', index),
+    path('', login),
+    path('login/', login),
     path('index/', index),
+    path('upload/',upload),
+    path('logout/',logout),
     path('notify/task/<str:file_watermark>', notify),
+    path('track/<str:file_watermark>', track),
 ]
 
 if settings.DEBUG:

@@ -12,673 +12,322 @@
 
 <body>
     <div class="ui fixed inverted main menu" id="top">
-      <div class="fluid large ui black button" id='sid'>{{ student_id }}</div>
-      <div class="fluid large ui black button">Modern Cryptography TestSys</div>
-      <div class="fluid large ui black button">
-        <b>Left time:</b>
-        <b id="mss"></b>
-      </div>
+      <div class="fluid large ui black button" id='sid'>{{ user_id }}</div>
+      <div class="fluid large ui black button">文档溯源系统</div>
+      <div class="fluid large ui black button" onclick="window.location.href='/logout'">Logout</div>
     </div>
 
     <div class="fluid black ui buttons">
       <div class="ui button"></div>
       <div class="ui button"></div>
       <div class="ui button">
-        <b>Left time:</b> 
+        <b>文档溯源系统</b>
       </div>
     </div>
 
     <div class="ui segment" id="wrapper">
-        
-<!--
-                    Multiple choice I
--->
 
-        <div class="ui compact segment">
-            <h2 class="ui purple header">
-            Multiple choice I
-            <div class="sub header">one answer is correct.2 points each.</div>
-            </h2>
-        </div>
 
-        <div class="ui blue segment">
+        <input type="file" id="upload_file" style='display:none' multiple="multiple"/>
 
-            <div class="ui form">
-                <div class="grouped fields">
-                    <label style="font-size:19px;">{{ Single1.stem }}</label>
-                    <br>
-                    {% for option in Single1.options %}
-                    <div class="field">
-                        <div class="ui toggle checkbox">
-                            <input type="radio" name="Single1" value="{{ forloop.counter }}">
-                            <label style="font-size:17px;">{{ option }}</label>
-                        </div>
-                    </div>
-                    {% endfor %}
+
+        <div class="ui compact segment" style="margin:auto;">
+
+
+{#            <form enctype="multipart/form-data" name="upload_form" action="/upload/" method="post">#}
+{#             {% csrf_token %}#}
+{#             <input type="file" name="upload_file" accept=".jpg, .jpeg, .png" onchange="document.forms['upload_form'].submit();"/>#}
+{#            </form>#}
+
+
+            <div id="container">
+
+                <h3 style="text-align:center;margin: 15px;color: rgb(143, 143, 143);">Drag File Here</h3>
+
+                <div id="drop-zone" style="text-align:center;">
+
+                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"  style="margin: 5em;">
+                        <path class="icon-path" d="M2.09375 19.5H6.25C6.57656 19.5 6.84375 19.2328 6.84375 18.9062V5.84375H19.9062C20.2328 5.84375 20.5 5.57656 20.5 5.25V1.09375C20.5 0.767188 20.2328 0.5 19.9062 0.5H6.54688C3.75625 0.5 1.5 2.75625 1.5 5.54688V18.9062C1.5 19.2328 1.76719 19.5 2.09375 19.5ZM40.0938 5.84375H53.1562V18.9062C53.1562 19.2328 53.4234 19.5 53.75 19.5H57.9062C58.2328 19.5 58.5 19.2328 58.5 18.9062V5.54688C58.5 2.75625 56.2438 0.5 53.4531 0.5H40.0938C39.7672 0.5 39.5 0.767188 39.5 1.09375V5.25C39.5 5.57656 39.7672 5.84375 40.0938 5.84375ZM19.9062 52.1562H6.84375V39.0938C6.84375 38.7672 6.57656 38.5 6.25 38.5H2.09375C1.76719 38.5 1.5 38.7672 1.5 39.0938V52.4531C1.5 55.2438 3.75625 57.5 6.54688 57.5H19.9062C20.2328 57.5 20.5 57.2328 20.5 56.9062V52.75C20.5 52.4234 20.2328 52.1562 19.9062 52.1562ZM57.9062 38.5H53.75C53.4234 38.5 53.1562 38.7672 53.1562 39.0938V52.1562H40.0938C39.7672 52.1562 39.5 52.4234 39.5 52.75V56.9062C39.5 57.2328 39.7672 57.5 40.0938 57.5H53.4531C56.2438 57.5 58.5 55.2438 58.5 52.4531V39.0938C58.5 38.7672 58.2328 38.5 57.9062 38.5ZM59.0938 26.3281H0.90625C0.579688 26.3281 0.3125 26.5953 0.3125 26.9219V31.0781C0.3125 31.4047 0.579688 31.6719 0.90625 31.6719H59.0938C59.4203 31.6719 59.6875 31.4047 59.6875 31.0781V26.9219C59.6875 26.5953 59.4203 26.3281 59.0938 26.3281Z" fill="#F0F0F0"></path>
+                    </svg>
+
                 </div>
-            </div>
-        </div>
 
+{#                <div id="content">#}
+{#                    Your image to appear here..#}
+{#                </div>#}
 
-        <div class="ui orange segment">
-            <div class="ui form">
-                <div class="grouped fields">
-                    <label style="font-size:19px;"><b>{{ Single2.stem }}</b></label>
-                    <br>
-                    {% for option in Single2.options %}
-                    <div class="field">
-                        <div class="ui toggle checkbox">
-                            <input type="radio" name="Single2" value="{{ forloop.counter }}">
-                            <label style="font-size:17px;">{{ option }}</label>
-                        </div>
-                    </div>
-                    {% endfor %}
+                <div style="text-align:center;margin: 2em 0px -2em 0px">
+{#                    <button class="ui primary button">#}
+{#                        <span>Upload Files</span>#}
+{#                    </button>#}
+                    <button class="upload_button" onclick="document.getElementById('upload_file').click();">Upload Files</button>
+
                 </div>
+
+                <div id="feedback" style="padding: 15px;"></div>
+
+{#                <label id="progress-label" for="progress"></label>#}
+{#                <progress id="progress" value="0" max="100"></progress>#}
+
             </div>
-        </div>
 
-        <div class="ui green segment">
-            <div class="ui form">
-                <div class="grouped fields">
-                    <label style="font-size:19px;"><b>{{ Single3.stem }}</b></label>
-                    <br>
-                    {% for option in Single3.options %}
-                    <div class="field">
-                        <div class="ui toggle checkbox">
-                            <input type="radio" name="Single3" value="{{ forloop.counter }}">
-                            <label style="font-size:17px;">{{ option }}</label>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-
-        <div class="ui red segment">
-            <div class="ui form">
-                <div class="grouped fields">
-                    <label style="font-size:19px;"><b>{{ Single4.stem }}</b></label>
-                    <br>
-                    {% for option in Single4.options %}
-                    <div class="field">
-                        <div class="ui toggle checkbox">
-                            <input type="radio" name="Single4" value="{{ forloop.counter }}">
-                            <label style="font-size:17px;">{{ option }}</label>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-
-        <div class="ui purple segment">
-            <div class="ui form">
-                <div class="grouped fields">
-                    <label style="font-size:19px;"><b>{{ Single5.stem }}</b></label>
-                    <br>
-                    {% for option in Single5.options %}
-                    <div class="field">
-                        <div class="ui toggle checkbox">
-                            <input type="radio" name="Single5" value="{{ forloop.counter }}">
-                            <label style="font-size:17px;">{{ option }}</label>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-
-        <div class="ui teal segment">
-            <div class="ui form">
-                <div class="grouped fields">
-                    <label style="font-size:19px;"><b>{{ Single6.stem }}</b></label>
-                    <br>
-                    {% for option in Single6.options %}
-                    <div class="field">
-                        <div class="ui toggle checkbox">
-                            <input type="radio" name="Single6" value="{{ forloop.counter }}">
-                            <label style="font-size:17px;">{{ option }}</label>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-
-        <div class="ui purple segment">
-            <div class="ui form">
-                <div class="grouped fields">
-                    <label style="font-size:19px;"><b>{{ Single7.stem }}</b></label>
-                    <br>
-                    {% for option in Single7.options %}
-                    <div class="field">
-                        <div class="ui toggle checkbox">
-                            <input type="radio" name="Single7" value="{{ forloop.counter }}">
-                            <label style="font-size:17px;">{{ option }}</label>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-
-        <div class="ui red segment">
-            <div class="ui form">
-                <div class="grouped fields">
-                    <label style="font-size:19px;"><b>{{ Single8.stem }}</b></label>
-                    <br>
-                    {% for option in Single8.options %}
-                    <div class="field">
-                        <div class="ui toggle checkbox">
-                            <input type="radio" name="Single8" value="{{ forloop.counter }}">
-                            <label style="font-size:17px;">{{ option }}</label>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-
-        <div class="ui green segment">
-            <div class="ui form">
-                <div class="grouped fields">
-                    <label style="font-size:19px;"><b>{{ Single9.stem }}</b></label>
-                    <br>
-                    {% for option in Single9.options %}
-                    <div class="field">
-                        <div class="ui toggle checkbox">
-                            <input type="radio" name="Single9" value="{{ forloop.counter }}">
-                            <label style="font-size:17px;">{{ option }}</label>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-
-        <div class="ui orange segment">
-            <div class="ui form">
-                <div class="grouped fields">
-                    <label style="font-size:19px;"><b>{{ Single10.stem }}</b></label>
-                    <br>
-                    {% for option in Single10.options %}
-                    <div class="field">
-                        <div class="ui toggle checkbox">
-                            <input type="radio" name="Single10" value="{{ forloop.counter }}">
-                            <label style="font-size:17px;">{{ option }}</label>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-
-<!--
-                    Multiple choice II
--->
-
-        <div class="ui divider"></div>
-        <div class="ui compact segment">
-            <h2 class="ui purple header">
-            Multiple choice II
-            <div class="sub header">more than one answer is correct.4 points each.</div>
-            </h2>
-        </div>
-
-
-        <div class="ui blue segment">
-            <div class="ui form">
-                <div class="grouped fields">
-                    <label style="font-size:19px;"><b>{{ Multiple1.stem }}</b></label>
-                    <br>
-                    {% for option in Multiple1.options %}
-                    <div class="field">
-                        <div class="ui toggle checkbox">
-                          <input type="checkbox" name="Multiple1" value="{{ forloop.counter }}">
-                          <label style="font-size:17px;">{{ option }}</label>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-
-        <div class="ui orange segment">
-            <div class="ui form">
-                <div class="grouped fields">
-                    <label style="font-size:19px;"><b>{{ Multiple2.stem }}</b></label>
-                    <br>
-                    {% for option in Multiple2.options %}
-                    <div class="field">
-                        <div class="ui toggle checkbox">
-                          <input type="checkbox" name="Multiple2" value="{{ forloop.counter }}">
-                          <label style="font-size:17px;">{{ option }}</label>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-
-        <div class="ui green segment">
-            <div class="ui form">
-                <div class="grouped fields">
-                    <label style="font-size:19px;"><b>{{ Multiple3.stem }}</b></label>
-                    <br>
-                    {% for option in Multiple3.options %}
-                    <div class="field">
-                        <div class="ui toggle checkbox">
-                          <input type="checkbox" name="Multiple3" value="{{ forloop.counter }}">
-                          <label style="font-size:17px;">{{ option }}</label>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-
-        <div class="ui red segment">
-            <div class="ui form">
-                <div class="grouped fields">
-                    <label style="font-size:19px;"><b>{{ Multiple4.stem }}</b></label>
-                    <br>
-                    {% for option in Multiple4.options %}
-                    <div class="field">
-                        <div class="ui toggle checkbox">
-                          <input type="checkbox" name="Multiple4" value="{{ forloop.counter }}">
-                          <label style="font-size:17px;">{{ option }}</label>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-
-        <div class="ui purple segment">
-            <div class="ui form">
-                <div class="grouped fields">
-                    <label style="font-size:19px;"><b>{{ Multiple5.stem }}</b></label>
-                    <br>
-                    {% for option in Multiple5.options %}
-                    <div class="field">
-                        <div class="ui toggle checkbox">
-                          <input type="checkbox" name="Multiple5" value="{{ forloop.counter }}">
-                          <label style="font-size:17px;">{{ option }}</label>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-
-
-<!--
-                    True or false
--->
-
-        <div class="ui divider"></div>
-        <div class="ui compact segment">
-            <h2 class="ui purple header">
-            True or false
-            <div class="sub header">one answer is correct.3 points each.</div>
-            </h2>
-        </div>
-
-        <div class="ui teal segment">
-
-            <div class="ui form">
-                <div class="grouped fields">
-                    <label style="font-size:19px;">{{ True1.stem }}</label>
-                    <br>
-                    {% for option in True1.options %}
-                    <div class="field">
-                        <div class="ui toggle checkbox">
-                            <input type="radio" name="True1" value="{{ forloop.counter }}">
-                            <label style="font-size:17px;">{{ option }}</label>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-
-        <div class="ui purple segment">
-            <div class="ui form">
-                <div class="grouped fields">
-                    <label style="font-size:19px;">{{ True2.stem }}</label>
-                    <br>
-                    {% for option in True2.options %}
-                    <div class="field">
-                        <div class="ui toggle checkbox">
-                            <input type="radio" name="True2" value="{{ forloop.counter }}">
-                            <label style="font-size:17px;">{{ option }}</label>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-
-        <div class="ui red segment">
-            <div class="ui form">
-                <div class="grouped fields">
-                    <label style="font-size:19px;">{{ True3.stem }}</label>
-                    <br>
-                    {% for option in True3.options %}
-                    <div class="field">
-                        <div class="ui toggle checkbox">
-                            <input type="radio" name="True3" value="{{ forloop.counter }}">
-                            <label style="font-size:17px;">{{ option }}</label>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-
-        <div class="ui green segment">
-            <div class="ui form">
-                <div class="grouped fields">
-                    <label style="font-size:19px;">{{ True4.stem }}</label>
-                    <br>
-                    {% for option in True4.options %}
-                    <div class="field">
-                        <div class="ui toggle checkbox">
-                            <input type="radio" name="True4" value="{{ forloop.counter }}">
-                            <label style="font-size:17px;">{{ option }}</label>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-
-
-<!--
-                    Fill in the blanks
--->
-
-
-        <div class="ui divider"></div>
-        <div class="ui compact segment">
-            <h2 class="ui purple header">
-            Fill in the blanks
-            <div class="sub header">Please fill in the blank with the correct answer.4 points each.</div>
-            </h2>
-        </div>
-
-        <div class="ui orange segment">
-            <div class="ui form">
-                <div class="grouped fields">
-                    <label style="font-size:19px;">{{ Fill1.stem }}</label>
-                    <br>
-                    <div class="field">
-                        <textarea id="Fill1"></textarea>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="ui blue segment">
-            <div class="ui form">
-                <div class="grouped fields">
-                    <label style="font-size:19px;">{{ Fill2.stem }}</label>
-                    <br>
-                    <div class="field">
-                        <textarea id="Fill2"></textarea>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="ui teal segment">
-            <div class="ui form">
-                <div class="grouped fields">
-                    <label style="font-size:19px;">{{ Fill3.stem }}</label>
-                    <br>
-                    <div class="field">
-                        <textarea id="Fill3"></textarea>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="ui green segment">
-            <div class="ui form">
-                <div class="grouped fields">
-                    <label style="font-size:19px;">{{ Fill4.stem }}</label>
-                    <br>
-                    <div class="field">
-                        <textarea id="Fill4"></textarea>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-<!--
-                    Program question
--->
-
-        <div class="ui divider"></div>
-        <div class="ui compact segment">
-            <h2 class="ui purple header">
-            Program question
-            <div class="sub header">You need solve the problem by programming and fill in the blank with the correct answer.16 points each.</div>
-            </h2>
-        </div>
-
-        <div class="ui blue segment">
-            <div class="ui form">
-                <div class="grouped fields">
-                    <label style="font-size:19px;">{{ Program1.stem }}</label>
-                    <br>
-                    <div class="field">
-                        <textarea id="Program1"></textarea>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="ui purple segment">
-            <div class="ui form">
-                <div class="grouped fields">
-                    <label style="font-size:19px;">{{ Program2.stem }}</label>
-                    <br>
-                    <div class="field">
-                        <textarea id="Program2"></textarea>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-<!--
-                    Submit button
--->
-
-        <div class="ui center aligned segment">
-            <div class="ui massive buttons">
-                <div class="positive ui button" id="post_all" onclick="var if_confirm = confirm('Please confirm whether to submit the examination paper?');if(if_confirm) submit_paper();">Submit</div>                    
-            </div>
-        </div>
-
-
-
-    </div>
-
-<script>
-
-function stop()
-{
-return false;
-};
-
-document.oncontextmenu=stop;
-
-function sleep(numberMillis)
-{ 
-    var now = new Date(); 
-    var exitTime = now.getTime() + numberMillis; 
-    while (true) 
-    {
-        now = new Date();
-        if (now.getTime() > exitTime)
-            return; 
-    }
-};
-
-function get_Single(checkbox_name) {
-    var value  = $('input[name='+'"'+checkbox_name+'"]'+':checked').val();
-    return value?value:'';
-};
-
-function get_Multiple(checkbox_name) {
-
-    var obj = document.getElementsByName(checkbox_name);
-        var s = ''; 
-        for(var i=0 ; i<obj.length ; i++)
-        { 
-            if(obj[i].checked)
-                s += obj[i].value+',';
-        }
-        return s.substring(0,s.length-1);
-    
-};
-
-function get_Fills(checkbox_id) {
-    var inner_content = document.getElementById(checkbox_id).value;
-    return inner_content;
-};
-
-function submit_paper()
-{
-    var student_id = document.getElementById('sid').innerHTML;    
-    var da = {'student_id':student_id,
-                'Single1':get_Single('Single1'),
-                'Single2':get_Single('Single2'),
-                'Single3':get_Single('Single3'),
-                'Single4':get_Single('Single4'),
-                'Single5':get_Single('Single5'),
-                'Single6':get_Single('Single6'),
-                'Single7':get_Single('Single7'),
-                'Single8':get_Single('Single8'),
-                'Single9':get_Single('Single9'),
-                'Single10':get_Single('Single10'),
-                'Multiple1':get_Multiple('Multiple1'),
-                'Multiple2':get_Multiple('Multiple2'),
-                'Multiple3':get_Multiple('Multiple3'),
-                'Multiple4':get_Multiple('Multiple4'),
-                'Multiple5':get_Multiple('Multiple5'),
-                'True1':get_Single('True1'),
-                'True2':get_Single('True2'),
-                'True3':get_Single('True3'),
-                'True4':get_Single('True4'),
-                'Fill1':get_Fills('Fill1'),
-                'Fill2':get_Fills('Fill2'),
-                'Fill3':get_Fills('Fill3'),
-                'Fill4':get_Fills('Fill4'),
-                'Program1':get_Fills('Program1'),
-                'Program2':get_Fills('Program2'),
+            <style>
+                div#container {
+                  margin: 15px;
                 }
-    var url = '/result/'
-    $.ajax({
-        type: 'POST',
-        data:da,
-        url: url,
-        success: ShowScore,
-        dataType: 'html',
-        async: false
-    });
 
-    /*$.post("/result/",{'student_id':student_id,
-                    'Single1':get_Single('Single1'),
-                    'Single2':get_Single('Single2'),
-                    'Single3':get_Single('Single3'),
-                    'Single4':get_Single('Single4'),
-                    'Single5':get_Single('Single5'),
-                    'Single6':get_Single('Single6'),
-                    'Single7':get_Single('Single7'),
-                    'Single8':get_Single('Single8'),
-                    'Single9':get_Single('Single9'),
-                    'Single10':get_Single('Single10'),
-                    'Multiple1':get_Multiple('Multiple1'),
-                    'Multiple2':get_Multiple('Multiple2'),
-                    'Multiple3':get_Multiple('Multiple3'),
-                    'Multiple4':get_Multiple('Multiple4'),
-                    'Multiple5':get_Multiple('Multiple5'),
-                    'True1':get_Single('True1'),
-                    'True2':get_Single('True2'),
-                    'True3':get_Single('True3'),
-                    'True4':get_Single('True4'),
-                    'Fill1':get_Fills('Fill1'),
-                    'Fill2':get_Fills('Fill2'),
-                    'Fill3':get_Fills('Fill3'),
-                    'Fill4':get_Fills('Fill4'),
-                    'Program1':get_Fills('Program1'),
-                    'Program2':get_Fills('Program2'),
+                div#drop-zone {
+                  height: 200px;
+                  width: 600px;
+                  border: 2px dotted #ebebeb;
+                }
+
+                div#drop-zone:hover {
+                  background-color: rgba(143, 143, 143, 0.1);
+                  border: 1px dotted #000000;
+                  cursor: move;
+                }
+
+                div#content {
+
+                  border: 1px solid #FFF;
+                  margin-top: 15px;
+                  padding: 10px;
+                }
+
+
+                .upload_button {
+                    width: 178px;
+                    height: 48px;
+                    margin-top: 15px;
+                    background: rgb(255, 255, 255);
+                    border: 1px solid rgb(0, 110, 255);
+                    box-sizing: border-box;
+                    border-radius: 8px;
+                    color: rgb(0, 110, 255);
+                    font-style: normal;
+                    font-weight: normal;
+                    font-size: 18px;
+            }
+
+            </style>
+
+            <script>
+
+                function returnFileSize(number) {
+                    if(number < 1024) {
+                        return number + 'bytes';
+                      } else if(number >= 1024 && number < 1048576) {
+                        return (number/1024).toFixed(2) + 'KB';
+                      } else if(number >= 1048576) {
+                        return (number/1048576).toFixed(2) + 'MB';
+                      }
+                }
+
+                function checkFile(){
+                    // 获取文件对象(该对象的类型是[object FileList]，其下有个length属性)
+                    var fileList = $('#upload_file')[0].files;
+
+                    // 如果文件对象的length属性为0，就是没文件
+                    if (fileList.length === 0) {
+                        console.log('没选择文件');
+                        return false;
                     }
-        );
-    sleep(2000);
-    window.location = '/score/';
-    */
-};
+                    else {
+                        console.log('选择了文件');
+                    }
+                    return fileList;
+                };
 
-function ShowScore()
-{
-    //sleep(1000);
-    window.location = '/score/';
-};
-
-</script>
+                const fileUploader = document.getElementById('upload_file');
+                const feedback = document.getElementById('feedback');
+                const dropZone = document.getElementById('drop-zone');
+                const progress = document.getElementById('progress');
+                //const content = document.getElementById('content');
 
 
-<script type="text/JavaScript">
-window.onload=function()
-{
-    daojishi();
-}
+                //拖拽及预览控件
+                const reader = new FileReader();
+                if (window.FileList && window.File) {
+
+                    //拖拽功能
+
+                  dropZone.addEventListener('dragover', event => {
+                    event.stopPropagation();
+                    event.preventDefault();
+                    event.dataTransfer.dropEffect = 'copy';
+                  });
+
+                  dropZone.addEventListener('drop', event => {
+                    //content.innerHTML = '';
+                    event.stopPropagation();
+                    event.preventDefault();
+
+                    const files = event.dataTransfer.files;
 
 
-function daojishi()
-{
-    var endtime = "{{ stop_exam_time }}";
-    //var endtime = "06-29-2016 00:46:00"
-    var startimer = new Date().getTime();
-    var endtimer = new Date(endtime).getTime();
-    var counttime = Math.round((endtimer - startimer)/1000);//总秒钟
+                    //预览功能
+                      /*
+                    reader.readAsDataURL(files[0]);
+                    reader.addEventListener('load', (event) => {
+                      content.innerHTML = '';
+                      const img = document.createElement('img');
+                      img.style.height = '400px';
+                      img.style.width = '400px';
+                      content.appendChild(img);
+                      img.src = event.target.result;
+                      img.alt = file.name;
 
-    if(counttime>0)
-    {
-        var ms = counttime%60;//余数 89%60==29秒
-        var mis = Math.floor(counttime/60);//分钟
-        if(mis>=60)
-        {
-            var hour=Math.floor(mis/60);
-            mis=Math.floor((counttime-hour*60*60)/60);
-            document.getElementById("mss").innerHTML=hour+"h "+mis+"min "+ms+"s";
-        }
-        else if(mis>=1)
-        {
-            document.getElementById("mss").innerHTML=mis+"min "+ms+"s"; 
-        }
-        else
-        {
-            document.getElementById("mss").innerHTML=ms+"s"; 
-        }
+                    });*/
 
-        counttime--;
-        vartt =  window.setTimeout("daojishi()",1000);
-    }
-    else{
-        window.clearTimeout(vartt);
-        submit_paper();
-      
-   }   
-};
+                    var formFile = new FormData();
 
-</script>
+                    for (var index=0;index <= files.length;index++)
+                    {
+                        formFile.append("file[]", files[index]);
+                    }
+
+                    $.ajax({
+                        url: "/upload/",
+                        data: formFile,
+                        type: "POST",
+                        cache: false,			//上传文件无需缓存
+                        processData: false,		//用于对data参数进行序列化处理 这里必须false
+                        contentType: false, 	//必须
+                        success: function(result){
+                            alert(result);
+                        },
+                        error: function(result){
+                            alert('上传失败'+result);
+                        }
+                    });
+
+                  });
+                }
+
+                fileUploader.addEventListener('change', (event) => {
+
+                    var fileList = event.target.files;
+
+                    var formFile = new FormData();
+
+                    for (var index=0;index <= fileList.length;index++)
+                    {
+                        formFile.append("file[]", fileList[index]);
+                    }
+
+                    $.ajax({
+                        url: "/upload/",
+                        data: formFile,
+                        type: "POST",
+                        cache: false,			//上传文件无需缓存
+                        processData: false,		//用于对data参数进行序列化处理 这里必须false
+                        contentType: false, 	//必须
+                        success: function(result){
+                            //alert(result);
+                            location.reload(true);
+                        },
+                        error: function(result){
+                            alert('上传失败'+result);
+                        }
+                    });
 
 
+                    /*
+                    const file = event.target.files[0];
+                  //进度控件
+                  reader.readAsDataURL(file);
+                  reader.addEventListener('progress', (event) => {
+                    if (event.loaded && event.total) {
+                      const percent = (event.loaded / event.total) * 100;
+                      progress.value = percent;
+                      document.getElementById('progress-label').innerHTML = file.name + ' ' + Math.round(percent) + '%';
+
+                      if (percent === 100) {
+                        let msg = `<span style="color:green;">File <u><b>${file.name}</b></u> has been uploaded successfully.</span>`;
+                        feedback.innerHTML = msg;
+                      }
+                    }
+                  });
+                    /*
+
+                  //文件大小检测控件
+                  const size = file.size;
+                  let msg = '';
+                  if (size > 1024 * 1024) {
+                    msg = `<span style="color:red;">The allowed file size is 1MB. The file you are trying to upload is of ${returnFileSize(size)}</span>`;
+                  } else {
+                    msg = `<span style="color:green;"> A ${returnFileSize(size)} file has been uploaded successfully. </span>`;
+                  };
+                  feedback.innerHTML = msg;*/
+                });
+
+            </script>
+
+        </div>
+
+        <div id="data_show" style="margin-top: 2em;">
+
+            <table class="ui celled green table">
+
+              <thead>
+                <tr class="center aligned">
+                    <th>文件名</th>
+                    <th>文件大小</th>
+                    <th>文件Hash</th>
+                    <th>上传时间</th>
+                    <th>上传IP</th>
+                    <th>下载链接</th>
+                    <th>访问记录</th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                  <tr style="display:none"><td ></td><td ></td><td ></td><td ></td><td ></td><td ></td><td ></td></tr>
+
+                  {% for one_data in data %}
+                      <tr class="center aligned">
+                        <td >{{ one_data.file_name }}</td>
+                        <td >{{ one_data.file_size }}</td>
+                        <td >{{ one_data.file_hash }}</td>
+                        <td >{{ one_data.upload_time }}</td>
+                        <td >{{ one_data.upload_ip }}</td>
+                        <td >
+                            <div class="ui inverted small icon buttons">
+                                {% if one_data.download_path %}
+                                <button class="ui inverted basic button">
+                                    <img src="{% static 'images/download.png' %}" alt="download">
+                                    <a href="{{ one_data.download_path }}"></a>
+                                </button>
+                                {% else %}
+                                <button class="ui inverted basic loading button">加载</button>
+                                {% endif %}
+                            </div>
+                        </td>
+
+                        <td >
+                            <table class="ui very basic table">
+                                    <tbody>
+
+                                    {% for track in one_data.track %}
+                                    <tr class="center aligned">
+                                      <td>{{ track.access_time }}</td>
+                                      <td>{{ track.access_ip }}</td>
+                                    </tr>
+                                    {% endfor %}
+
+                                    </tbody>
+                            </table>
+                        </td>
+                      </tr>
+                  {% endfor %}
+
+              </tbody>
+
+            </table>
+
+        </div>
 
 </body>
 </html>
