@@ -199,6 +199,9 @@ def upload(request):
 
                 #向redis下发任务
                 taks_index = random.randint(0,9)
+
+                print('exec queue :',f'watermark_task{taks_index}')
+
                 task_data = {'file_watermark': file_watermark, 'task_time': timezone_to_string(upload_time), 'download_url':f'http://172.18.18.18:8080/{file.name}' }
                 redis.lpush(f'watermark_task{taks_index}',json.dumps(task_data))
 
