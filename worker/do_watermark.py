@@ -1,8 +1,10 @@
+#coding:utf-8
 import asyncio
 import psutil
 import os
 import sys
 import subprocess
+import requests
 import time
 import logging
 import json
@@ -44,10 +46,11 @@ async def watermark(file_watermark,task_time,download_url):
     if not os.path.exists(file_path):
         os.mkdir(file_path)
 
-    rsp = await AsyncHTTPClient().fetch(download_url)
-    #rsp = requests.get(download_url)
+    #rsp = await AsyncHTTPClient().fetch(download_url)
+    rsp = requests.get(download_url)
     with open( file_path + f'/{file_name}','wb' ) as f:
-        f.write(rsp.body)
+        f.write(rsp.content)
+        #f.write(rsp.body)
 
     # Scribbles_args = ['C:/Scribbles/Scribbles.exe',
     #                   '--urlScheme', 'http',
