@@ -2,3 +2,4 @@
 .DS_Store
 0*py
 *.pyc
+upload/*
