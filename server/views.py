@@ -94,7 +94,7 @@ def login(request):
 
     current_ip = request.META['REMOTE_ADDR']
     if not ip_filter(current_ip, 3):
-        return Http404()
+        raise Http404()
 
     context = {}
     if request.method == "POST":
@@ -152,7 +152,7 @@ def login(request):
 def logout(request):
 
     if not ip_filter(request.META['REMOTE_ADDR'], 3):
-        return Http404()
+        raise Http404()
 
     if request.session.get("is_login", None):
         request.session.flush()
@@ -163,7 +163,7 @@ def logout(request):
 def index(request):
 
     if not ip_filter(request.META['REMOTE_ADDR'], 3):
-        return Http404()
+        raise Http404()
 
     context = {}
     context['data'] = []
@@ -200,7 +200,7 @@ def index(request):
 def upload(request):
 
     if not ip_filter(request.META['REMOTE_ADDR'], 3):
-        return Http404()
+        raise Http404()
 
     context = {}
     if request.session.get("is_login", None):
@@ -247,7 +247,7 @@ def upload(request):
 def download(request,file_watermark,file_name):
 
     if not ip_filter(request.META['REMOTE_ADDR'], 3):
-        return Http404()
+        raise Http404()
 
     if request.session.get("is_login", None):
 
@@ -317,4 +317,4 @@ def track(request,file_watermark):
 
         return HttpResponse('')
     else:
-        return Http404()
+        raise Http404()
