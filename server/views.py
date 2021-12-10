@@ -22,11 +22,9 @@ VALID_CHARS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 SESSION_EXPIRY_TIME = 60 * 60
 
-WHITELIST = [ '113.108.77.*',
-              '111.206.145.*',
-]
+WHITELIST = json.loads(os.getenv('WHITELIST'))
 
-WORK_SERVER = ['119.29.129.79']
+WORK_SERVER = json.loads(os.getenv('WORK_SERVER'))
 
 def ip_filter(ip,match_segment):
     ip_segment = '.'.join(ip.split('.')[:match_segment])
@@ -35,7 +33,6 @@ def ip_filter(ip,match_segment):
         if ip_segment == white_ip_segment:
             return True
     return False
-
 
 def randbytes(n):
     return ''.join([chr(random.randint(1, 127)) for _ in range(n)])
