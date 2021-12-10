@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 
-from django.http import HttpResponse,HttpResponseRedirect,FileResponse
+from django.http import Http404,HttpResponse,HttpResponseRedirect,FileResponse
 from django.utils import timezone
 from django_redis import get_redis_connection
 from django.views.decorators.csrf import csrf_exempt
@@ -19,6 +19,23 @@ import shutil
 
 redis = get_redis_connection()
 VALID_CHARS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+SESSION_EXPIRY_TIME = 60 * 60
+
+WHITELIST = [ '113.108.77.*',
+              '111.206.145.*',
+]
+
+WORK_SERVER = ['119.29.129.79']
+
+def ip_filter(ip,match_segment):
+    ip_segment = '.'.join(ip.split('.')[:match_segment])
+    for white_ip in WHITELIST:
+        white_ip_segment = '.'.join(white_ip.split('.')[:match_segment])
+        if ip_segment == white_ip_segment:
+            return True
+    return False
+
 
 def randbytes(n):
     return ''.join([chr(random.randint(1, 127)) for _ in range(n)])
@@ -74,8 +91,12 @@ class UserForm(forms.Form):
 
 
 def login(request):
-    context = {}
+
     current_ip = request.META['REMOTE_ADDR']
+    if not ip_filter(current_ip, 3):
+        return Http404()
+
+    context = {}
     if request.method == "POST":
         uf = UserForm(request.POST)
         if uf.is_valid():
@@ -83,8 +104,6 @@ def login(request):
             user_id = uf.cleaned_data['user_id']
             user_passwd = uf.cleaned_data['user_passwd']
             user_submit = uf.cleaned_data['user_submit']
-
-            #print(user_id,user_passwd,user_submit)
 
             if user_submit == 'submit-register':
 
@@ -107,7 +126,7 @@ def login(request):
                         request.session['is_login'] = True
                         request.session['login_ip'] = current_ip
                         request.session['secret'] = sha256(user_id+user_passwd+current_ip)
-                        request.session.set_expiry(60*60)
+                        request.session.set_expiry(SESSION_EXPIRY_TIME)
 
                         response = HttpResponseRedirect('/index')
                         #context['points_info'] = ['Login successfully.']
@@ -131,14 +150,21 @@ def login(request):
     return render(request,'login.html',context)
 
 def logout(request):
+
+    if not ip_filter(request.META['REMOTE_ADDR'], 3):
+        return Http404()
+
     if request.session.get("is_login", None):
         request.session.flush()
         return HttpResponseRedirect('/login')
     else:
         return HttpResponse('No login')
 
-
 def index(request):
+
+    if not ip_filter(request.META['REMOTE_ADDR'], 3):
+        return Http404()
+
     context = {}
     context['data'] = []
     if request.session.get("is_login", None):
@@ -172,6 +198,10 @@ def index(request):
 
 @csrf_exempt
 def upload(request):
+
+    if not ip_filter(request.META['REMOTE_ADDR'], 3):
+        return Http404()
+
     context = {}
     if request.session.get("is_login", None):
         user_id = request.session['user_id']
@@ -215,6 +245,10 @@ def upload(request):
 
 
 def download(request,file_watermark,file_name):
+
+    if not ip_filter(request.META['REMOTE_ADDR'], 3):
+        return Http404()
+
     if request.session.get("is_login", None):
 
         file_path = f'{settings.BASE_DIR}/download/{file_watermark}/{file_name}'
@@ -225,6 +259,8 @@ def download(request,file_watermark,file_name):
         response['Content-Disposition'] = f'attachment;filename="{file_name}"'
 
         return response
+    else:
+        return HttpResponseRedirect('/login')
 
 
 def notify(request,file_watermark):
@@ -264,14 +300,21 @@ def notify(request,file_watermark):
     except:
         return HttpResponse(f"download watermarked file {file_name} failed.")
 
-work_server = ['119.29.129.79']
 
 def track(request,file_watermark):
 
     access_ip = request.META['REMOTE_ADDR']
     access_time = timezone.now()
 
-    if not access_ip in work_server:
-        Track.objects.create(file_watermark=file_watermark,access_ip=access_ip,access_time=access_time)
+    if not access_ip in WORK_SERVER:
 
-    return HttpResponse('')
+        try:
+            File.objects.get(file_watermark=file_watermark)
+        except File.DoesNotExist:
+            return Http404()
+
+        Track.objects.create(file_watermark=file_watermark, access_ip=access_ip, access_time=access_time)
+
+        return HttpResponse('')
+    else:
+        return Http404()
