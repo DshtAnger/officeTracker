@@ -14,6 +14,7 @@ import json
 import hashlib
 import random
 import time
+import re
 import os
 import shutil
 
@@ -54,6 +55,9 @@ def timezone_to_string(date):
 
 def get_current_time():
     return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+
+def get_valid_filename(s):
+    return re.sub(r'(?u)[^-\w.]', '_', s)
 
 class UserForm(forms.Form):
     user_id = forms.CharField(max_length=32)
@@ -215,24 +219,25 @@ def upload(request):
 
             for file in files:
 
-                print('file_name :',file.name)
+                print('origin file_name :',file.name)
+                file_name = get_valid_filename(file.name)
 
                 file_hash = cala_file_hash(file)
                 upload_time = timezone.now()
                 file_watermark = cala_watermark(file_hash,upload_ip,timezone_to_string(upload_time),randbytes(8))
 
-                File.objects.create(user_id=user_id, file_owner=user_id, file_name=file.name, file_size=file.size, file_hash=file_hash,
+                File.objects.create(user_id=user_id, file_owner=user_id, file_name=file_name, file_size=file.size, file_hash=file_hash,
                                     file=file, upload_ip=upload_ip, upload_time=upload_time, file_watermark=file_watermark)
 
                 #向redis下发任务
-                taks_index = random.randint(0,9)
+                task_index = random.randint(0,9)
 
-                print('exec queue :',f'watermark_task{taks_index}')
+                print('exec queue :',f'watermark_task{task_index}')
 
-                task_data = {'file_watermark': file_watermark, 'task_time': timezone_to_string(upload_time), 'download_url':f'http://172.18.18.18:8080/{file.name}' }
-                redis.lpush(f'watermark_task{taks_index}',json.dumps(task_data))
+                task_data = {'file_watermark': file_watermark, 'task_time': timezone_to_string(upload_time), 'download_url':f'http://172.18.18.18:8080/{file_name}' }
+                redis.lpush(f'watermark_task{task_index}',json.dumps(task_data))
 
-                result.append(f'{file.name} uploaded successfully.')
+                result.append(f'{get_valid_filename(file_name)} uploaded successfully.')
 
             return HttpResponse(result)
         else:
