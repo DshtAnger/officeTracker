@@ -19,18 +19,19 @@ class User(models.Model):
         return self.user_id
 
 class File(models.Model):
-    user_id = models.CharField(max_length=32)
-    file_owner = models.CharField(max_length=32)
-    file_name = models.CharField(max_length=128)
+    # linux中文件名最长为255字符，文件路径最大长度为4096字符
+    user_id = models.CharField(max_length=32)#表示该文件的上传归属人
+    file_sharer = models.CharField(max_length=32)
+    file_name = models.CharField(max_length=255)
     file_size = models.CharField(max_length=9) #上传时要检测size不大于200M=209715200字节
     file_hash = models.CharField(max_length=64)
 
-    file = models.FileField()#models.FileField(upload_to=uplaod_to)
+    upload_file_path = models.CharField(max_length=4096)#models.FileField(upload_to=uplaod_to)
 
     upload_ip = models.CharField(max_length=32)
     upload_time = models.DateTimeField()
 
-    download_path = models.CharField(max_length=1024)
+    download_file_path = models.CharField(max_length=4096)
     file_watermark = models.CharField(max_length=64)
 
     def __unicode__(self):

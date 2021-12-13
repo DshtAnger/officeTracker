@@ -41,9 +41,9 @@ def randbytes(n):
 def sha256(string):
     return hashlib.sha256(string.encode('utf-8')).hexdigest()
 
-def cala_file_hash(file):
+def cala_file_hash(upload_file_obj):
     file_hash = hashlib.sha256()
-    for chunk in file.chunks():
+    for chunk in upload_file_obj.chunks():
         file_hash.update(chunk)
     return file_hash.hexdigest()
 
@@ -55,6 +55,11 @@ def timezone_to_string(date):
 
 def get_current_time():
     return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+
+def handle_uploaded_file(upload_file_obj, upload_file_path):
+    with open(upload_file_path, 'wb+') as local_file_obj:
+        for chunk in upload_file_obj.chunks():
+            local_file_obj.write(chunk)
 
 def get_valid_filename(s):
     return re.sub(r'(?u)[^-\w.]', '_', s)
@@ -185,7 +190,7 @@ def index(request):
                     'file_hash': one_obj.file_hash,
                     'upload_time': timezone_to_string(one_obj.upload_time),
                     'upload_ip': one_obj.upload_ip,
-                    'download_path': one_obj.download_path,
+                    'download_file_path': one_obj.download_file_path,
                     'file_watermark': one_obj.file_watermark,
                     'track': track_obj_data
                 }
@@ -215,47 +220,48 @@ def upload(request):
 
             if not files:
                 return HttpResponse('No file uploaded.')
-            result = []
 
+            result = []
             for file in files:
 
                 print('origin file_name :',file.name)
-                file_name = get_valid_filename(file.name)
+                upload_valid_filename =  get_valid_filename(file.name)
 
                 file_hash = cala_file_hash(file)
                 upload_time = timezone.now()
-                file_watermark = cala_watermark(file_hash,upload_ip,timezone_to_string(upload_time),randbytes(8))
+                file_watermark = cala_watermark(file_hash, upload_ip, timezone_to_string(upload_time), randbytes(8))
 
-                File.objects.create(user_id=user_id, file_owner=user_id, file_name=file_name, file_size=file.size, file_hash=file_hash,
-                                    file=file, upload_ip=upload_ip, upload_time=upload_time, file_watermark=file_watermark)
+                upload_file_path = f'{settings.BASE_DIR}/upload/{upload_valid_filename}'
+                handle_uploaded_file(file,upload_file_path)
+
+                File.objects.create(user_id=user_id, file_owner=user_id, file_name=upload_valid_filename, file_size=file.size, file_hash=file_hash,
+                                    upload_file_path=upload_file_path, upload_ip=upload_ip, upload_time=upload_time, file_watermark=file_watermark)
 
                 #向redis下发任务
                 task_index = random.randint(0,9)
-
                 print('exec queue :',f'watermark_task{task_index}')
 
-                task_data = {'file_watermark': file_watermark, 'task_time': timezone_to_string(upload_time), 'download_url':f'http://172.18.18.18:8080/{file_name}' }
-                redis.lpush(f'watermark_task{task_index}',json.dumps(task_data))
+                task_data = {'file_watermark': file_watermark, 'task_time': timezone_to_string(upload_time), 'download_url':f'http://172.18.18.18:8080/{upload_valid_filename}' }
+                redis.lpush(f'watermark_task{task_index}', json.dumps(task_data))
 
-                result.append(f'{get_valid_filename(file_name)} uploaded successfully.')
+                result.append(f'{upload_valid_filename} uploaded successfully.')
 
-            return HttpResponse(result)
+            return HttpResponse('\n'.join(result))
         else:
             return HttpResponseRedirect('/index')
     else:
         return HttpResponseRedirect('/login')
 
 
-def download(request,file_watermark,file_name):
+def download(request, file_watermark, file_name):
 
     if not ip_filter(request.META['REMOTE_ADDR'], 3):
         raise Http404()
 
     if request.session.get("is_login", None):
+        #预留:后面要在下载时验证,下载人是否是该文件的共享人,要在session里额外添加身份信息
 
-        file_path = f'{settings.BASE_DIR}/download/{file_watermark}/{file_name}'
-
-        file = open(file_path,'rb')
+        file = open(f'{settings.BASE_DIR}/download/{file_watermark}/{file_name}', 'rb')
         response = FileResponse(file)
         response['Content-Type'] = 'application/octet-stream'
         response['Content-Disposition'] = f'attachment;filename="{file_name}"'
@@ -275,33 +281,32 @@ def notify(request,file_watermark):
         download_url = download_url.decode('utf-8')
 
     file_name = download_url.split('/')[-1]
-    file_path = f'{settings.BASE_DIR}/download/{file_watermark}/'
+    download_file_path = f'{settings.BASE_DIR}/download/{file_watermark}/'
 
     try:
         rsp = requests.get(download_url)
         if rsp.status_code == 200:
 
-            if not os.path.exists(file_path):
-                os.mkdir(file_path)
+            if not os.path.exists(download_file_path):
+                os.mkdir(download_file_path)
 
-            with open(file_path + file_name, 'wb') as f:
+            with open(download_file_path + file_name, 'wb') as f:
                 f.write(rsp.content)
 
             file_obj = File.objects.get(file_watermark=file_watermark)
-            file_obj.download_path = file_path + file_name
+            file_obj.download_file_path = download_file_path + file_name
             file_obj.save()
 
             move_file = f'{settings.BASE_DIR}/upload/{file_name}'
-
             shutil.move(move_file, f'{settings.BASE_DIR}/move/')
 
             return HttpResponse(f"download watermarked file {file_name} finished.")
 
         elif rsp.status_code == 404:
+            # 预留:无法下载到处理过的文档时，要重新给worker下发任务再次处理
             return HttpResponse(f"watermarked file {file_name} has been deleted.")
     except:
         return HttpResponse(f"download watermarked file {file_name} failed.")
-
 
 def track(request,file_watermark):
 
