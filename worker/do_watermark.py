@@ -82,8 +82,11 @@ async def watermark(file_watermark,task_time,download_url):
     logging.info(f'[+][{get_current_time()}][{file_watermark}] program stdout : {stdout}')
 
     # 有些xls转换为xlsx文件后,想要再转换回xls后会出现弹框让你确认兼容性和轻微损失.修改后端C#代码不转换回xls,所以给实际文件名+x
+    # ppt转为pptx后,想要再转回ppt时,源码1983:powerPointApp = new PowerPoint.Application()报错
+    # [从 IClassFactory 为 CLSID 为 {91493441-5A91-11CF-8700-00AA0060263B} 的 COM 组件创建实例失败，原因是出现以下错误: 800706b5 接口未知。 (异常来自 HRESULT:0x800706B5)。]
+    # 故ppt类型也不再从pptx转回ppt
     output_filename = file_name
-    if output_filename.split('.')[-1] == 'xls':
+    if output_filename.split('.')[-1] in ['xls', 'ppt']:
         output_filename = output_filename + 'x'
 
     redis_result_data = {'task_status': '1', 'task_time': task_time, 'failed_info': '', 'file_watermark': file_watermark, 'download_url': f'http://172.18.18.28:8080/{file_watermark}/{output_filename}'}
