@@ -259,7 +259,7 @@ def upload(request):
         return HttpResponseRedirect('/login')
 
 
-def download(request, file_watermark, file_name):
+def download(request, file_watermark):
 
     if not ip_filter(request.META['REMOTE_ADDR'], 3):
         raise Http404()
@@ -267,15 +267,17 @@ def download(request, file_watermark, file_name):
     if request.session.get("is_login", None):
         #预留:后面要在下载时验证,下载人是否是该文件的共享人,要在session里额外添加身份信息
 
-        # 有些xls转换为xlsx文件后,想要再转换回xls后会出现弹框让你确认兼容性和轻微损失.修改后端C#代码不转换回xls,所以给实际文件名+x
-        output_filename = file_name
-        if output_filename.split('.')[-1] == 'xls':
-            output_filename = output_filename + 'x'
+        try:
+            file_obj = File.objects.get(file_watermark=file_watermark)
+        except File.DoesNotExist:
+            raise Http404()
 
-        file = open(f'{settings.BASE_DIR}/download/{file_watermark}/{output_filename}', 'rb')
-        response = FileResponse(file)
-        response['Content-Type'] = 'application/octet-stream'
-        response['Content-Disposition'] = f'attachment;filename="{output_filename}"'
+        output_filename = file_obj.download_file_path.split('/')[-1]
+
+        with open(file_obj.download_file_path, 'rb') as file:
+            response = FileResponse(file)
+            response['Content-Type'] = 'application/octet-stream'
+            response['Content-Disposition'] = f'attachment;filename="{output_filename}"'
 
         return response
     else:
