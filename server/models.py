@@ -6,10 +6,10 @@ from django.forms import ModelForm
 from django.conf import settings
 import os
 
-if settings.DEBUG:
-    uplaod_to = f'./upload/'
-else:
-    uplaod_to = f'./{os.path.join(settings.BASE_DIR, "upload")}'
+# if settings.DEBUG:
+#     uplaod_to = f'./upload/'
+# else:
+#     uplaod_to = f'./{os.path.join(settings.BASE_DIR, "upload")}'
 
 class User(models.Model):
     user_id = models.CharField(max_length=32)
@@ -25,7 +25,7 @@ class File(models.Model):
     file_size = models.CharField(max_length=9) #上传时要检测size不大于200M=209715200字节
     file_hash = models.CharField(max_length=64)
 
-    file = models.FileField(upload_to=uplaod_to)
+    file = models.FileField()#models.FileField(upload_to=uplaod_to)
 
     upload_ip = models.CharField(max_length=32)
     upload_time = models.DateTimeField()
