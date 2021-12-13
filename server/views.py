@@ -62,8 +62,8 @@ def handle_uploaded_file(upload_file_obj, upload_file_path):
         for chunk in upload_file_obj.chunks():
             local_file_obj.write(chunk)
 
-def get_valid_filename(s):
-    return re.sub(r'(?u)[^-\w.]', '_', s)
+def get_valid_filename(origin_filename):
+    return re.sub(r'(?u)[^-\w.]', '_', origin_filename)
 
 class UserForm(forms.Form):
     user_id = forms.CharField(max_length=32)

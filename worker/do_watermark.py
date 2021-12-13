@@ -81,7 +81,12 @@ async def watermark(file_watermark,task_time,download_url):
     stdout, stderr = await proc.communicate()
     logging.info(f'[+][{get_current_time()}][{file_watermark}] program stdout : {stdout}')
 
-    redis_result_data = {'task_status': '1', 'task_time': task_time, 'failed_info': '', 'file_watermark': file_watermark, 'download_url': f'http://172.18.18.28:8080/{file_watermark}/{file_name}'}
+    # 有些xls转换为xlsx文件后,想要再转换回xls后会出现弹框让你确认兼容性和轻微损失.修改后端C#代码不转换回xls,所以给实际文件名+x
+    output_filename = file_name
+    if output_filename.split('.')[-1] == 'xls':
+        output_filename = output_filename + 'x'
+
+    redis_result_data = {'task_status': '1', 'task_time': task_time, 'failed_info': '', 'file_watermark': file_watermark, 'download_url': f'http://172.18.18.28:8080/{file_watermark}/{output_filename}'}
     await redis.hmset(file_watermark, redis_result_data)
     logging.info(f'[+][{get_current_time()}][{file_watermark}] Done task and return redis Hash data: {redis_result_data}')
 
