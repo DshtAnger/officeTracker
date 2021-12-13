@@ -275,9 +275,9 @@ def download(request, file_watermark):
         output_filename = file_obj.download_file_path.split('/')[-1]
 
         file = open(file_obj.download_file_path, 'rb')
-        response = FileResponse(file)
+        response = FileResponse(file, filename=output_filename)
         response['Content-Type'] = 'application/octet-stream'
-        response['Content-Disposition'] = f'attachment;filename="{output_filename}"'
+        #response['Content-Disposition'] = f'attachment;filename="{output_filename}"'
 
         return response
     else:
