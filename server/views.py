@@ -334,7 +334,12 @@ def track(request,file_watermark):
         except File.DoesNotExist:
             raise Http404()
 
-        Track.objects.create(file_watermark=file_watermark, access_ip=access_ip, access_time=access_time)
+        lastest_access_time = Track.objects.filter(file_watermark=file_watermark).order_by('-access_time')
+        if len(lastest_access_time) == 0:
+            Track.objects.create(file_watermark=file_watermark, access_ip=access_ip, access_time=access_time)
+        else:
+            if (access_time - lastest_access_time[0].access_time).seconds > 1:
+                Track.objects.create(file_watermark=file_watermark, access_ip=access_ip, access_time=access_time)
 
         return HttpResponse('')
     else:
