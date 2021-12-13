@@ -267,10 +267,15 @@ def download(request, file_watermark, file_name):
     if request.session.get("is_login", None):
         #预留:后面要在下载时验证,下载人是否是该文件的共享人,要在session里额外添加身份信息
 
-        file = open(f'{settings.BASE_DIR}/download/{file_watermark}/{file_name}', 'rb')
+        # 有些xls转换为xlsx文件后,想要再转换回xls后会出现弹框让你确认兼容性和轻微损失.修改后端C#代码不转换回xls,所以给实际文件名+x
+        output_filename = file_name
+        if output_filename.split('.')[-1] == 'xls':
+            output_filename = output_filename + 'x'
+
+        file = open(f'{settings.BASE_DIR}/download/{file_watermark}/{output_filename}', 'rb')
         response = FileResponse(file)
         response['Content-Type'] = 'application/octet-stream'
-        response['Content-Disposition'] = f'attachment;filename="{file_name}"'
+        response['Content-Disposition'] = f'attachment;filename="{output_filename}"'
 
         return response
     else:
@@ -303,8 +308,8 @@ def notify(request,file_watermark):
             file_obj.download_file_path = download_file_path + file_name
             file_obj.save()
 
-            move_file = f'{settings.BASE_DIR}/upload/{file_name}'
-            shutil.move(move_file, f'{settings.BASE_DIR}/move/')
+            # move_file = f'{settings.BASE_DIR}/upload/{file_name}'
+            # shutil.move(move_file, f'{settings.BASE_DIR}/move/')
 
             return HttpResponse(f"download watermarked file {file_name} finished.")
 
