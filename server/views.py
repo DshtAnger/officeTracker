@@ -239,7 +239,7 @@ def upload(request):
                     File.objects.create(user_id=user_id, user_owner=user_id, file_name=upload_valid_filename, file_size=file.size, file_hash=file_hash,
                                         upload_file_path=upload_file_path, upload_ip=upload_ip, upload_time=upload_time, file_watermark=file_watermark)
                 except Exception:
-                    exception_info = traceback.traceback.format_exc()
+                    exception_info = traceback.format_exc()
                     print(exception_info)
                     return HttpResponse(exception_info)
 
