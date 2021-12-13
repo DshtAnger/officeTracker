@@ -324,7 +324,7 @@ def track(request,file_watermark):
         try:
             File.objects.get(file_watermark=file_watermark)
         except File.DoesNotExist:
-            return Http404()
+            raise Http404()
 
         Track.objects.create(file_watermark=file_watermark, access_ip=access_ip, access_time=access_time)
 
