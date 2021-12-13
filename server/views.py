@@ -4,6 +4,7 @@ from django.shortcuts import render
 
 from django.http import Http404,HttpResponse,HttpResponseRedirect,FileResponse
 from django.utils import timezone
+from django.utils.encoding import escape_uri_path
 from django_redis import get_redis_connection
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
@@ -275,9 +276,9 @@ def download(request, file_watermark):
         output_filename = file_obj.download_file_path.split('/')[-1]
 
         file = open(file_obj.download_file_path, 'rb')
-        response = FileResponse(file, filename=output_filename)
+        response = FileResponse(file)
         response['Content-Type'] = 'application/octet-stream'
-        #response['Content-Disposition'] = f'attachment;filename="{output_filename}"'
+        response['Content-Disposition'] = f'attachment;filename="{escape_uri_path(output_filename)}"'
 
         return response
     else:
