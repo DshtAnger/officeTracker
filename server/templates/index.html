@@ -199,7 +199,7 @@
                             alert(result);
                         },
                         error: function(result){
-                            alert('上传失败'+result);
+                            alert('上传失败'+'|'+'未捕获错误'+result);
                         }
                     });
 
@@ -226,10 +226,13 @@
                         contentType: false, 	//必须
                         success: function(result){
                             //alert(result);
-                            location.reload(true);
+                            if (result.slice(0,4) == '[OK]')
+                                location.reload(true);
+                            else
+                                alert(result)
                         },
                         error: function(result){
-                            alert('上传失败'+result);
+                            alert('上传失败'+'|'+'未捕获错误'+result);
                         }
                     });
 

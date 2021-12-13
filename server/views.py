@@ -17,6 +17,7 @@ import time
 import re
 import os
 import shutil
+import traceback
 
 redis = get_redis_connection()
 VALID_CHARS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -234,8 +235,12 @@ def upload(request):
                 upload_file_path = f'{settings.BASE_DIR}/upload/{upload_valid_filename}'
                 handle_uploaded_file(file,upload_file_path)
 
-                File.objects.create(user_id=user_id, file_owner=user_id, file_name=upload_valid_filename, file_size=file.size, file_hash=file_hash,
-                                    upload_file_path=upload_file_path, upload_ip=upload_ip, upload_time=upload_time, file_watermark=file_watermark)
+                try:
+                    File.objects.create(user_id=user_id, user_owner=user_id, file_name=upload_valid_filename, file_size=file.size, file_hash=file_hash,
+                                        upload_file_path=upload_file_path, upload_ip=upload_ip, upload_time=upload_time, file_watermark=file_watermark)
+                except Exception:
+                    exception_info = traceback.print_exc()
+                    return HttpResponse(exception_info)
 
                 #向redis下发任务
                 task_index = random.randint(0,9)
@@ -246,7 +251,7 @@ def upload(request):
 
                 result.append(f'{upload_valid_filename} uploaded successfully.')
 
-            return HttpResponse('\n'.join(result))
+            return HttpResponse('[OK]' + '\n'.join(result))
         else:
             return HttpResponseRedirect('/index')
     else:
