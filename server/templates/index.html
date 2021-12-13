@@ -195,10 +195,14 @@
                         processData: false,		//用于对data参数进行序列化处理 这里必须false
                         contentType: false, 	//必须
                         success: function(result){
-                            alert(result);
+                            //alert(result);
+                            if (result.slice(0,4) == '[OK]')
+                                location.reload(true);
+                            else
+                                alert(result)
                         },
                         error: function(result){
-                            alert('上传失败'+'|'+'未捕获错误'+result);
+                            alert('上传失败'+'|'+'未捕获异常'+result);
                         }
                     });
 
