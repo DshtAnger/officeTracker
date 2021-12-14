@@ -309,7 +309,7 @@
                                     </a>
                                 </button>
                                 {% else %}
-                                <button class="ui inverted basic loading button">加载</button>
+                                <button class="ui inverted basic loading button"></button>
                                 {% endif %}
                             </div>
                         </td>
@@ -351,7 +351,11 @@
 
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            alert(data.message + '\n');
+            //alert(data.message + '\n');
+            if (data.download_update)
+                console.log('download_update');
+            else if (data.track_update)
+                console.log('track_update');
         };
 
         chatSocket.onclose = function(e) {

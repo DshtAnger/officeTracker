@@ -10,6 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django import forms
 from server.models import *
+import websocket
 import requests
 import json
 import hashlib
@@ -28,6 +29,8 @@ SESSION_EXPIRY_TIME = 60 * 60
 WHITELIST = json.loads(os.getenv('WHITELIST','""'))
 
 WORK_SERVER = json.loads(os.getenv('WORK_SERVER','""'))
+
+HOST_SERVER = json.loads(os.getenv('HOST_SERVER','""'))
 
 def ip_filter(ip,match_segment):
     if settings.DEBUG:
@@ -67,6 +70,21 @@ def handle_uploaded_file(upload_file_obj, upload_file_path):
 
 def get_valid_filename(origin_filename):
     return re.sub(r'(?u)[^-\w.]', '_', origin_filename)
+
+def send_websocket_data(user_id, ws_data):
+    try:
+        ws = websocket.WebSocket()
+        ws.timeout = 30
+
+        ws.connect(f'ws://{HOST_SERVER}/ws/{user_id}/')
+        ws.send(json.dumps(ws_data))
+
+        ws.close()
+
+    except Exception:
+        exception_info = traceback.format_exc()
+        print(exception_info)
+
 
 class UserForm(forms.Form):
     user_id = forms.CharField(max_length=32)
@@ -316,6 +334,9 @@ def notify(request,file_watermark):
             # move_file = f'{settings.BASE_DIR}/upload/{file_name}'
             # shutil.move(move_file, f'{settings.BASE_DIR}/move/')
 
+            #通知前端进行下载图标状态更新
+            send_websocket_data(file_obj.user_id, {'download_update':file_watermark})
+
             return HttpResponse(f"download watermarked file {file_name} finished.")
 
         elif rsp.status_code == 404:
@@ -339,9 +360,11 @@ def track(request,file_watermark):
         lastest_access_time = Track.objects.filter(file_watermark=file_watermark).order_by('-access_time')
         if len(lastest_access_time) == 0:
             Track.objects.create(file_watermark=file_watermark, access_ip=access_ip, access_time=access_time)
+            # 通知前端进行访问记录更新
         else:
             if (access_time - lastest_access_time[0].access_time).seconds > 1:
                 Track.objects.create(file_watermark=file_watermark, access_ip=access_ip, access_time=access_time)
+                # 通知前端进行访问记录更新
 
         return HttpResponse('')
     else:
