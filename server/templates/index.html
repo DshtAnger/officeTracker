@@ -12,7 +12,7 @@
 
 <body>
     <div class="ui fixed inverted main menu" id="top">
-      <div class="fluid large ui black button" id='sid'>{{ user_id }}</div>
+      <div class="fluid large ui black button" id='uid'>{{ user_id }}</div>
       <div class="fluid large ui black button">云鼎文档溯源系统</div>
       <div class="fluid large ui black button" onclick="window.location.href='/logout'">Logout</div>
     </div>
@@ -337,5 +337,29 @@
 
         </div>
 
+        <script>
+
+        const user_id = document.getElementById('uid').textContent;
+
+        const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/'
+            + user_id
+            + '/'
+        );
+
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            alert(data.message + '\n');
+        };
+
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+    </script>
+
+    </div>
 </body>
 </html>
