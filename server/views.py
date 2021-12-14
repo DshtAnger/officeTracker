@@ -30,7 +30,7 @@ WHITELIST = json.loads(os.getenv('WHITELIST','""'))
 
 WORK_SERVER = json.loads(os.getenv('WORK_SERVER','""'))
 
-HOST_SERVER = json.loads(os.getenv('HOST_SERVER','""'))
+HOST_SERVER = os.getenv('HOST_SERVER')
 
 def ip_filter(ip,match_segment):
     if settings.DEBUG:

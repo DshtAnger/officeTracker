@@ -351,7 +351,7 @@
 
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            //alert(data.message + '\n');
+            //alert(data + '\n');
             if (data.download_update)
                 console.log('download_update');
             else if (data.track_update)
