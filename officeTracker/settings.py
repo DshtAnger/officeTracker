@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'server.apps.ServerConfig'
+    'server.apps.ServerConfig',
+    'channels'
 ]
 
 MIDDLEWARE = [
@@ -72,6 +73,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'officeTracker.wsgi.application'
 
+ASGI_APPLICATION = "officeTracker.asgi.application"
+
+CHANNEL_LAYERS = {
+  'default': {
+    'BACKEND': 'channels_redis.core.RedisChannelLayer',
+    'CONFIG': {
+      "hosts": [ ( os.getenv('REDIS_HOST'), int(os.getenv('REDIS_PORT')) ) ],
+    },
+  },
+}
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
