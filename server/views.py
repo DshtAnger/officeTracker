@@ -265,7 +265,7 @@ def upload(request):
                     return HttpResponse('Create Error.')
 
                 #向redis下发任务
-                task_index = random.randint(0,1)
+                task_index = random.randint(0,9)
                 print('exec queue :',f'watermark_task{task_index}')
 
                 task_data = {'user_id': user_id, 'file_watermark': file_watermark, 'task_time': timezone_to_string(upload_time), 'download_url':f'http://172.18.18.18:8080/{upload_valid_filename}' }
@@ -363,7 +363,7 @@ def track(request,file_watermark):
             Track.objects.create(file_watermark=file_watermark, access_ip=access_ip, access_time=access_time)
 
             # 通知前端进行访问记录更新
-            task_index = random.randint(0, 1)
+            task_index = random.randint(0, 9)
             print('exec queue :', f'track_task{task_index}')
             task_data = {'user_id': file_obj.user_id, 'file_watermark': file_watermark, 'access_ip':access_ip, 'access_time':timezone_to_string(access_time)}
             redis.lpush(f'track_task{task_index}', json.dumps(task_data))
@@ -373,7 +373,7 @@ def track(request,file_watermark):
                 Track.objects.create(file_watermark=file_watermark, access_ip=access_ip, access_time=access_time)
 
                 # 通知前端进行访问记录更新
-                task_index = random.randint(0, 1)
+                task_index = random.randint(0, 9)
                 print('exec queue :', f'track_task{task_index}')
                 task_data = {'user_id': file_obj.user_id, 'file_watermark': file_watermark, 'access_ip': access_ip, 'access_time': timezone_to_string(access_time)}
                 redis.lpush(f'track_task{task_index}', json.dumps(task_data))

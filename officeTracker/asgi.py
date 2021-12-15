@@ -3,8 +3,10 @@ from channels.http import AsgiHandler
 from channels.routing import ProtocolTypeRouter,URLRouter
 from channels.auth import AuthMiddlewareStack
 import server.routing
+import django
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'officeTracker.settings')
+django.setup()
 
 application = ProtocolTypeRouter({
   "http": AsgiHandler(),
