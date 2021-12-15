@@ -316,7 +316,7 @@
 
                         <td >
                             <table class="ui very basic table">
-                                    <tbody>
+                                    <tbody id="{{ one_data.file_watermark }}">
 
                                     {% for track in one_data.track %}
                                     <tr class="center aligned">
@@ -353,24 +353,34 @@
             const data = JSON.parse(e.data);
             //alert(data + '\n');
             if (data.download_update){
-                console.log('download_update');
+                //console.log('download_update');
 
                 var load_button = document.getElementById('load_button');
                 load_button.remove();
 
                 var download_link = document.getElementById('download_link');
 
-                var download_button = document.createElement('button')
-                download_button.setAttribute('class', 'ui inverted basic button')
-                download_button.setAttribute('id', 'download_button')
+                var download_button = document.createElement('button');
+                download_button.setAttribute('class', 'ui inverted basic button');
+                download_button.setAttribute('id', 'download_button');
                 download_button.innerHTML = '<a href="/download/' + data.download_update + '"><img src="/static/images/download.png" alt="download"></a>';
-                
+
                 download_link.append(download_button);
 
             }
 
-            else if (data.track_update)
-                console.log('track_update');
+            else if (data.track_update){
+
+                //console.log('track_update');
+
+                var tbody_obj =  document.getElementById(data.track_update);
+
+                var tr_obj = document.createElement('tr');
+                tr_obj.setAttribute('class','center aligned');
+                tr_obj.innerHTML = '<td>' + data.access_time + '</td><td>' + data.access_ip + '</td>'
+
+                tbody_obj.prepend(tr_obj);
+            }
         };
 
         chatSocket.onclose = function(e) {

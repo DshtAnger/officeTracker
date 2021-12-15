@@ -335,6 +335,7 @@ def notify(request,file_watermark):
             # shutil.move(move_file, f'{settings.BASE_DIR}/move/')
 
             # 通知前端进行下载图标状态更新
+            # 由Win Worker在通知Server下载处理后文件的同时,访问用户websocket进行通知
             # send_websocket_data(file_obj.user_id, {'download_update':file_watermark})
 
             return HttpResponse(f"download watermarked file {file_name} finished.")
@@ -360,11 +361,22 @@ def track(request,file_watermark):
         lastest_access_time = Track.objects.filter(file_watermark=file_watermark).order_by('-access_time')
         if len(lastest_access_time) == 0:
             Track.objects.create(file_watermark=file_watermark, access_ip=access_ip, access_time=access_time)
+
             # 通知前端进行访问记录更新
+            task_index = random.randint(0, 1)
+            print('exec queue :', f'track_task{task_index}')
+            task_data = {'user_id': user_id, 'file_watermark': file_watermark, 'access_ip':access_ip, 'access_time':access_time}
+            redis.lpush(f'track_task{task_index}', json.dumps(task_data))
+
         else:
             if (access_time - lastest_access_time[0].access_time).seconds > 1:
                 Track.objects.create(file_watermark=file_watermark, access_ip=access_ip, access_time=access_time)
+
                 # 通知前端进行访问记录更新
+                task_index = random.randint(0, 1)
+                print('exec queue :', f'track_task{task_index}')
+                task_data = {'user_id': user_id, 'file_watermark': file_watermark, 'access_ip': access_ip, 'access_time': access_time}
+                redis.lpush(f'track_task{task_index}', json.dumps(task_data))
 
         return HttpResponse('')
     else:

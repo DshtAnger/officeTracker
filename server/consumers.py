@@ -26,6 +26,9 @@ class UserConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
 
+        if text_data_json.get('track_update'):
+            pass
+
         # Send message to room group
         await self.channel_layer.group_send(
             self.user_id_group,

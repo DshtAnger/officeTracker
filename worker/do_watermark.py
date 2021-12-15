@@ -16,9 +16,9 @@ programe_id = 1#int(sys.argv[0].split('.')[0][-1])
 
 psutil.Process().cpu_affinity([programe_id])
 
-
 log_filename = f'watermake{programe_id}.log'
-QUEUE = f'watermark_task{programe_id}'
+WATERMARK_QUEUE = f'watermark_task{programe_id}'
+TRACK_QUEUE = f'track_task{programe_id}'
 
 def get_current_time():
     return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
@@ -115,27 +115,44 @@ async def run():
 
     while 1:
 
-        if not await redis.exists(QUEUE):
-            logging.info(f'[*][{get_current_time()}] {QUEUE} is empty.')
-            await asyncio.sleep(1)
-            continue
+        if not await redis.exists(WATERMARK_QUEUE):
+            pass
+            #logging.info(f'[*][{get_current_time()}] {WATERMARK_QUEUE} is empty.')
+            #await asyncio.sleep(1)
+            #continue
+        else:
+            data = await redis.lpop(WATERMARK_QUEUE)
+            data = json.loads(data.decode('utf-8'))
 
-        data = await redis.lpop(QUEUE)
-        data = json.loads(data.decode('utf-8'))
+            user_id = data.get('user_id')
+            file_watermark = data.get('file_watermark')
+            task_time = data.get('task_time')
+            download_url = data.get('download_url')
 
-        user_id = data.get('user_id')
-        file_watermark = data.get('file_watermark')
-        task_time = data.get('task_time')
-        download_url = data.get('download_url')
+            logging.info(f'[+][{get_current_time()}][{file_watermark}] Get task : {data}')
 
-        logging.info(f'[+][{get_current_time()}][{file_watermark}] Get task : {data}')
+            await watermark(user_id, file_watermark, task_time, download_url)
 
-        await watermark(user_id, file_watermark, task_time, download_url)
+            logging.info(f'[*][{get_current_time()}] ' + '-'*50)
 
-        #add_async_task(watermark,False,[task_id,task_time,file_watermark,download_url])
 
-        #await asyncio.sleep(3)
+        if not await redis.exists(TRACK_QUEUE):
+            pass
+        else:
+            data = await redis.lpop(TRACK_QUEUE)
+            data = json.loads(data.decode('utf-8'))
 
+            user_id = data.get('user_id')
+            file_watermark = data.get('file_watermark')
+            access_ip = data.get('access_ip')
+            access_time = data.get('access_time')
+
+            await send_websocket_data(user_id, {'track_update': file_watermark, 'access_ip':access_ip, 'access_time':access_time})
+            logging.info(f'[+][{get_current_time()}][{file_watermark}] Server had notified the front end to refresh the track status.')
+
+            logging.info(f'[*][{get_current_time()}] ' + '-' * 50)
+
+        await asyncio.sleep(1)
 
 
 
