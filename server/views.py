@@ -365,7 +365,7 @@ def track(request,file_watermark):
             # 通知前端进行访问记录更新
             task_index = random.randint(0, 1)
             print('exec queue :', f'track_task{task_index}')
-            task_data = {'user_id': user_id, 'file_watermark': file_watermark, 'access_ip':access_ip, 'access_time':access_time}
+            task_data = {'user_id': user_id, 'file_watermark': file_watermark, 'access_ip':access_ip, 'access_time':timezone_to_string(access_time)}
             redis.lpush(f'track_task{task_index}', json.dumps(task_data))
 
         else:
@@ -375,7 +375,7 @@ def track(request,file_watermark):
                 # 通知前端进行访问记录更新
                 task_index = random.randint(0, 1)
                 print('exec queue :', f'track_task{task_index}')
-                task_data = {'user_id': file_obj.user_id, 'file_watermark': file_watermark, 'access_ip': access_ip, 'access_time': access_time}
+                task_data = {'user_id': file_obj.user_id, 'file_watermark': file_watermark, 'access_ip': access_ip, 'access_time': timezone_to_string(access_time)}
                 redis.lpush(f'track_task{task_index}', json.dumps(task_data))
 
         return HttpResponse('')
