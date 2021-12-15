@@ -186,7 +186,7 @@
 
                     for (var index=0;index <= files.length;index++)
                     {
-                        file_extension = files[index].substring(files[index].lastIndexOf('.') + 1)
+                        file_extension = files[index].substring(files[index].indexOf('.') + 1)
                         if ( Extension_list.indexOf(file_extension) == -1 )
                         {
                             alert('上传文件非法,请上传Office文档类型文件.');
