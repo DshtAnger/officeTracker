@@ -307,10 +307,22 @@ def download(request, file_watermark):
 
 def notify(request,file_watermark):
 
+    task_status = redis.hget(file_watermark, 'task_status').decode('utf-8')
     download_url = redis.hget(file_watermark, 'download_url')
 
-    if download_url == None:
+    if task_status == False:
+
+        file_obj = File.objects.get(file_watermark=file_watermark)
+        file_obj.download_file_path = 'ERROR'
+        file_obj.save()
+
+        # 遗留工作:前端js通过is_success字段更新下载图标为x,前端模版根据download_file_path==None更新下载图标为x
+
+        return HttpResponse(f"Failed task {file_watermark}. failed_info: {redis.hget(file_watermark, 'failed_info').decode('utf-8')}")
+
+    elif download_url == None:
         return HttpResponse(f"No task {file_watermark}")
+
     else:
         download_url = download_url.decode('utf-8')
 
@@ -342,7 +354,7 @@ def notify(request,file_watermark):
 
         elif rsp.status_code == 404:
             # 预留:无法下载到处理过的文档时，要重新给worker下发任务再次处理
-            return HttpResponse(f"watermarked file {file_name} has been deleted.")
+            return HttpResponse(f"watermarked file {file_name} does not exist.")
     except:
         return HttpResponse(f"download watermarked file {file_name} failed.")
 
