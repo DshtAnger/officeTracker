@@ -186,14 +186,14 @@
 
                     for (var index=0;index <= files.length;index++)
                     {
-                        var file = files[index];
-                        file_extension = file.name.substring(file.name.indexOf('.') + 1)
+                        var filename = files[index].name;
+                        file_extension = filename.substring(filename.indexOf('.') + 1)
                         if ( Extension_list.indexOf(file_extension) == -1 )
                         {
                             alert('上传文件非法,请上传Office文档类型文件.');
                             return
                         }
-                        formFile.append("file[]", file);
+                        formFile.append("file[]", files[index]);
                     }
 
                     $.ajax({
