@@ -184,9 +184,9 @@
 
                     var formFile = new FormData();
 
-                    for (var index=0;index <= files.length;index++)
+                    for (var index=0;index < files.length;index++)
                     {
-                        var filename = files[index].name;
+                        const filename = files[index].name;
                         var file_extension = filename.substring(filename.indexOf('.') + 1)
                         if ( Extension_list.indexOf(file_extension) == -1 )
                         {
@@ -224,7 +224,7 @@
 
                     var formFile = new FormData();
 
-                    for (var index=0;index <= fileList.length;index++)
+                    for (var index=0;index < fileList.length;index++)
                     {
                         formFile.append("file[]", fileList[index]);
                     }
