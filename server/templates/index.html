@@ -359,7 +359,13 @@
                 load_button.remove();
 
                 var download_link = document.getElementById('download_link');
-                download_link.append('<button class="ui inverted basic button" id="download_button"><a href="/download/{{ one_data.file_watermark }}"><img src="/static/images/download.png" alt="download"></a></button>');
+
+                var download_button = document.createElement('button')
+                download_button.setAttribute('class', 'ui inverted basic button')
+                download_button.setAttribute('id', 'download_button')
+                download_button.innerHTML = '<a href="/download/' + data.download_update + '"><img src="/static/images/download.png" alt="download"></a>';
+                
+                download_link.append(download_button);
 
             }
 
