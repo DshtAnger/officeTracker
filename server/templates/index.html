@@ -301,15 +301,15 @@
                         <td >{{ one_data.upload_time }}</td>
                         <td >{{ one_data.upload_ip }}</td>
                         <td >
-                            <div class="ui inverted small icon buttons">
+                            <div class="ui inverted small icon buttons" id="download_link">
                                 {% if one_data.download_file_path %}
-                                <button class="ui inverted basic button">
+                                <button class="ui inverted basic button" id="download_button">
                                     <a href="/download/{{ one_data.file_watermark }}">
                                         <img src="{% static 'images/download.png' %}" alt="download">
                                     </a>
                                 </button>
                                 {% else %}
-                                <button class="ui inverted basic loading button"></button>
+                                <button class="ui inverted basic loading button" id="load_button"></button>
                                 {% endif %}
                             </div>
                         </td>
@@ -352,8 +352,17 @@
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
             //alert(data + '\n');
-            if (data.download_update)
+            if (data.download_update){
                 console.log('download_update');
+
+                var load_button = document.getElementById('load_button');
+                load_button.remove();
+
+                var download_link = document.getElementById('download_link');
+                download_link.append('<button class="ui inverted basic button" id="download_button"><a href="/download/{{ one_data.file_watermark }}"><img src="/static/images/download.png" alt="download"></a></button>');
+
+            }
+
             else if (data.track_update)
                 console.log('track_update');
         };
