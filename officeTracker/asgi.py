@@ -4,7 +4,7 @@ from channels.routing import ProtocolTypeRouter,URLRouter
 from channels.auth import AuthMiddlewareStack
 import server.routing
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mysite.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'officeTracker.settings')
 
 application = ProtocolTypeRouter({
   "http": AsgiHandler(),

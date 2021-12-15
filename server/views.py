@@ -119,7 +119,7 @@ class UserForm(forms.Form):
 
 
 def login(request):
-
+    #user_agent = request.META['HTTP_USER_AGENT']
     current_ip = request.META['REMOTE_ADDR']
     if not ip_filter(current_ip, 3):
         raise Http404()
