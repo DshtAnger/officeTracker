@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django import forms
 from server.models import *
-import websocket
+# import websocket
 import requests
 import json
 import hashlib
@@ -71,19 +71,19 @@ def handle_uploaded_file(upload_file_obj, upload_file_path):
 def get_valid_filename(origin_filename):
     return re.sub(r'(?u)[^-\w.]', '_', origin_filename)
 
-def send_websocket_data(user_id, ws_data):
-    try:
-        ws = websocket.WebSocket()
-        ws.timeout = 30
-
-        ws.connect(f'ws://{HOST_SERVER}/ws/{user_id}/')
-        ws.send(json.dumps(ws_data))
-
-        ws.close()
-
-    except Exception:
-        exception_info = traceback.format_exc()
-        print(exception_info)
+# def send_websocket_data(user_id, ws_data):
+#     try:
+#         ws = websocket.WebSocket()
+#         ws.timeout = 30
+#
+#         ws.connect(f'ws://{HOST_SERVER}/ws/{user_id}/')
+#         ws.send(json.dumps(ws_data))
+#
+#         ws.close()
+#
+#     except Exception:
+#         exception_info = traceback.format_exc()
+#         print(exception_info)
 
 
 class UserForm(forms.Form):
@@ -265,10 +265,10 @@ def upload(request):
                     return HttpResponse('Create Error.')
 
                 #向redis下发任务
-                task_index = random.randint(0,9)
+                task_index = random.randint(0,1)
                 print('exec queue :',f'watermark_task{task_index}')
 
-                task_data = {'file_watermark': file_watermark, 'task_time': timezone_to_string(upload_time), 'download_url':f'http://172.18.18.18:8080/{upload_valid_filename}' }
+                task_data = {'user_id': user_id, 'file_watermark': file_watermark, 'task_time': timezone_to_string(upload_time), 'download_url':f'http://172.18.18.18:8080/{upload_valid_filename}' }
                 redis.lpush(f'watermark_task{task_index}', json.dumps(task_data))
 
                 result.append(f'{upload_valid_filename} uploaded successfully.')
@@ -334,8 +334,8 @@ def notify(request,file_watermark):
             # move_file = f'{settings.BASE_DIR}/upload/{file_name}'
             # shutil.move(move_file, f'{settings.BASE_DIR}/move/')
 
-            #通知前端进行下载图标状态更新
-            send_websocket_data(file_obj.user_id, {'download_update':file_watermark})
+            # 通知前端进行下载图标状态更新
+            # send_websocket_data(file_obj.user_id, {'download_update':file_watermark})
 
             return HttpResponse(f"download watermarked file {file_name} finished.")
 

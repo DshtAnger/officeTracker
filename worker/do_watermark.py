@@ -9,6 +9,7 @@ import time
 import logging
 import json
 from tornado.httpclient import AsyncHTTPClient
+import websockets
 
 #re.search('\d+','do_watermakr1.py').group()
 programe_id = 1#int(sys.argv[0].split('.')[0][-1])
@@ -35,7 +36,15 @@ def handle_exception(exc_type, exc_value, exc_traceback):
     logging.info("--------------------Uncaught Exception--------------------",exc_info=(exc_type, exc_value, exc_traceback))
 sys.excepthook = handle_exception
 
-async def watermark(file_watermark,task_time,download_url):
+async def send_websocket_data(user_id, ws_data):
+    try:
+        async with websockets.connect(f'ws://{hostServerName}/ws/{user_id}') as websocket:
+            await websocket.send(json.dumps(ws_data))
+    except Exception:
+        exception_info = traceback.format_exc()
+        print(exception_info)
+
+async def watermark(user_id, file_watermark, task_time, download_url):
 
     file_name = download_url.split('/')[-1]
 
@@ -99,6 +108,8 @@ async def watermark(file_watermark,task_time,download_url):
     except:
         pass
 
+    await send_websocket_data(user_id, {'download_update':file_watermark})
+    logging.info(f'[+][{get_current_time()}][{file_watermark}] Server had notified the front end to refresh the download status.')
 
 async def run():
 
@@ -112,13 +123,14 @@ async def run():
         data = await redis.lpop(QUEUE)
         data = json.loads(data.decode('utf-8'))
 
+        user_id = data.get('user_id')
         file_watermark = data.get('file_watermark')
         task_time = data.get('task_time')
         download_url = data.get('download_url')
 
         logging.info(f'[+][{get_current_time()}][{file_watermark}] Get task : {data}')
 
-        await watermark(file_watermark,task_time,download_url)
+        await watermark(user_id, file_watermark, task_time, download_url)
 
         #add_async_task(watermark,False,[task_id,task_time,file_watermark,download_url])
 
