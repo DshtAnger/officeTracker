@@ -10,11 +10,11 @@ import logging
 import json
 from tornado.httpclient import AsyncHTTPClient
 import websockets
+import traceback
 
-#re.search('\d+','do_watermakr1.py').group()
-programe_id = 1#int(sys.argv[0].split('.')[0][-1])
-
+programe_id = int(sys.argv[1])#int(re.search('\d+',sys.argv[0]).group())
 psutil.Process().cpu_affinity([programe_id])
+print(f'programe_id: {programe_id}')
 
 log_filename = f'watermake{programe_id}.log'
 WATERMARK_QUEUE = f'watermark_task{programe_id}'
@@ -44,7 +44,7 @@ async def send_websocket_data(user_id, ws_data):
             await websocket.send(json.dumps(ws_data))
     except Exception:
         exception_info = traceback.format_exc()
-        print(exception_info)
+        logging.info(exception_info)
 
 async def watermark(user_id, file_watermark, task_time, download_url):
 
@@ -103,7 +103,7 @@ async def watermark(user_id, file_watermark, task_time, download_url):
     stdout, stderr = await proc.communicate()
     logging.info(f'[+][{get_current_time()}][{file_watermark}] program stdout : {stdout} | program stderr : {stderr}')
 
-    if 'does not have a recognized extension' in stdout:
+    if 'does not have a recognized extension' in stdout.decode('unicode_escape'):#byte串中含中文,decode('utf-8')会报错，用这个编码
         task_status = False
         redis_result_data = {'task_status': task_status, 'task_time': task_time, 'failed_info': 'upload file does not have a recognized extension',
                              'file_watermark': file_watermark,
