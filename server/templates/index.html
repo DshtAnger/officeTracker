@@ -310,15 +310,15 @@
                         <td >{{ one_data.upload_time }}</td>
                         <td >{{ one_data.upload_ip }}</td>
                         <td >
-                            <div class="ui inverted small icon buttons" id="download_link">
+                            <div class="ui inverted small icon buttons" id="download_link_{{ one_data.file_watermark }}">
                                 {% if one_data.download_file_path %}
-                                <button class="ui inverted basic button" id="download_button">
+                                <button class="ui inverted basic button">
                                     <a href="/download/{{ one_data.file_watermark }}">
                                         <img src="{% static 'images/download.png' %}" alt="download">
                                     </a>
                                 </button>
                                 {% else %}
-                                <button class="ui inverted basic loading button" id="load_button"></button>
+                                <button class="ui inverted basic loading button" id="load_button_{{ one_data.file_watermark }}"></button>
                                 {% endif %}
                             </div>
                         </td>
@@ -364,14 +364,14 @@
             if (data.download_update){
                 //console.log('download_update');
 
-                var load_button = document.getElementById('load_button');
+                var load_button = document.getElementById('load_button'+'_'+data.download_update);
                 load_button.remove();
 
-                var download_link = document.getElementById('download_link');
+                var download_link = document.getElementById('download_link'+'_'+data.download_update);
 
                 var download_button = document.createElement('button');
                 download_button.setAttribute('class', 'ui inverted basic button');
-                download_button.setAttribute('id', 'download_button');
+                //download_button.setAttribute('id', 'download_button');
                 download_button.innerHTML = '<a href="/download/' + data.download_update + '"><img src="/static/images/download.png" alt="download"></a>';
 
                 download_link.append(download_button);
