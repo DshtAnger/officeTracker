@@ -101,7 +101,7 @@ async def watermark(user_id, file_watermark, task_time, download_url):
 
     proc = await asyncio.create_subprocess_shell(' '.join(Scribbles_args),stdout=asyncio.subprocess.PIPE,stderr=asyncio.subprocess.PIPE)
     stdout, stderr = await proc.communicate()
-    logging.info(f'[+][{get_current_time()}][{file_watermark}] program stdout : {stdout} | program stderr : {stderr}')
+    logging.info(f'[+][{get_current_time()}][{file_watermark}] program stdout : {stdout.decode("unicode_escape")} | program stderr : {stderr.decode("unicode_escape")}')
 
     if 'does not have a recognized extension' in stdout.decode('unicode_escape'):#byte串中含中文,decode('utf-8')会报错，用这个编码
         task_status = False
