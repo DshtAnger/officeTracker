@@ -210,6 +210,8 @@ def index(request):
             context['data'].append(
                 {
                     'file_name': one_obj.file_name,
+                    'file_owner': one_obj.user_id,
+                    #'file_sharer': one_obj.file_sharer,
                     'file_size': one_obj.file_size,
                     'file_hash': one_obj.file_hash,
                     'upload_time': timezone_to_string(one_obj.upload_time),

@@ -289,6 +289,7 @@
               <thead>
                 <tr class="center aligned">
                     <th>文件名</th>
+                    <th>文件归属</th>
                     <th>文件大小(B)</th>
                     <th>文件Hash</th>
                     <th>上传时间</th>
@@ -305,6 +306,7 @@
                   {% for one_data in data %}
                       <tr class="center aligned">
                         <td >{{ one_data.file_name }}</td>
+                        <td >{{ one_data.file_owner }}</td>
                         <td >{{ one_data.file_size }}</td>
                         <td >{{ one_data.file_hash }}</td>
                         <td >{{ one_data.upload_time }}</td>
