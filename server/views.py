@@ -56,6 +56,15 @@ def cala_file_hash(upload_file_obj):
         file_hash.update(chunk)
     return file_hash.hexdigest()
 
+def show_file_size(size_str: int):
+    #前端的文件大小限制，待做
+    if 1024 <= size_str < 1024*1024:
+        return '{:.2f}KB'.format(size_str/1024)
+    elif 1024*1024 <= size_str <= 1024*1024*200:
+        return '{:.2f}MB'.format(size_str /1024/1024)
+    else:
+        return '{0}B'.format(size_str)
+
 def cala_watermark(file_hash,upload_ip,upload_time,random_8byte):
     return sha256(file_hash + upload_ip + upload_time + random_8byte)
 
@@ -261,7 +270,7 @@ def upload(request):
                 handle_uploaded_file(file,upload_file_path)
 
                 try:
-                    File.objects.create(user_id=user_id, file_sharer=user_id, file_name=upload_valid_filename, file_size=file.size, file_hash=file_hash,
+                    File.objects.create(user_id=user_id, file_sharer=user_id, file_name=upload_valid_filename, file_size=show_file_size(file.size), file_hash=file_hash,
                                         upload_file_path=upload_file_path, upload_ip=upload_ip, upload_time=upload_time, file_watermark=file_watermark)
                 except Exception:
                     exception_info = traceback.format_exc()
