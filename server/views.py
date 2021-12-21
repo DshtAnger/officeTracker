@@ -207,12 +207,20 @@ def index(request):
 
     context = {}
     context['file_data'] = []
+    # context['self_data'] = []
+    # context['sharer_data'] = []
     if request.session.get("is_login", None):
         user_id = request.session['user_id']
 
-        file_obj = File.objects.filter(file_sharer=user_id).order_by('-upload_time')
+        file_obj = File.objects.filter(user_id=user_id).order_by('-upload_time')
 
-        for one_obj in file_obj:
+        # #做分享人记录聚合时,需要考虑几种情况
+        # # user_id是自己，且sharer也是自己的，为单独为自己上传场景,字段显示和之前全一样。不用管文件因素，因为每一条记录只会是一个文件。
+        # file_obj_self = File.objects.filter(user_id=user_id, file_sharer=user_id).order_by('-upload_time')
+        # # user_id是自己，但sharer都不是自己的，为给其他用户上传场景。一条显示中共享人字段把所有共享人包进去,下载链接为空,track展示多个人的记录。。要管文件因素，因为每个user_id可能对应了多个共享出去的文件
+        # file_obj_sharer = File.objects.filter(user_id=user_id).filter(~Q(file_sharer=user_id))
+
+        for one_obj in file_obj_self:
 
             track_obj = Track.objects.filter(file_watermark=one_obj.file_watermark).order_by('-access_time')
             track_obj_data = [{'access_time': timezone_to_string(track.access_time), 'access_ip': track.access_ip} for track in track_obj]
@@ -226,11 +234,28 @@ def index(request):
                     'file_hash': one_obj.file_hash,
                     'upload_time': timezone_to_string(one_obj.upload_time),
                     'upload_ip': one_obj.upload_ip,
-                    'download_file_path': one_obj.download_file_path,
+                    'download_file_path': one_obj.download_file_path if one_obj.file_sharer == user_id else '',
                     'file_watermark': one_obj.file_watermark,
                     'track': track_obj_data
                 }
             )
+
+        # fille_sharer = ','.join([one.file_sharer for one in file_obj_sharer])
+        # context['sharer_data'].append(
+        #     {
+        #         'file_name': one_obj.file_name,
+        #         'file_owner': one_obj.user_id,
+        #         'file_sharer': one_obj.file_sharer,
+        #         'file_size': one_obj.file_size,
+        #         'file_hash': one_obj.file_hash,
+        #         'upload_time': timezone_to_string(one_obj.upload_time),
+        #         'upload_ip': one_obj.upload_ip,
+        #         'download_file_path': one_obj.download_file_path,
+        #         'file_watermark': one_obj.file_watermark,
+        #         'track': track_obj_data
+        #     }
+        # )
+
 
         user_data = User.objects.filter(~Q(user_id=user_id))
         context['user_data'] = [user.user_id for user in user_data]
@@ -260,6 +285,7 @@ def upload(request):
 
             if not files:
                 return HttpResponse('No file uploaded.')
+
             if not file_sharer:
                 file_sharer = user_id
 
@@ -274,7 +300,7 @@ def upload(request):
                 handle_uploaded_file(file, upload_file_path)
 
                 try:
-                    for sharer in file_sharer.split(',') + [user_id]:
+                    for sharer in file_sharer.split(','):
 
                         upload_time = timezone.now()
                         file_watermark = cala_watermark(file_hash, upload_ip, timezone_to_string(upload_time), sharer, randbytes(16))
