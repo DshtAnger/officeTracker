@@ -232,8 +232,8 @@ def index(request):
                 }
             )
 
-        user_list = User.objects.filter(~Q(user_id=user_id))
-        context['user_data'] = [user.user_id for user in user_list]
+        user_data = User.objects.filter(~Q(user_id=user_id))
+        context['user_data'] = [user.user_id for user in user_data]
 
         context['user_id'] = user_id
 

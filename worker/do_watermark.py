@@ -61,6 +61,8 @@ async def watermark(user_id, file_watermark, task_time, download_url):
 
     #rsp = await AsyncHTTPClient().fetch(download_url)
     rsp = requests.get(download_url)
+    # if rsp.status_code != 200:
+    #     return
     with open( file_path + f'/{file_name}','wb' ) as f:
         f.write(rsp.content)
         #f.write(rsp.body)
