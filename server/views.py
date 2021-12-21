@@ -256,7 +256,7 @@ def upload(request):
             #file = request.FILES.get('upload_file', None) #form提交场景，get from表单里input标签的name,这个name在构造js formData apped时指定key
 
             files = request.FILES.getlist('file[]', None) #jQuery提交场景，request.FILES == <MultiValueDict: {'file': [<InMemoryUploadedFile: 05241946734744.jpg (image/jpeg)>]}>
-            file_sharer = request.FILES.get('file_sharer', None)
+            file_sharer = request.POST.get('file_sharer', None)
 
             if not files:
                 return HttpResponse('No file uploaded.')
