@@ -73,14 +73,16 @@ function deal_button(obj)
             <button class="ui button" id="submit-register" onclick="deal_button(this)">注册</button>
         </div>
 
-        <form action="" class="post-form" method="post" onsubmit="return checkForm()">
-            {% csrf_token %}
-            <input type="text"     id="user_id" name='user_id' placeholder="RTX id">
-            <input type="password" id="input_password" placeholder="Password">
-            <input type="hidden"   id="sha256_password" name="user_passwd">
-            <input type="hidden"   id="user_submit" name="user_submit" value="submit-login">
-            <input type="submit" value="提交" style="margin-bottom:0px;">
-        </form>
+        <div>
+            <form action="" class="post-form" method="post" onsubmit="return checkForm()">
+                {% csrf_token %}
+                <input type="text"     id="user_id" name='user_id' placeholder="RTX id">
+                <input type="password" id="input_password" placeholder="Password">
+                <input type="hidden"   id="sha256_password" name="user_passwd">
+                <input type="hidden"   id="user_submit" name="user_submit" value="submit-login">
+                <input type="submit" value="提交" style="margin-bottom:0px;">
+            </form>
+        </div>
 
     </div>
 

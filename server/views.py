@@ -10,6 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django import forms
 from server.models import *
+from django.db.models import Q
 # import websocket
 import requests
 import json
@@ -197,7 +198,7 @@ def logout(request):
         request.session.flush()
         return HttpResponseRedirect('/login')
     else:
-        return HttpResponse('No login')
+        return HttpResponseRedirect('/')
 
 def index(request):
 
@@ -205,7 +206,7 @@ def index(request):
         raise Http404()
 
     context = {}
-    context['data'] = []
+    context['file_data'] = []
     if request.session.get("is_login", None):
         user_id = request.session['user_id']
 
@@ -216,11 +217,11 @@ def index(request):
             track_obj = Track.objects.filter(file_watermark=one_obj.file_watermark).order_by('-access_time')
             track_obj_data = [{'access_time': timezone_to_string(track.access_time), 'access_ip': track.access_ip} for track in track_obj]
 
-            context['data'].append(
+            context['file_data'].append(
                 {
                     'file_name': one_obj.file_name,
                     'file_owner': one_obj.user_id,
-                    #'file_sharer': one_obj.file_sharer,
+                    'file_sharer': one_obj.file_sharer,
                     'file_size': one_obj.file_size,
                     'file_hash': one_obj.file_hash,
                     'upload_time': timezone_to_string(one_obj.upload_time),
@@ -230,6 +231,9 @@ def index(request):
                     'track': track_obj_data
                 }
             )
+
+        user_list = User.objects.filter(~Q(user_id=user_id))
+        context['user_data'] = [user.user_id for user in user_list]
 
         context['user_id'] = user_id
 

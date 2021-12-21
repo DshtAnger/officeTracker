@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{% static 'css/semantic.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
     <script src="{% static 'js/jquery.min.js' %}"></script>
-
+    <script src="{% static 'js/semantic.min.js' %}"></script>
 </head>
 
 <body>
@@ -44,9 +44,9 @@
 
                 <h3 style="text-align:center;margin: 15px;color: rgb(143, 143, 143);">Drag File Here</h3>
 
-                <div id="drop-zone" style="text-align:center;">
+                <div id="drop-zone" style="margin:auto;">
 
-                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"  style="margin: 5em;">
+                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"  style="margin: 5em 0em 0em 19em;">
                         <path class="icon-path" d="M2.09375 19.5H6.25C6.57656 19.5 6.84375 19.2328 6.84375 18.9062V5.84375H19.9062C20.2328 5.84375 20.5 5.57656 20.5 5.25V1.09375C20.5 0.767188 20.2328 0.5 19.9062 0.5H6.54688C3.75625 0.5 1.5 2.75625 1.5 5.54688V18.9062C1.5 19.2328 1.76719 19.5 2.09375 19.5ZM40.0938 5.84375H53.1562V18.9062C53.1562 19.2328 53.4234 19.5 53.75 19.5H57.9062C58.2328 19.5 58.5 19.2328 58.5 18.9062V5.54688C58.5 2.75625 56.2438 0.5 53.4531 0.5H40.0938C39.7672 0.5 39.5 0.767188 39.5 1.09375V5.25C39.5 5.57656 39.7672 5.84375 40.0938 5.84375ZM19.9062 52.1562H6.84375V39.0938C6.84375 38.7672 6.57656 38.5 6.25 38.5H2.09375C1.76719 38.5 1.5 38.7672 1.5 39.0938V52.4531C1.5 55.2438 3.75625 57.5 6.54688 57.5H19.9062C20.2328 57.5 20.5 57.2328 20.5 56.9062V52.75C20.5 52.4234 20.2328 52.1562 19.9062 52.1562ZM57.9062 38.5H53.75C53.4234 38.5 53.1562 38.7672 53.1562 39.0938V52.1562H40.0938C39.7672 52.1562 39.5 52.4234 39.5 52.75V56.9062C39.5 57.2328 39.7672 57.5 40.0938 57.5H53.4531C56.2438 57.5 58.5 55.2438 58.5 52.4531V39.0938C58.5 38.7672 58.2328 38.5 57.9062 38.5ZM59.0938 26.3281H0.90625C0.579688 26.3281 0.3125 26.5953 0.3125 26.9219V31.0781C0.3125 31.4047 0.579688 31.6719 0.90625 31.6719H59.0938C59.4203 31.6719 59.6875 31.4047 59.6875 31.0781V26.9219C59.6875 26.5953 59.4203 26.3281 59.0938 26.3281Z" fill="#F0F0F0"></path>
                     </svg>
 
@@ -56,11 +56,25 @@
 {#                    Your image to appear here..#}
 {#                </div>#}
 
-                <div style="text-align:center;margin: 2em 0px -2em 0px">
+                <div style="text-align:center;margin: 3em 0px 0em 0em;">
+                    <div class="ui search selection dropdown multiple">
+                        <input type="hidden" id="multi-select">
+                        <i class="dropdown icon"></i>
+                        <div class="default text" >文档共享人</div>
+                        <div class="menu transition hidden" tabindex="-1">
+{#                            <div class="item selected" data-value="{{ user_id }}">{{ user_id }}</div>#}
+                            {% for one_data in user_data %}
+                                <div class="item" data-value="{{ one_data }}">{{ one_data }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <div style="text-align:center;margin: 2em 0em -2em 0em">
 {#                    <button class="ui primary button">#}
 {#                        <span>Upload Files</span>#}
 {#                    </button>#}
-                    <button class="upload_button" onclick="document.getElementById('upload_file').click();">Upload Files</button>
+                    <button class="ui blue button" onclick="document.getElementById('upload_file').click();">Upload Files</button>
 
                 </div>
 
@@ -96,10 +110,10 @@
                 }
 
 
-                .upload_button {
+                .ui.blue.button {
                     width: 178px;
                     height: 48px;
-                    margin-top: 15px;
+                    margin-top: 10px;
                     background: rgb(255, 255, 255);
                     border: 1px solid rgb(0, 110, 255);
                     box-sizing: border-box;
@@ -196,6 +210,9 @@
                         formFile.append("file[]", files[index]);
                     }
 
+                    var file_sharer = ("#multi-select").val()
+                    formFile.append('formFile', file_sharer)
+
                     $.ajax({
                         url: "/upload/",
                         data: formFile,
@@ -218,6 +235,7 @@
                   });
                 }
 
+                //按钮文件上传
                 fileUploader.addEventListener('change', (event) => {
 
                     var fileList = event.target.files;
@@ -228,6 +246,9 @@
                     {
                         formFile.append("file[]", fileList[index]);
                     }
+
+                    var file_sharer = ("#multi-select").val()
+                    formFile.append('formFile', file_sharer)
 
                     $.ajax({
                         url: "/upload/",
@@ -289,8 +310,9 @@
               <thead>
                 <tr class="center aligned">
                     <th>文件名</th>
-                    <th>文件归属</th>
-                    <th>文件大小(B)</th>
+                    <th>文件大小</th>
+                    <th>所有人</th>
+                    <th>共享人</th>
                     <th>文件Hash</th>
                     <th>上传时间</th>
                     <th>上传IP</th>
@@ -303,11 +325,12 @@
 
                   <tr style="display:none"><td ></td><td ></td><td ></td><td ></td><td ></td><td ></td><td ></td></tr>
 
-                  {% for one_data in data %}
+                  {% for one_data in file_data %}
                       <tr class="center aligned">
                         <td >{{ one_data.file_name }}</td>
-                        <td >{{ one_data.file_owner }}</td>
                         <td >{{ one_data.file_size }}</td>
+                        <td >{{ one_data.file_owner }}</td>
+                        <td >{{ one_data.file_sharer }}</td>
                         <td >{{ one_data.file_hash }}</td>
                         <td >{{ one_data.upload_time }}</td>
                         <td >{{ one_data.upload_ip }}</td>
