@@ -66,8 +66,8 @@ def show_file_size(size_str: int):
     else:
         return '{0}B'.format(size_str)
 
-def cala_watermark(file_hash,upload_ip,upload_time,random_8byte):
-    return sha256(file_hash + upload_ip + upload_time + random_8byte)
+def cala_watermark(file_hash, upload_ip, upload_time, user_id, random_8byte):
+    return sha256(file_hash + upload_ip + upload_time + user_id + random_8byte)
 
 def timezone_to_string(date):
     return date.strftime("%Y-%m-%d %H:%M:%S")
@@ -270,29 +270,34 @@ def upload(request):
                 upload_valid_filename =  get_valid_filename(file.name)
 
                 file_hash = cala_file_hash(file)
-                upload_time = timezone.now()
-                file_watermark = cala_watermark(file_hash, upload_ip, timezone_to_string(upload_time), randbytes(8))
-
                 upload_file_path = f'{settings.BASE_DIR}/upload/{upload_valid_filename}'
                 handle_uploaded_file(file, upload_file_path)
 
                 try:
                     for sharer in file_sharer.split(','):
+
+                        upload_time = timezone.now()
+                        file_watermark = cala_watermark(file_hash, upload_ip, timezone_to_string(upload_time), sharer, randbytes(16))
+
                         File.objects.create(user_id=user_id, file_sharer=sharer, file_name=upload_valid_filename, file_size=show_file_size(file.size), file_hash=file_hash,
                                         upload_file_path=upload_file_path, upload_ip=upload_ip, upload_time=upload_time, file_watermark=file_watermark)
+
+                        # 向redis下发任务
+                        task_index = random.randint(0, QUEUE_MAX - 1)
+                        print('exec queue :', f'watermark_task{task_index}')
+
+                        task_data = {'user_id': user_id, 'file_watermark': file_watermark,
+                                     'task_time': timezone_to_string(upload_time),
+                                     'download_url': f'http://172.18.18.18:8080/{upload_valid_filename}'}
+
+                        redis.lpush(f'watermark_task{task_index}', json.dumps(task_data))
+
+                        result.append(f'{upload_valid_filename} uploaded successfully.')
+
                 except Exception:
                     exception_info = traceback.format_exc()
                     print(exception_info)
                     return HttpResponse('Create Error.')
-
-                #向redis下发任务
-                task_index = random.randint(0,QUEUE_MAX-1)
-                print('exec queue :',f'watermark_task{task_index}')
-
-                task_data = {'user_id': user_id, 'file_watermark': file_watermark, 'task_time': timezone_to_string(upload_time), 'download_url':f'http://172.18.18.18:8080/{upload_valid_filename}' }
-                redis.lpush(f'watermark_task{task_index}', json.dumps(task_data))
-
-                result.append(f'{upload_valid_filename} uploaded successfully.')
 
             return HttpResponse('[OK]' + '\n'.join(result))
         else:
