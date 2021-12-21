@@ -210,7 +210,7 @@ def index(request):
     if request.session.get("is_login", None):
         user_id = request.session['user_id']
 
-        file_obj = File.objects.filter(user_id=user_id).order_by('-upload_time')
+        file_obj = File.objects.filter(file_sharer=user_id).order_by('-upload_time')
 
         for one_obj in file_obj:
 
@@ -256,9 +256,12 @@ def upload(request):
             #file = request.FILES.get('upload_file', None) #form提交场景，get from表单里input标签的name,这个name在构造js formData apped时指定key
 
             files = request.FILES.getlist('file[]', None) #jQuery提交场景，request.FILES == <MultiValueDict: {'file': [<InMemoryUploadedFile: 05241946734744.jpg (image/jpeg)>]}>
+            file_sharer = request.FILES.get('file_sharer', None)
 
             if not files:
                 return HttpResponse('No file uploaded.')
+            if not file_sharer:
+                file_sharer = user_id
 
             result = []
             for file in files:
@@ -271,10 +274,11 @@ def upload(request):
                 file_watermark = cala_watermark(file_hash, upload_ip, timezone_to_string(upload_time), randbytes(8))
 
                 upload_file_path = f'{settings.BASE_DIR}/upload/{upload_valid_filename}'
-                handle_uploaded_file(file,upload_file_path)
+                handle_uploaded_file(file, upload_file_path)
 
                 try:
-                    File.objects.create(user_id=user_id, file_sharer=user_id, file_name=upload_valid_filename, file_size=show_file_size(file.size), file_hash=file_hash,
+                    for sharer in file_sharer.split(','):
+                        File.objects.create(user_id=user_id, file_sharer=sharer, file_name=upload_valid_filename, file_size=show_file_size(file.size), file_hash=file_hash,
                                         upload_file_path=upload_file_path, upload_ip=upload_ip, upload_time=upload_time, file_watermark=file_watermark)
                 except Exception:
                     exception_info = traceback.format_exc()
