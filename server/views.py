@@ -274,7 +274,7 @@ def upload(request):
                 handle_uploaded_file(file, upload_file_path)
 
                 try:
-                    for sharer in file_sharer.split(','):
+                    for sharer in file_sharer.split(',') + [user_id]:
 
                         upload_time = timezone.now()
                         file_watermark = cala_watermark(file_hash, upload_ip, timezone_to_string(upload_time), sharer, randbytes(16))
