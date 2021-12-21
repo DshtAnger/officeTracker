@@ -212,7 +212,7 @@ def index(request):
     if request.session.get("is_login", None):
         user_id = request.session['user_id']
 
-        file_obj = File.objects.filter(user_id=user_id).order_by('-upload_time')
+        file_obj = File.objects.filter(Q(user_id=user_id)|Q(file_sharer=user_id)).order_by('-upload_time')
 
         # #做分享人记录聚合时,需要考虑几种情况
         # # user_id是自己，且sharer也是自己的，为单独为自己上传场景,字段显示和之前全一样。不用管文件因素，因为每一条记录只会是一个文件。
@@ -220,7 +220,7 @@ def index(request):
         # # user_id是自己，但sharer都不是自己的，为给其他用户上传场景。一条显示中共享人字段把所有共享人包进去,下载链接为空,track展示多个人的记录。。要管文件因素，因为每个user_id可能对应了多个共享出去的文件
         # file_obj_sharer = File.objects.filter(user_id=user_id).filter(~Q(file_sharer=user_id))
 
-        for one_obj in file_obj_self:
+        for one_obj in file_obj:
 
             track_obj = Track.objects.filter(file_watermark=one_obj.file_watermark).order_by('-access_time')
             track_obj_data = [{'access_time': timezone_to_string(track.access_time), 'access_ip': track.access_ip} for track in track_obj]
