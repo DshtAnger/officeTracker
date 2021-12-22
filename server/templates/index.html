@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/semantic.min.js' %}"></script>
+{#    <script src="https://semantic-ui.com/javascript/library/tablesort.js"></script>#}
 </head>
 
 <body>
@@ -312,19 +313,19 @@
 
         <div id="data_show" style="margin-top: 2em;">
 
-            <table class="ui celled green table">
+            <table class="ui sortable celled green table" id="main_table">
 
               <thead>
                 <tr class="center aligned">
                     <th>文件名</th>
-                    <th>文件大小</th>
-                    <th>文件Hash</th>
+                    <th class="one wide">文件大小</th>
+                    <th class="three wide">文件Hash</th>
                     <th>归属人</th>
                     <th>共享人</th>
-                    <th>上传时间</th>
-                    <th>上传IP</th>
-                    <th>下载链接</th>
-                    <th>访问记录</th>
+                    <th class="one wide">上传时间</th>
+                    <th class="one wide">上传IP</th>
+                    <th class="one wide">下载链接</th>
+                    <th >访问记录</th>
                 </tr>
               </thead>
 
@@ -381,6 +382,8 @@
         </div>
 
         <script>
+
+         //$('#main_table').tablesort();
 
         const user_id = document.getElementById('uid').textContent;
 
