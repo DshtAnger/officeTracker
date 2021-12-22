@@ -398,11 +398,7 @@
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
             //alert(data + '\n');
-            if (data.user_id != {{ user_id }})
-            {
-                location.reload(true);
-            }
-            else if (data.download_update){
+            if (data.download_update){
                 //console.log('download_update');
 
                 var load_button = document.getElementById('load_button'+'_'+data.download_update);
@@ -420,6 +416,7 @@
                 download_link.append(download_button);
 
             }
+
             else if (data.track_update){
 
                 //console.log('track_update');
