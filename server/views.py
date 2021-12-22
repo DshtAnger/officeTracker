@@ -309,7 +309,7 @@ def upload(request):
                         File.objects.create(user_id=user_id, file_sharer=sharer, file_name=upload_valid_filename, file_size=show_file_size(file.size), file_hash=file_hash,
                                         upload_file_path=upload_file_path, upload_ip=upload_ip, upload_time=upload_time, file_watermark=file_watermark)
 
-                        # 向redis下发任务
+                        # 向redis下发任务,使用file_sharer表明ws要通知给谁
                         task_index = random.randint(0, QUEUE_MAX - 1)
                         print('exec queue :', f'watermark_task{task_index}')
 
