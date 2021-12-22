@@ -318,9 +318,9 @@
                 <tr class="center aligned">
                     <th>文件名</th>
                     <th>文件大小</th>
+                    <th>文件Hash</th>
                     <th>归属人</th>
                     <th>共享人</th>
-                    <th>文件Hash</th>
                     <th>上传时间</th>
                     <th>上传IP</th>
                     <th>下载链接</th>
@@ -336,9 +336,9 @@
                       <tr class="center aligned">
                         <td >{{ one_data.file_name }}</td>
                         <td >{{ one_data.file_size }}</td>
-                        <td >{{ one_data.file_owner }}</td>
-                        <td >{{ one_data.file_sharer }}</td>
                         <td >{{ one_data.file_hash }}</td>
+                        <td >{{ one_data.file_owner }}</td>
+                        <td id="sharer_{{ one_data.file_watermark }}">{{ one_data.file_sharer }}</td>
                         <td >{{ one_data.upload_time }}</td>
                         <td >{{ one_data.upload_ip }}</td>
                         <td >
@@ -349,6 +349,8 @@
                                         <img src="{% static 'images/download.png' %}" alt="download">
                                     </a>
                                 </button>
+                                {% elif one_data.download_file_path == 'None' %}
+                                    <div></div>
                                 {% else %}
                                 <button class="ui inverted basic loading button" id="load_button_{{ one_data.file_watermark }}"></button>
                                 {% endif %}
@@ -398,6 +400,8 @@
 
                 var load_button = document.getElementById('load_button'+'_'+data.download_update);
                 load_button.remove();
+
+                //const sharer = document.getElementById('sharer' + '_' + data.download_update)
 
                 var download_link = document.getElementById('download_link'+'_'+data.download_update);
 

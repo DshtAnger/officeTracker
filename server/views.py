@@ -234,7 +234,8 @@ def index(request):
                     'file_hash': one_obj.file_hash,
                     'upload_time': timezone_to_string(one_obj.upload_time),
                     'upload_ip': one_obj.upload_ip,
-                    'download_file_path': one_obj.download_file_path if one_obj.file_sharer == user_id else '',
+                    'download_file_path': one_obj.download_file_path if one_obj.file_sharer == user_id else 'None',
+                    #ws有干扰，会导致刷新页面前用户看到下载按钮，要修改index页面。同时对下载api做cooki校验
                     'file_watermark': one_obj.file_watermark,
                     'track': track_obj_data
                 }
@@ -338,7 +339,7 @@ def download(request, file_watermark):
         raise Http404()
 
     if request.session.get("is_login", None):
-        #预留:后面要在下载时验证,下载人是否是该文件的共享人,要在session里额外添加身份信息
+        #预留:后面要在下载时验证,下载人是否是该文件的共享人,并且归属人不能下载共享人的文件,要在session里额外添加身份信息
 
         try:
             file_obj = File.objects.get(file_watermark=file_watermark)
