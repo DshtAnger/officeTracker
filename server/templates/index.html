@@ -402,7 +402,11 @@
                 //console.log('download_update');
 
                 var load_button = document.getElementById('load_button'+'_'+data.download_update);
-                load_button.remove();
+
+                if (load_button == null)
+                    location.reload(true);
+                else
+                    load_button.remove();
 
                 //const sharer = document.getElementById('sharer' + '_' + data.download_update)
 
