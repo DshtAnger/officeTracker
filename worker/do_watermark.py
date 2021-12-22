@@ -127,7 +127,7 @@ async def watermark(user_id, file_watermark, task_time, download_url):
     except:
         pass
 
-    await send_websocket_data(user_id, {'download_update':file_watermark, 'is_success': task_status})
+    await send_websocket_data(user_id, {'user_id':user_id, 'download_update':file_watermark, 'is_success': task_status})
     logging.info(f'[+][{get_current_time()}][{file_watermark}] Server had notified the front end to refresh the download status.')
 
 async def run():
@@ -166,7 +166,7 @@ async def run():
             access_ip = data.get('access_ip')
             access_time = data.get('access_time')
 
-            await send_websocket_data(user_id, {'track_update': file_watermark, 'access_ip':access_ip, 'access_time':access_time})
+            await send_websocket_data(user_id, {'user_id':user_id, 'track_update': file_watermark, 'access_ip':access_ip, 'access_time':access_time})
             logging.info(f'[+][{get_current_time()}][{file_watermark}] Server had notified the front end to refresh the track status.')
 
             logging.info(f'[*][{get_current_time()}] ' + '-' * 50)
