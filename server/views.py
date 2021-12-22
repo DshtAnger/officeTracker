@@ -309,11 +309,11 @@ def upload(request):
                         File.objects.create(user_id=user_id, file_sharer=sharer, file_name=upload_valid_filename, file_size=show_file_size(file.size), file_hash=file_hash,
                                         upload_file_path=upload_file_path, upload_ip=upload_ip, upload_time=upload_time, file_watermark=file_watermark)
 
-                        # 向redis下发任务,使用file_sharer表明ws要通知给谁
+                        # 向redis下发任务,使用file_sharer标示要把下载链接展示给谁
                         task_index = random.randint(0, QUEUE_MAX - 1)
                         print('exec queue :', f'watermark_task{task_index}')
 
-                        task_data = {'user_id': user_id, 'file_watermark': file_watermark,
+                        task_data = {'user_id': file_sharer, 'file_watermark': file_watermark,
                                      'task_time': timezone_to_string(upload_time),
                                      'download_url': f'http://172.18.18.18:8080/{upload_valid_filename}'}
 
@@ -430,8 +430,13 @@ def track(request,file_watermark):
             # 通知前端进行访问记录更新
             task_index = random.randint(0, QUEUE_MAX-1)
             print('exec queue :', f'track_task{task_index}')
-            task_data = {'user_id': file_obj.user_id, 'file_watermark': file_watermark, 'access_ip':access_ip, 'access_time':timezone_to_string(access_time)}
+
+            task_data = {'user_id': file_obj.file_sharer, 'file_watermark': file_watermark, 'access_ip':access_ip, 'access_time':timezone_to_string(access_time)}
             redis.lpush(f'track_task{task_index}', json.dumps(task_data))
+
+            if file_obj.user_id != file_obj.file_sharer:
+                task_data.update({'user_id':file_obj.user_id})
+                redis.lpush(f'track_task{task_index}', json.dumps(task_data))
 
         else:
             if (access_time - lastest_access_time[0].access_time).seconds > 1:
@@ -440,8 +445,13 @@ def track(request,file_watermark):
                 # 通知前端进行访问记录更新
                 task_index = random.randint(0, QUEUE_MAX-1)
                 print('exec queue :', f'track_task{task_index}')
-                task_data = {'user_id': file_obj.user_id, 'file_watermark': file_watermark, 'access_ip': access_ip, 'access_time': timezone_to_string(access_time)}
+
+                task_data = {'user_id': file_obj.file_sharer, 'file_watermark': file_watermark, 'access_ip': access_ip, 'access_time': timezone_to_string(access_time)}
                 redis.lpush(f'track_task{task_index}', json.dumps(task_data))
+
+                if file_obj.user_id != file_obj.file_sharer:
+                    task_data.update({'user_id': file_obj.user_id})
+                    redis.lpush(f'track_task{task_index}', json.dumps(task_data))
 
         return HttpResponse('')
     else:
