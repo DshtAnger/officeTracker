@@ -416,6 +416,9 @@ def track(request,file_watermark):
     access_ip = request.META['REMOTE_ADDR']
     access_time = timezone.now()
 
+    print(request.META['PATH_INFO'])
+    print(request.META['HTTP_USER_AGENT'])
+
     if not access_ip in WORK_SERVER:
 
         try:
@@ -453,6 +456,6 @@ def track(request,file_watermark):
                     task_data.update({'user_id': file_obj.user_id})
                     redis.lpush(f'track_task{task_index}', json.dumps(task_data))
 
-        return HttpResponse('')
+        raise Http404()#return HttpResponse('')
     else:
         raise Http404()
