@@ -325,7 +325,7 @@
                     <th class="one wide">上传时间</th>
                     <th class="one wide">上传IP</th>
                     <th class="one wide">下载链接</th>
-                    <th >访问记录</th>
+                    <th>访问记录</th>
                 </tr>
               </thead>
 
@@ -335,14 +335,14 @@
 
                   {% for one_data in file_data %}
                       <tr class="center aligned">
-                        <td >{{ one_data.file_name }}</td>
-                        <td >{{ one_data.file_size }}</td>
-                        <td >{{ one_data.file_hash }}</td>
-                        <td >{{ one_data.file_owner }}</td>
+                        <td>{{ one_data.file_name }}</td>
+                        <td>{{ one_data.file_size }}</td>
+                        <td>{{ one_data.file_hash }}</td>
+                        <td>{{ one_data.file_owner }}</td>
                         <td id="sharer_{{ one_data.file_watermark }}">{{ one_data.file_sharer }}</td>
-                        <td >{{ one_data.upload_time }}</td>
-                        <td >{{ one_data.upload_ip }}</td>
-                        <td >
+                        <td>{{ one_data.upload_time }}</td>
+                        <td>{{ one_data.upload_ip }}</td>
+                        <td>
                             <div class="ui inverted small icon buttons" id="download_link_{{ one_data.file_watermark }}">
                                 {% if one_data.download_file_path == 'None' %}
                                 <div></div>
