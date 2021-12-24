@@ -223,7 +223,7 @@ def index(request):
         for one_obj in file_obj:
 
             track_obj = Track.objects.filter(file_watermark=one_obj.file_watermark).order_by('-access_time')
-            track_obj_data = [{'access_time': timezone_to_string(track.access_time), 'access_ip': track.access_ip} for track in track_obj]
+            track_obj_data = [{'access_time': timezone_to_string(track.access_time), 'access_ip': track.access_ip, 'access_UA':track.access_UA} for track in track_obj]
 
             context['file_data'].append(
                 {
@@ -454,7 +454,7 @@ def track(request,file_watermark):
                 TO_NOFITY = True
                 UA_UPDATE = True
 
-            # 访问间隔2s及以上，视为新的访问，进行该文件的再次记录，但access_UA记录为空
+            # 访问间隔2s及以上，视为新的访问，进行该文件的再次记录、但新记录的access_UA设置为空
             if (access_time - lastest_access_list[0].access_time).total_seconds() >= 2:
                 Track.objects.create(file_watermark=file_watermark, access_ip=access_ip, access_time=access_time, access_UA='')
                 TO_NOFITY = True
