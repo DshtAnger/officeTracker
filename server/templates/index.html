@@ -366,6 +366,7 @@
                                     <tr class="center aligned">
                                       <td>{{ track.access_time }}</td>
                                       <td>{{ track.access_ip }}</td>
+                                      <td id="ua_{{ track.access_time }}">{{ track.access_UA }}</td>
                                     </tr>
                                     {% endfor %}
 
@@ -427,11 +428,22 @@
 
                 var tbody_obj = document.getElementById(data.track_update);
 
+                if (!data.access_UA){
+
                 var tr_obj = document.createElement('tr');
                 tr_obj.setAttribute('class','center aligned');
-                tr_obj.innerHTML = '<td>' + data.access_time + '</td><td>' + data.access_ip + '</td>'
+                tr_obj.innerHTML = '<td>' + data.access_time + '</td><td>' + data.access_ip + '</td><td id="ua_' + data.access_time + '"></td>'
 
                 tbody_obj.prepend(tr_obj);
+
+                }
+                else
+                {
+                    var ua_obj = document.getElementById('ua_' + data.access_time);
+                    ua_obj.innerText = data.access_UA;
+                }
+
+
             }
         };
 

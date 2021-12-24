@@ -60,11 +60,11 @@ def cala_file_hash(upload_file_obj):
 def show_file_size(size_str: int):
     #前端的文件大小限制，待做
     if 1024 <= size_str < 1024*1024:
-        return '{:.2f}KB'.format(size_str/1024)
+        return '{:.2f} KB'.format(size_str/1024)
     elif 1024*1024 <= size_str <= 1024*1024*200:
-        return '{:.2f}MB'.format(size_str /1024/1024)
+        return '{:.2f} MB'.format(size_str /1024/1024)
     else:
-        return '{0}B'.format(size_str)
+        return '{0} B'.format(size_str)
 
 def cala_watermark(file_hash, upload_ip, upload_time, user_id, random_8byte):
     return sha256(file_hash + upload_ip + upload_time + user_id + random_8byte)
@@ -415,6 +415,7 @@ def track(request,file_watermark):
 
     access_ip = request.META['REMOTE_ADDR']
     access_time = timezone.now()
+    access_UA = request.META['HTTP_USER_AGENT']
 
     print(request.META['PATH_INFO'])
     print(request.META['HTTP_USER_AGENT'])
@@ -426,15 +427,16 @@ def track(request,file_watermark):
         except File.DoesNotExist:
             raise Http404()
 
-        lastest_access_time = Track.objects.filter(file_watermark=file_watermark).order_by('-access_time')
-        if len(lastest_access_time) == 0:
-            Track.objects.create(file_watermark=file_watermark, access_ip=access_ip, access_time=access_time)
+        lastest_access_list = Track.objects.filter(file_watermark=file_watermark).order_by('-access_time')
+
+        if len(lastest_access_list) == 0:
+            Track.objects.create(file_watermark=file_watermark, access_ip=access_ip, access_time=access_time, access_UA='')
 
             # 通知前端进行访问记录更新
             task_index = random.randint(0, QUEUE_MAX-1)
             print('exec queue :', f'track_task{task_index}')
 
-            task_data = {'user_id': file_obj.file_sharer, 'file_watermark': file_watermark, 'access_ip':access_ip, 'access_time':timezone_to_string(access_time)}
+            task_data = {'user_id': file_obj.file_sharer, 'file_watermark': file_watermark, 'access_ip':access_ip, 'access_time':timezone_to_string(access_time), 'access_UA':''}
             redis.lpush(f'track_task{task_index}', json.dumps(task_data))
 
             if file_obj.user_id != file_obj.file_sharer:
@@ -442,14 +444,31 @@ def track(request,file_watermark):
                 redis.lpush(f'track_task{task_index}', json.dumps(task_data))
 
         else:
-            if (access_time - lastest_access_time[0].access_time).seconds > 1:
-                Track.objects.create(file_watermark=file_watermark, access_ip=access_ip, access_time=access_time)
+            TO_NOFITY = None
+            UA_UPDATE = None
+
+            # 访问间隔2s以内，且最早的记录access_UA为空时，则更新最早记录的access_UA
+            if (access_time - lastest_access_list[0].access_time).total_seconds() < 2 and lastest_access_list[0].access_UA == '':
+                lastest_access_list[0].access_UA = access_UA
+                lastest_access_list[0].save()
+                TO_NOFITY = True
+                UA_UPDATE = True
+
+            # 访问间隔2s及以上，视为新的访问，进行该文件的再次记录，但access_UA记录为空
+            if (access_time - lastest_access_list[0].access_time).total_seconds() >= 2:
+                Track.objects.create(file_watermark=file_watermark, access_ip=access_ip, access_time=access_time, access_UA='')
+                TO_NOFITY = True
+                UA_UPDATE = False
+
+
+            if TO_NOFITY:
 
                 # 通知前端进行访问记录更新
                 task_index = random.randint(0, QUEUE_MAX-1)
                 print('exec queue :', f'track_task{task_index}')
 
-                task_data = {'user_id': file_obj.file_sharer, 'file_watermark': file_watermark, 'access_ip': access_ip, 'access_time': timezone_to_string(access_time)}
+                access_UA = access_UA if UA_UPDATE else ''
+                task_data = {'user_id': file_obj.file_sharer, 'file_watermark': file_watermark, 'access_ip': access_ip, 'access_time': timezone_to_string(access_time), 'access_UA': access_UA}
                 redis.lpush(f'track_task{task_index}', json.dumps(task_data))
 
                 if file_obj.user_id != file_obj.file_sharer:

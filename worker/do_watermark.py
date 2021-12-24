@@ -103,9 +103,9 @@ async def watermark(user_id, file_watermark, task_time, download_url):
 
     proc = await asyncio.create_subprocess_shell(' '.join(Scribbles_args),stdout=asyncio.subprocess.PIPE,stderr=asyncio.subprocess.PIPE)
     stdout, stderr = await proc.communicate()
-    logging.info(f'[+][{get_current_time()}][{file_watermark}] program stdout : {stdout.decode("unicode_escape")} | program stderr : {stderr.decode("unicode_escape")}')
+    logging.info(f'[+][{get_current_time()}][{file_watermark}] program stdout : {stdout} | program stderr : {stderr}')
 
-    if 'does not have a recognized extension' in stdout.decode('unicode_escape'):#byte串中含中文,decode('utf-8')会报错，用这个编码
+    if b'does not have a recognized extension' in stdout:#.decode("unicode_escape") byte串中含中文,decode('utf-8')会报错，用这个编码
         task_status = False
         redis_result_data = {'task_status': task_status, 'task_time': task_time, 'failed_info': 'upload file does not have a recognized extension',
                              'file_watermark': file_watermark,
@@ -165,8 +165,9 @@ async def run():
             file_watermark = data.get('file_watermark')
             access_ip = data.get('access_ip')
             access_time = data.get('access_time')
+            access_UA = data.get('access_UA')
 
-            await send_websocket_data(user_id, {'user_id':user_id, 'track_update': file_watermark, 'access_ip':access_ip, 'access_time':access_time})
+            await send_websocket_data(user_id, {'user_id':user_id, 'track_update': file_watermark, 'access_ip':access_ip, 'access_time':access_time, 'access_UA':access_UA})
             logging.info(f'[+][{get_current_time()}][{file_watermark}] Server had notified the front end to refresh the track status.')
 
             logging.info(f'[*][{get_current_time()}] ' + '-' * 50)
