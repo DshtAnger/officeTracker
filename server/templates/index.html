@@ -422,22 +422,21 @@
 
             }
 
-            else if (data.track_update){
+            else if(data.track_update){
 
                 //console.log('track_update');
 
                 var tbody_obj = document.getElementById(data.track_update);
 
-                if (!data.access_UA){
-
-                var tr_obj = document.createElement('tr');
-                tr_obj.setAttribute('class','center aligned');
-                tr_obj.innerHTML = '<td>' + data.access_time + '</td><td>' + data.access_ip + '</td><td></td>'
-
-                tbody_obj.prepend(tr_obj);
-
+                if(!tbody_obj.textContent.includes(data.access_time))
+                {
+                    var tr_obj = document.createElement('tr');
+                    tr_obj.setAttribute('class','center aligned');
+                    tr_obj.innerHTML = '<td>' + data.access_time + '</td><td>' + data.access_ip + '</td><td></td>'
+                    tbody_obj.prepend(tr_obj);
                 }
-                else
+
+                if(data.access_UA)
                 {
                     $('#'+data.track_update+' > tr:nth-child(1) > td:nth-child(3)')[0].innerText = data.access_UA;
                 }
