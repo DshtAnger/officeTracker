@@ -417,6 +417,7 @@ def track(request,file_watermark):
     access_time = timezone.now()
     access_UA = request.META['HTTP_USER_AGENT']
 
+    format_access_time = timezone_to_string(access_time)
     if 'Mozilla/4.0 (' in access_UA and access_UA[-1] == ')':
         access_UA = access_UA[13:-1]
 
@@ -434,13 +435,13 @@ def track(request,file_watermark):
 
         if len(lastest_access_list) == 0:
             new_track_obj = Track.objects.create(file_watermark=file_watermark, access_ip=access_ip, access_time=access_time, access_UA='')
-            redis.hmset(f'{file_watermark}[{timezone_to_string(access_time)}]_times', '1')
+            redis.hmset(f'{file_watermark}[{format_access_time}]_times', '1')
 
             # 通知前端进行访问记录更新
             task_index = random.randint(0, QUEUE_MAX-1)
             print('exec queue :', f'track_task{task_index}')
 
-            task_data = {'user_id': file_obj.file_sharer, 'file_watermark': file_watermark, 'access_ip':access_ip, 'access_time':timezone_to_string(access_time), 'access_UA':''}
+            task_data = {'user_id': file_obj.file_sharer, 'file_watermark': file_watermark, 'access_ip':access_ip, 'access_time':format_access_time, 'access_UA':''}
             redis.lpush(f'track_task{task_index}', json.dumps(task_data))
 
             if file_obj.user_id != file_obj.file_sharer:
@@ -456,14 +457,14 @@ def track(request,file_watermark):
             if (access_time - lastest_access_list[0].access_time).total_seconds() < 2 and lastest_access_list[0].access_UA == '':
                 lastest_access_list[0].access_UA = access_UA
                 lastest_access_list[0].save()
-                redis.hmset(f'{file_watermark}[{timezone_to_string(access_time)}]_times', '2')
+                redis.hmset(f'{file_watermark}[{format_access_time}]_times', '2')
                 TO_NOFITY = True
                 UA_UPDATE = True
 
             # 访问间隔2s及以上，视为新的访问，进行该文件的再次记录、但新记录的access_UA设置为空
             if (access_time - lastest_access_list[0].access_time).total_seconds() >= 2:
                 new_track_obj = Track.objects.create(file_watermark=file_watermark, access_ip=access_ip, access_time=access_time, access_UA='')
-                redis.hmset(f'{file_watermark}[{timezone_to_string(access_time)}]_times', '1')
+                redis.hmset(f'{file_watermark}[{format_access_time}]_times', '1')
                 TO_NOFITY = True
                 UA_UPDATE = False
 
@@ -475,7 +476,7 @@ def track(request,file_watermark):
                 print('exec queue :', f'track_task{task_index}')
 
                 access_UA = access_UA if UA_UPDATE else ''
-                task_data = {'user_id': file_obj.file_sharer, 'file_watermark': file_watermark, 'access_ip': access_ip, 'access_time': timezone_to_string(access_time), 'access_UA': access_UA}
+                task_data = {'user_id': file_obj.file_sharer, 'file_watermark': file_watermark, 'access_ip': access_ip, 'access_time': format_access_time, 'access_UA': access_UA}
                 redis.lpush(f'track_task{task_index}', json.dumps(task_data))
 
                 if file_obj.user_id != file_obj.file_sharer:
@@ -486,7 +487,7 @@ def track(request,file_watermark):
         # 判定access_UA是否为空的逻辑也可以整体修改为依靠redis的次数记录来判定
         if file_obj.file_name.split('.')[-1] == 'doc':
             time.sleep(2)
-            if redis.hget(f'{file_watermark}[{timezone_to_string(access_time)}]_times') != '2':
+            if redis.hget(f'{file_watermark}[{format_access_time}]_times') != '2':
                 new_track_obj.access_UA = 'compatible; ms-office; MSOffice 16'
 
                 # 通知前端进行访问记录更新
@@ -494,7 +495,7 @@ def track(request,file_watermark):
                 print('exec queue :', f'track_task{task_index}')
 
                 task_data = {'user_id': file_obj.file_sharer, 'file_watermark': file_watermark, 'access_ip': access_ip,
-                             'access_time': timezone_to_string(access_time), 'access_UA': ''}
+                             'access_time': format_access_time, 'access_UA': ''}
                 redis.lpush(f'track_task{task_index}', json.dumps(task_data))
 
                 if file_obj.user_id != file_obj.file_sharer:
