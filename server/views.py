@@ -22,7 +22,7 @@ import os
 import shutil
 import traceback
 
-redis = get_redis_connection()
+redis = get_redis_connection() # redis get出来的数据都是byte类型,使用前decode('utf-8')
 VALID_CHARS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 SESSION_EXPIRY_TIME = 60 * 60
@@ -456,7 +456,7 @@ def track(request,file_watermark):
             TO_UPDATE = None
 
             # 访问间隔默认值2s以内，且最早的记录还没有更新2次，则更新最早记录并刷新缓存
-            if (access_time - lastest_access_list[0].access_time).total_seconds() < ACCESS_INTERVAL and redis.hget(f'{file_watermark}[{lastest_access_list[0].access_time.strftime("%Y%m%d%H%M%S")}]','times') != '2':
+            if (access_time - lastest_access_list[0].access_time).total_seconds() < ACCESS_INTERVAL and redis.hget(f'{file_watermark}[{lastest_access_list[0].access_time.strftime("%Y%m%d%H%M%S")}]','times').decode('utf-8') != '2':
                 lastest_access_list[0].access_UA = access_UA
                 lastest_access_list[0].save()
                 redis.hmset(f'{file_watermark}[{lastest_access_list[0].access_time.strftime("%Y%m%d%H%M%S")}]', {'times':'2'})
