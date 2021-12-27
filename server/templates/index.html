@@ -339,7 +339,7 @@
                         <td>{{ one_data.file_size }}</td>
                         <td>{{ one_data.file_hash }}</td>
                         <td>{{ one_data.file_owner }}</td>
-                        <td id="sharer_{{ one_data.file_watermark }}">{{ one_data.file_sharer }}</td>
+                        <td>{{ one_data.file_sharer }}</td>
                         <td>{{ one_data.upload_time }}</td>
                         <td>{{ one_data.upload_ip }}</td>
                         <td>
@@ -408,8 +408,6 @@
                     location.reload(true);
                 else
                     load_button.remove();
-
-                //const sharer = document.getElementById('sharer' + '_' + data.download_update)
 
                 var download_link = document.getElementById('download_link'+'_'+data.download_update);
 
