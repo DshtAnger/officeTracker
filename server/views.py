@@ -452,6 +452,8 @@ def track(request,file_watermark):
 
         else:
             update_time = None
+            TO_NOTIFY = None
+            TO_UPDATE = None
 
             # 访问间隔默认值2s以内，且最早的记录还没有更新2次，则更新最早记录并刷新缓存
             if (access_time - lastest_access_list[0].access_time).total_seconds() < ACCESS_INTERVAL and redis.hget(f'{file_watermark}[{lastest_access_list[0].access_time.strftime("%Y%m%d%H%M%S")}]','times') != '2':
@@ -459,23 +461,26 @@ def track(request,file_watermark):
                 lastest_access_list[0].save()
                 redis.hmset(f'{file_watermark}[{lastest_access_list[0].access_time.strftime("%Y%m%d%H%M%S")}]', {'times':'2'})
                 update_time = lastest_access_list[0].access_time
+                TO_NOTIFY = True
 
             # 访问间隔默认值2s及以上，视为新的访问，进行该文件的再次记录
             if (access_time - lastest_access_list[0].access_time).total_seconds() >= ACCESS_INTERVAL:
                 new_track_obj = Track.objects.create(file_watermark=file_watermark, access_ip=access_ip, access_time=access_time, access_UA=access_UA)
                 redis.hmset(f'{file_watermark}[{access_time.strftime("%Y%m%d%H%M%S")}]', {'times':'1'})
                 update_time = access_time
+                TO_NOTIFY = True
 
-            # 通知前端进行访问记录更新
-            task_index = random.randint(0, QUEUE_MAX-1)
-            print('exec queue :', f'track_task{task_index}')
+            if TO_NOTIFY:
+                # 通知前端进行访问记录更新
+                task_index = random.randint(0, QUEUE_MAX-1)
+                print('exec queue :', f'track_task{task_index}')
 
-            task_data = {'user_id': file_obj.file_sharer, 'file_watermark': file_watermark, 'access_ip': access_ip, 'access_time': timezone_to_string(update_time), 'access_UA': access_UA}
-            redis.lpush(f'track_task{task_index}', json.dumps(task_data))
-
-            if file_obj.user_id != file_obj.file_sharer:
-                task_data.update({'user_id': file_obj.user_id})
+                task_data = {'user_id': file_obj.file_sharer, 'file_watermark': file_watermark, 'access_ip': access_ip, 'access_time': timezone_to_string(update_time), 'access_UA': access_UA}
                 redis.lpush(f'track_task{task_index}', json.dumps(task_data))
+
+                if file_obj.user_id != file_obj.file_sharer:
+                    task_data.update({'user_id': file_obj.user_id})
+                    redis.lpush(f'track_task{task_index}', json.dumps(task_data))
 
 
         # win10打开doc,无论如何都只有一次访问记录.借助redis记录访问次数,当访问文档是doc时暂停2s再检测redis记录,如为达2则确定时win10打开doc场景,强制赋值并通知.
