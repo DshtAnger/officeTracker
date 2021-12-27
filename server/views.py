@@ -470,7 +470,6 @@ def track(request,file_watermark):
             task_index = random.randint(0, QUEUE_MAX-1)
             print('exec queue :', f'track_task{task_index}')
 
-            access_UA = access_UA if UA_UPDATE else ''
             task_data = {'user_id': file_obj.file_sharer, 'file_watermark': file_watermark, 'access_ip': access_ip, 'access_time': timezone_to_string(update_time), 'access_UA': access_UA}
             redis.lpush(f'track_task{task_index}', json.dumps(task_data))
 
