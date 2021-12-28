@@ -59,8 +59,9 @@ async def run():
 
             logging.info('-' * 50)
 
-        await asyncio.sleep(0.2)
+        await asyncio.sleep(0.5)
 
 loop = asyncio.new_event_loop()
 asyncio.set_event_loop(loop)
+print('[+] Start Nofity...')
 loop.run_until_complete(run())

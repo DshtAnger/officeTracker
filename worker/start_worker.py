@@ -27,8 +27,11 @@ async def start_do_watermark(programe_id):
 loop = asyncio.get_event_loop()
 
 tasks = []
+
 for programe_id in range(0,QUEUE_MAX):
     task = asyncio.ensure_future( start_do_watermark(programe_id) )
     tasks.append(task)
+
+print('[+] Start Worker...')
 
 loop.run_until_complete(asyncio.gather(*tasks))

@@ -446,19 +446,11 @@ def track(request,file_watermark):
                 task_data.update({'user_id':file_obj.user_id})
                 redis.lpush('track_task', json.dumps(task_data))
 
-
         else:
             update_time = None
             TO_NOTIFY = None
-            TO_UPDATE = None
 
-            # 访问间隔默认值2s以内，且最早的记录还没有更新2次，则更新最早记录并刷新缓存
-            if (access_time - lastest_access_list[0].access_time).total_seconds() < ACCESS_INTERVAL and redis.hget(f'{file_watermark}[{lastest_access_list[0].access_time.strftime("%Y%m%d%H%M%S")}]','times').decode('utf-8') != '2':
-                lastest_access_list[0].access_UA = access_UA
-                lastest_access_list[0].save()
-                redis.hmset(f'{file_watermark}[{lastest_access_list[0].access_time.strftime("%Y%m%d%H%M%S")}]', {'times':'2'})
-                update_time = lastest_access_list[0].access_time
-                TO_NOTIFY = True
+            #if (access_time - lastest_access_list[0].access_time).total_seconds() < ACCESS_INTERVAL and redis.hget(f'{file_watermark}[{lastest_access_list[0].access_time.strftime("%Y%m%d%H%M%S")}]','times').decode('utf-8') != '2':
 
             # 访问间隔默认值2s及以上，视为新的访问，进行该文件的再次记录
             if (access_time - lastest_access_list[0].access_time).total_seconds() >= ACCESS_INTERVAL:
@@ -466,6 +458,17 @@ def track(request,file_watermark):
                 redis.hmset(f'{file_watermark}[{access_time.strftime("%Y%m%d%H%M%S")}]', {'times':'1'})
                 update_time = access_time
                 TO_NOTIFY = True
+
+            else:
+                # 访问间隔默认值2s以内，且本次访问缓存还没有刷新2次，则更新访问记录、并刷新缓存
+                if redis.hget(f'{file_watermark}[{lastest_access_list[0].access_time.strftime("%Y%m%d%H%M%S")}]','times').decode('utf-8') != '2':
+
+                    lastest_access_list[0].access_UA = access_UA
+                    lastest_access_list[0].save()
+                    redis.hmset(f'{file_watermark}[{lastest_access_list[0].access_time.strftime("%Y%m%d%H%M%S")}]', {'times':'2'})
+                    update_time = lastest_access_list[0].access_time
+                    TO_NOTIFY = True
+
 
             if TO_NOTIFY:
 
