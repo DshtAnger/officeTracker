@@ -346,9 +346,9 @@ def download(request, file_watermark):
             file_obj = File.objects.get(file_watermark=file_watermark)
 
             # 下载时验证身份,下载人是否是该文件的共享人,也就意味者归属人不能下载共享人的文件
-            if file_obj.file_sharer != request.session.get("user_id", None)
+            if file_obj.file_sharer != request.session.get("user_id", None):
                 raise Http404()
-            
+
         except File.DoesNotExist:
             raise Http404()
 
