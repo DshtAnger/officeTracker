@@ -315,7 +315,7 @@ def upload(request):
                         task_index = random.randint(0, QUEUE_MAX - 1)
                         print('exec queue :', f'watermark_task{task_index}')
 
-                        task_data = {'user_id': file_sharer, 'file_watermark': file_watermark,
+                        task_data = {'user_id': sharer, 'file_watermark': file_watermark,
                                      'task_time': timezone_to_string(upload_time),
                                      'download_url': f'http://172.18.18.18:8080/{upload_valid_filename}'}
 
