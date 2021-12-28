@@ -45,7 +45,8 @@ async def run():
         if not await redis.exists(TRACK_QUEUE):
             pass
         else:
-            data = await redis.lpop(TRACK_QUEUE)
+            # 必须右取任务
+            data = await redis.rpop(TRACK_QUEUE)
             data = json.loads(data.decode('utf-8'))
 
             user_id = data.get('user_id')
