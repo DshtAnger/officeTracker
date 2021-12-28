@@ -422,7 +422,6 @@ def track(request,file_watermark):
     if 'Mozilla/4.0 (' in access_UA and access_UA[-1] == ')':
         access_UA = access_UA[13:-1]
 
-    print(request.META['PATH_INFO'])
     print(request.META['HTTP_USER_AGENT'])
 
     if not access_ip in WORK_SERVER:
@@ -438,7 +437,7 @@ def track(request,file_watermark):
             new_track_obj = Track.objects.create(file_watermark=file_watermark, access_ip=access_ip, access_time=access_time, access_UA=access_UA)
             redis.hmset(f'{file_watermark}[{access_time.strftime("%Y%m%d%H%M%S")}]', {'times':'1'})
 
-            # 通知前端进行访问记录更新
+            # 前端进行访问记录更新.向队列(左插)下发任务，因为时序关系,notify程序取任务进行ws通信时,必须右取.
             task_data = {'user_id': file_obj.file_sharer, 'file_watermark': file_watermark, 'access_ip':access_ip, 'access_time':timezone_to_string(access_time), 'access_UA':access_UA}
             redis.lpush('track_task', json.dumps(task_data))
 
@@ -452,7 +451,7 @@ def track(request,file_watermark):
 
             #if (access_time - lastest_access_list[0].access_time).total_seconds() < ACCESS_INTERVAL and redis.hget(f'{file_watermark}[{lastest_access_list[0].access_time.strftime("%Y%m%d%H%M%S")}]','times').decode('utf-8') != '2':
 
-            # 访问间隔默认值2s及以上，视为新的访问，进行该文件的再次记录
+            # 访问间隔默认值2s及以上，视为新的访问，进行该文件的访问记录再次记录
             if (access_time - lastest_access_list[0].access_time).total_seconds() >= ACCESS_INTERVAL:
                 new_track_obj = Track.objects.create(file_watermark=file_watermark, access_ip=access_ip, access_time=access_time, access_UA=access_UA)
                 redis.hmset(f'{file_watermark}[{access_time.strftime("%Y%m%d%H%M%S")}]', {'times':'1'})
@@ -469,10 +468,9 @@ def track(request,file_watermark):
                     update_time = lastest_access_list[0].access_time
                     TO_NOTIFY = True
 
-
             if TO_NOTIFY:
 
-                # 通知前端进行访问记录更新
+                # 前端进行访问记录更新.向队列(左插)下发任务，因为时序关系,notify程序取任务进行ws通信时,必须右取.
                 task_data = {'user_id': file_obj.file_sharer, 'file_watermark': file_watermark, 'access_ip': access_ip, 'access_time': timezone_to_string(update_time), 'access_UA': access_UA}
                 redis.lpush('track_task', json.dumps(task_data))
 

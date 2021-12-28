@@ -59,7 +59,7 @@ async def run():
 
             logging.info('-' * 50)
 
-        await asyncio.sleep(0.5)
+        await asyncio.sleep(0.3)
 
 loop = asyncio.new_event_loop()
 asyncio.set_event_loop(loop)
