@@ -325,7 +325,7 @@
                     <th class="one wide">上传时间</th>
                     <th class="one wide">上传IP</th>
                     <th class="one wide">下载链接</th>
-                    <th>访问记录</th>
+                    <th class="seven wide">访问记录</th>
                 </tr>
               </thead>
 
@@ -360,13 +360,14 @@
 
                         <td >
                             <table class="ui very basic table">
+
                                     <tbody id="{{ one_data.file_watermark }}">
 
                                     {% for track in one_data.track %}
                                     <tr class="center aligned">
-                                      <td>{{ track.access_time }}</td>
-                                      <td>{{ track.access_ip }}</td>
-                                      <td>{{ track.access_UA }}</td>
+                                      <td class="one wide">{{ track.access_time }}</td>
+                                      <td class="one wide">{{ track.access_ip }}</td>
+                                      <td class="seven wide">{{ track.access_UA }}</td>
                                     </tr>
                                     {% endfor %}
 
@@ -430,7 +431,7 @@
                 {
                     var tr_obj = document.createElement('tr');
                     tr_obj.setAttribute('class','center aligned');
-                    tr_obj.innerHTML = '<td>' + data.access_time + '</td><td>' + data.access_ip + '</td><td></td>'
+                    tr_obj.innerHTML = '<td class="one wide">' + data.access_time + '</td><td class="one wide">' + data.access_ip + '</td><td class="seven wide"></td>'
                     tbody_obj.prepend(tr_obj);
                 }
 
