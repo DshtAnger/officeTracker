@@ -10,7 +10,7 @@ from aredis import StrictRedis
 import websockets
 import traceback
 
-programe_id = 16
+programe_id = 15
 psutil.Process().cpu_affinity([programe_id])
 
 redis = StrictRedis(host=os.getenv('REDIS_HOST'), port=os.getenv('REDIS_PORT'), password=os.getenv('REDIS_PASSWORD'))
