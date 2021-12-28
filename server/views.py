@@ -419,8 +419,11 @@ def track(request,file_watermark):
     access_time = timezone.now()
     access_UA = request.META['HTTP_USER_AGENT']
 
-    if 'Mozilla/4.0 (' in access_UA and access_UA[-1] == ')':
-        access_UA = access_UA[13:-1]
+    try:
+        if 'Mozilla/4.0 (compatible; ' in access_UA and access_UA[-1] == ')':
+            access_UA = access_UA[25:-1]
+    except:
+        pass
 
     print(request.META['HTTP_USER_AGENT'])
 
