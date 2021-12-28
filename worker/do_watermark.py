@@ -152,29 +152,9 @@ async def run():
 
             await watermark(user_id, file_watermark, task_time, download_url)
 
-            logging.info(f'[*][{get_current_time()}] ' + '-'*50)
+            logging.info('-'*50)
 
-
-        if not await redis.exists(TRACK_QUEUE):
-            pass
-        else:
-            data = await redis.lpop(TRACK_QUEUE)
-            data = json.loads(data.decode('utf-8'))
-
-            user_id = data.get('user_id')
-            file_watermark = data.get('file_watermark')
-            access_ip = data.get('access_ip')
-            access_time = data.get('access_time')
-            access_UA = data.get('access_UA')
-
-            await send_websocket_data(user_id, {'user_id':user_id, 'track_update': file_watermark, 'access_ip':access_ip, 'access_time':access_time, 'access_UA':access_UA})
-            logging.info(f'[+][{get_current_time()}][{file_watermark}] Server had notified the front end to refresh the track status.')
-
-            logging.info(f'[*][{get_current_time()}] ' + '-' * 50)
-
-        await asyncio.sleep(1)
-
-
+        await asyncio.sleep(0.2)
 
 # loop = asyncio.get_event_loop()
 # loop.run_until_complete(asyncio.gather(asyncio.ensure_future(run())))
