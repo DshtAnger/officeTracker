@@ -54,8 +54,10 @@ async def run():
             access_ip = data.get('access_ip')
             access_time = data.get('access_time')
             access_UA = data.get('access_UA')
+            access_city = data.get('access_city')
+            access_legitimacy = data.get('access_legitimacy')
 
-            await send_websocket_data(user_id, {'user_id':user_id, 'track_update': file_watermark, 'access_ip':access_ip, 'access_time':access_time, 'access_UA':access_UA})
+            await send_websocket_data(user_id, {'user_id':user_id, 'track_update': file_watermark, 'access_ip':access_ip, 'access_time':access_time, 'access_UA':access_UA, 'access_city':access_city, 'access_legitimacy':access_legitimacy})
             logging.info(f'[+][{get_current_time()}][{file_watermark}] Server had notified the front end to refresh the track status.')
 
             logging.info('-' * 50)
