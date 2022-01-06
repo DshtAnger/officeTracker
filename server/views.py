@@ -136,7 +136,7 @@ class UserForm(forms.Form):
 def login(request):
     #user_agent = request.META['HTTP_USER_AGENT']
     current_ip = request.META['REMOTE_ADDR']
-    if not ip_filter(current_ip, 3):
+    if not ip_filter(current_ip):
         raise Http404()
 
     context = {}
@@ -194,7 +194,7 @@ def login(request):
 
 def logout(request):
 
-    if not ip_filter(request.META['REMOTE_ADDR'], 3):
+    if not ip_filter(request.META['REMOTE_ADDR']):
         raise Http404()
 
     if request.session.get("is_login", None):
@@ -205,7 +205,7 @@ def logout(request):
 
 def index(request):
 
-    if not ip_filter(request.META['REMOTE_ADDR'], 3):
+    if not ip_filter(request.META['REMOTE_ADDR']):
         raise Http404()
 
     context = {}
@@ -273,7 +273,7 @@ def index(request):
 @csrf_exempt
 def upload(request):
 
-    if not ip_filter(request.META['REMOTE_ADDR'], 3):
+    if not ip_filter(request.META['REMOTE_ADDR']):
         raise Http404()
 
     context = {}
@@ -338,7 +338,7 @@ def upload(request):
 
 def download(request, file_watermark):
 
-    if not ip_filter(request.META['REMOTE_ADDR'], 3):
+    if not ip_filter(request.META['REMOTE_ADDR']):
         raise Http404()
 
     if request.session.get("is_login", None):
