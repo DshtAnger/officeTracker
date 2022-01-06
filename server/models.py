@@ -48,6 +48,8 @@ class Track(models.Model):
     file_watermark = models.CharField(max_length=64)
     access_ip = models.CharField(max_length=32)
     access_time = models.DateTimeField()
+    access_city = models.CharField(max_length=32)
+    access_legitimacy = models.BooleanField(default=True)
     access_UA = models.CharField(max_length=1024)
     def __unicode__(self):
         return self.file_watermark

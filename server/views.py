@@ -45,7 +45,7 @@ def ip_filter(ip):
         return True
     for white_ip in WHITELIST:
         if ipaddress.ip_address(ip) in ipaddress.ip_network(white_ip):
-            return True
+            return white_ip
     return False
 
 def randbytes(n):
@@ -226,7 +226,7 @@ def index(request):
         for one_obj in file_obj:
 
             track_obj = Track.objects.filter(file_watermark=one_obj.file_watermark).order_by('-access_time')
-            track_obj_data = [{'access_time': timezone_to_string(track.access_time), 'access_ip': track.access_ip, 'access_UA':track.access_UA} for track in track_obj]
+            track_obj_data = [{'access_time': timezone_to_string(track.access_time), 'access_ip': track.access_ip, 'access_UA':track.access_UA, 'access_city':track.access_city, 'access_legitimacy':track.access_legitimacy} for track in track_obj]
 
             context['file_data'].append(
                 {
@@ -439,14 +439,22 @@ def track(request,file_watermark):
         except File.DoesNotExist:
             raise Http404()
 
+        white_ip = ip_filter(access_ip)
+        if white_ip:
+            access_city = CompanyIp.objects.get(ip=white_ip).city
+            access_legitimacy = True
+        else:
+            access_city = 'Non-company address'
+            access_legitimacy = False
+
         lastest_access_list = Track.objects.filter(file_watermark=file_watermark).order_by('-access_time')
 
         if len(lastest_access_list) == 0:
-            new_track_obj = Track.objects.create(file_watermark=file_watermark, access_ip=access_ip, access_time=access_time, access_UA=access_UA)
+            new_track_obj = Track.objects.create(file_watermark=file_watermark, access_ip=access_ip, access_time=access_time, access_UA=access_UA, access_city=access_city, access_legitimacy=access_legitimacy)
             redis.hmset(f'{file_watermark}[{access_time.strftime("%Y%m%d%H%M%S")}]', {'times':'1'})
 
             # 前端进行访问记录更新.向队列(左插)下发任务，因为时序关系,notify程序取任务进行ws通信时,必须右取.
-            task_data = {'user_id': file_obj.file_sharer, 'file_watermark': file_watermark, 'access_ip':access_ip, 'access_time':timezone_to_string(access_time), 'access_UA':access_UA}
+            task_data = {'user_id': file_obj.file_sharer, 'file_watermark': file_watermark, 'access_ip':access_ip, 'access_time':timezone_to_string(access_time), 'access_UA':access_UA, 'access_city':access_city, 'access_legitimacy':access_legitimacy}
             redis.lpush('track_task', json.dumps(task_data))
 
             if file_obj.user_id != file_obj.file_sharer:
@@ -463,7 +471,7 @@ def track(request,file_watermark):
 
             # 访问间隔默认值2s及以上，视为新的访问，进行该文件的访问记录再次记录
             if (access_time - lastest_access_list[0].access_time).total_seconds() >= ACCESS_INTERVAL:
-                new_track_obj = Track.objects.create(file_watermark=file_watermark, access_ip=access_ip, access_time=access_time, access_UA=access_UA)
+                new_track_obj = Track.objects.create(file_watermark=file_watermark, access_ip=access_ip, access_time=access_time, access_UA=access_UA, access_city=access_city, access_legitimacy=access_legitimacy)
                 redis.hmset(f'{file_watermark}[{access_time.strftime("%Y%m%d%H%M%S")}]', {'times':'1'})
                 update_time = access_time
                 TO_NOTIFY = True
@@ -481,7 +489,7 @@ def track(request,file_watermark):
             if TO_NOTIFY:
 
                 # 前端进行访问记录更新.向队列(左插)下发任务，因为时序关系,notify程序取任务进行ws通信时,必须右取.
-                task_data = {'user_id': file_obj.file_sharer, 'file_watermark': file_watermark, 'access_ip': access_ip, 'access_time': timezone_to_string(update_time), 'access_UA': access_UA}
+                task_data = {'user_id': file_obj.file_sharer, 'file_watermark': file_watermark, 'access_ip': access_ip, 'access_time': timezone_to_string(update_time), 'access_UA': access_UA, 'access_UA':access_UA, 'access_city':access_city, 'access_legitimacy':access_legitimacy}
                 redis.lpush('track_task', json.dumps(task_data))
 
                 if file_obj.user_id != file_obj.file_sharer:
