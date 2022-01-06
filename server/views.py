@@ -14,6 +14,7 @@ from django.db.models import Q
 # import websocket
 import requests
 import json
+import ipaddress
 import hashlib
 import random
 import time
@@ -27,7 +28,9 @@ VALID_CHARS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 SESSION_EXPIRY_TIME = 60 * 60
 
-WHITELIST = json.loads(os.getenv('WHITELIST','""'))
+#WHITELIST = json.loads(os.getenv('WHITELIST','""'))
+
+WHITELIST = [ ip_obj.ip for ip_obj in CompanyIp.objects.all()]
 
 WORK_SERVER = json.loads(os.getenv('WORK_SERVER','""'))
 
@@ -37,13 +40,11 @@ QUEUE_MAX = 10
 
 ACCESS_INTERVAL = 2
 
-def ip_filter(ip,match_segment):
+def ip_filter(ip):
     if settings.DEBUG:
         return True
-    ip_segment = '.'.join(ip.split('.')[:match_segment])
     for white_ip in WHITELIST:
-        white_ip_segment = '.'.join(white_ip.split('.')[:match_segment])
-        if ip_segment == white_ip_segment:
+        if ipaddress.ip_address(ip) in ipaddress.ip_network(white_ip):
             return True
     return False
 
@@ -457,6 +458,8 @@ def track(request,file_watermark):
             TO_NOTIFY = None
 
             #if (access_time - lastest_access_list[0].access_time).total_seconds() < ACCESS_INTERVAL and redis.hget(f'{file_watermark}[{lastest_access_list[0].access_time.strftime("%Y%m%d%H%M%S")}]','times').decode('utf-8') != '2':
+
+            # TODO:一个打标记的文档,被不同ip同一时刻访问,需要进一步加入ip信息组成二元组进一步区分
 
             # 访问间隔默认值2s及以上，视为新的访问，进行该文件的访问记录再次记录
             if (access_time - lastest_access_list[0].access_time).total_seconds() >= ACCESS_INTERVAL:

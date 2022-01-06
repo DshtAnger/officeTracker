@@ -51,3 +51,13 @@ class Track(models.Model):
     access_UA = models.CharField(max_length=1024)
     def __unicode__(self):
         return self.file_watermark
+
+class CompanyIp(models.Model):
+    ip = models.CharField(max_length=32)
+    type = models.CharField(max_length=32)
+    city = models.CharField(max_length=32)
+    region = models.CharField(max_length=32)
+    campus = models.CharField(max_length=32)
+    update_time = models.DateTimeField()
+    def __unicode__(self):
+        return self.ip
