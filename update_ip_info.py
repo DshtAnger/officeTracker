@@ -61,6 +61,9 @@ for i in range(2):
                 else:
                     type = 'host'
 
+                if ip == '58.56.129.144/27':
+                    ip = '58.56.129.144'
+
                 ip_list.append({'ip':ip, 'city':city, 'type':type, 'region':region, 'campus':campus, 'update_time':timezone.now()})
 
 update_count = 0
