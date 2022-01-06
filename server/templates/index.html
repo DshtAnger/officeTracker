@@ -361,18 +361,26 @@
                         <td >
                             <table class="ui very basic table">
 
-                                    <tbody id="{{ one_data.file_watermark }}">
+                                <tbody id="{{ one_data.file_watermark }}">
 
-                                    {% for track in one_data.track %}
+                                {% for track in one_data.track %}
+
+                                    {% if track.access_legitimacy == 1 %}
+                                    <tr class="center aligned" style="color:Red;">
+                                    {% else %}
                                     <tr class="center aligned">
+                                    {% endif %}
+
                                       <td class="one wide">{{ track.access_time }}</td>
                                       <td class="one wide">{{ track.access_ip }}</td>
                                       <td class="one wide">{{ track.access_city }}</td>
                                       <td class="seven wide">{{ track.access_UA }}</td>
-                                    </tr>
-                                    {% endfor %}
 
-                                    </tbody>
+                                    </tr>
+
+                                {% endfor %}
+
+                                </tbody>
                             </table>
                         </td>
                       </tr>

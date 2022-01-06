@@ -467,7 +467,7 @@ def track(request,file_watermark):
 
             #if (access_time - lastest_access_list[0].access_time).total_seconds() < ACCESS_INTERVAL and redis.hget(f'{file_watermark}[{lastest_access_list[0].access_time.strftime("%Y%m%d%H%M%S")}]','times').decode('utf-8') != '2':
 
-            # TODO:一个打标记的文档,被不同ip同一时刻访问,需要进一步加入ip信息组成二元组进一步区分
+            # TODO:同一个打标记的文档,被不同ip同一时刻访问,需要进一步加入ip信息组成二元组进一步区分
 
             # 访问间隔默认值2s及以上，视为新的访问，进行该文件的访问记录再次记录
             if (access_time - lastest_access_list[0].access_time).total_seconds() >= ACCESS_INTERVAL:
