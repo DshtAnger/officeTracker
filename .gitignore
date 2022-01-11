@@ -3,3 +3,4 @@
 0*py
 *.pyc
 upload/*
+send_email.py
