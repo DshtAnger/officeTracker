@@ -446,10 +446,6 @@ def track(request,file_watermark):
         else:
             access_city = 'Non-company address'
             access_legitimacy = False
-            #向email_task队列下发邮件通知任务
-            email_data = {'user_id':file_obj.file_sharer, 'file_name':file_obj.file_name, 'upload_time':timezone_to_string(file_obj.upload_time),
-                          'access_time':timezone_to_string(access_time), 'access_ip':access_ip, 'access_UA':access_UA}
-            redis.lpush('email_task',json.dumps(email_data))
 
         lastest_access_list = Track.objects.filter(file_watermark=file_watermark).order_by('-access_time')
 
@@ -479,6 +475,15 @@ def track(request,file_watermark):
                 redis.hmset(f'{file_watermark}[{access_time.strftime("%Y%m%d%H%M%S")}]', {'times':'1'})
                 update_time = access_time
                 TO_NOTIFY = True
+
+                if not access_legitimacy:
+                    # 向email_task队列下发邮件通知任务
+                    email_data = {'user_id': file_obj.file_sharer, 'file_name': file_obj.file_name,
+                                  'upload_time': timezone_to_string(file_obj.upload_time),
+                                  'access_time': timezone_to_string(access_time), 'access_ip': access_ip,
+                                  'access_UA': access_UA}
+                    redis.lpush('email_task', json.dumps(email_data))
+
 
             else:
                 # 访问间隔默认值2s以内，且本次访问缓存还没有刷新2次，则更新访问记录、并刷新缓存
