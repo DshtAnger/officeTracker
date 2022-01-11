@@ -478,7 +478,7 @@ def track(request,file_watermark):
 
                 if not access_legitimacy:
                     # 向email_task队列下发邮件通知任务
-                    email_data = {'user_id': file_obj.file_sharer, 'file_name': file_obj.file_name,
+                    email_data = {'user_id': file_obj.file_sharer, 'file_name': file_obj.file_name, 'file_owner':file_obj.user_id if file_obj.user_id!=file_obj.file_sharer else '',
                                   'upload_time': timezone_to_string(file_obj.upload_time),
                                   'access_time': timezone_to_string(access_time), 'access_ip': access_ip,
                                   'access_UA': access_UA}
