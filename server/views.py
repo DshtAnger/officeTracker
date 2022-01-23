@@ -38,7 +38,7 @@ HOST_SERVER = os.getenv('HOST_SERVER')
 
 QUEUE_MAX = 10
 
-ACCESS_INTERVAL = 2
+ACCESS_INTERVAL = 3
 
 def ip_filter(ip):
     if settings.DEBUG:
