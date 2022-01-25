@@ -41,8 +41,8 @@ QUEUE_MAX = 10
 ACCESS_INTERVAL = 3
 
 def ip_filter(ip):
-    if settings.DEBUG:
-        return True
+    # if settings.DEBUG:
+    #     return True
     for white_ip in WHITELIST:
         if ipaddress.ip_address(ip) in ipaddress.ip_network(white_ip):
             return white_ip
