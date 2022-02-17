@@ -325,7 +325,7 @@ def upload(request):
 
                         task_data = {'user_id': sharer, 'file_watermark': file_watermark,
                                      'task_time': timezone_to_string(upload_time),
-                                     'download_url': f'http://172.18.18.18:8080/{upload_valid_filename}'}
+                                     'download_url': f'http://{HOST_SERVER}:8080/{upload_valid_filename}'}
 
                         redis.lpush(f'watermark_task{task_index}', json.dumps(task_data))
 
