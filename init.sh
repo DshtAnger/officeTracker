@@ -39,14 +39,14 @@ service apache2 restart
 
 
 
-check_upload_server=`ps aux | grep "http.server --bind 172.18.18.18" | grep -v grep`
+check_upload_server=`ps aux | grep "http.server --bind 0.0.0.0" | grep -v grep`
 check_ws_server=`ps aux | grep "daphne officeTracker.asgi:application -b 0.0.0.0 -p 8888" | grep -v grep`
 
 if  [[ $check_upload_server =~ "http" ]]
 then
   echo "upload_server had started."
 else
-  nohup python3 -u -m http.server --bind 172.18.18.18 8080 --directory /root/officeTracker/upload/ >> /root/officeTracker/upload.log 2>&1 &
+  nohup python3 -u -m http.server --bind 0.0.0.0 8080 --directory /root/officeTracker/upload/ >> /root/officeTracker/upload.log 2>&1 &
   echo "upload_server start Done."
 fi
 

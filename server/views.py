@@ -26,6 +26,8 @@ import traceback
 redis = get_redis_connection() # redis get出来的数据都是byte类型,使用前decode('utf-8')
 VALID_CHARS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
+INTERNAL_DEPLOY = True
+
 SESSION_EXPIRY_TIME = 60 * 60
 
 #WHITELIST = json.loads(os.getenv('WHITELIST','""'))
@@ -136,8 +138,10 @@ class UserForm(forms.Form):
 def login(request):
     #user_agent = request.META['HTTP_USER_AGENT']
     current_ip = request.META['REMOTE_ADDR']
-    if not ip_filter(current_ip):
-        raise Http404()
+
+    if not INTERNAL_DEPLOY:
+        if not ip_filter(current_ip):
+            raise Http404()
 
     context = {}
     if request.method == "POST":
@@ -194,8 +198,9 @@ def login(request):
 
 def logout(request):
 
-    if not ip_filter(request.META['REMOTE_ADDR']):
-        raise Http404()
+    if not INTERNAL_DEPLOY:
+        if not ip_filter(request.META['REMOTE_ADDR']):
+            raise Http404()
 
     if request.session.get("is_login", None):
         request.session.flush()
@@ -205,8 +210,9 @@ def logout(request):
 
 def index(request):
 
-    if not ip_filter(request.META['REMOTE_ADDR']):
-        raise Http404()
+    if not INTERNAL_DEPLOY:
+        if not ip_filter(request.META['REMOTE_ADDR']):
+            raise Http404()
 
     context = {}
     context['file_data'] = []
@@ -273,8 +279,9 @@ def index(request):
 @csrf_exempt
 def upload(request):
 
-    if not ip_filter(request.META['REMOTE_ADDR']):
-        raise Http404()
+    if not INTERNAL_DEPLOY:
+        if not ip_filter(request.META['REMOTE_ADDR']):
+            raise Http404()
 
     context = {}
     if request.session.get("is_login", None):
@@ -338,8 +345,9 @@ def upload(request):
 
 def download(request, file_watermark):
 
-    if not ip_filter(request.META['REMOTE_ADDR']):
-        raise Http404()
+    if not INTERNAL_DEPLOY:
+        if not ip_filter(request.META['REMOTE_ADDR']):
+            raise Http404()
 
     if request.session.get("is_login", None):
 
