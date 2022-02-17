@@ -115,7 +115,7 @@ async def watermark(user_id, file_watermark, task_time, download_url):
         task_status = True
         redis_result_data = {'task_status': task_status, 'task_time': task_time, 'failed_info': '',
                              'file_watermark': file_watermark,
-                             'download_url': f'http://172.18.18.28:8080/{file_watermark}/{output_filename}'}
+                             'download_url': f'http://11.139.50.114:8080/{file_watermark}/{output_filename}'}#172.18.18.28
 
 
     await redis.hmset(file_watermark, redis_result_data)
