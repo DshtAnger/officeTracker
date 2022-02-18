@@ -19,7 +19,7 @@ server = "http://idc.rio.tencent.com"
 path = "/ebus/tof4_msg/api/v1/Message/SendMailInfo"
 
 
-logging.basicConfig(format='%(message)s',filename = f'/root/email.log', level=logging.INFO)
+logging.basicConfig(format='%(message)s',filename = f'/root/officeTracker/email.log', level=logging.INFO)
 def handle_exception(exc_type, exc_value, exc_traceback):
 	if issubclass(exc_type, KeyboardInterrupt):
 		sys.__excepthook__(exc_type, exc_value, exc_traceback)

@@ -52,7 +52,7 @@ if [[ $check_email_server =~ "email" ]]
 then
   echo "[*] Email Server Had Started."
 else
-  nohup python3 -u /root/officeTracker/send_email.py >> /root/officeTracker/email.log 2>&1 &
+  nohup python3 -u /root/officeTracker/send_email.py 2>&1 &
   echo "[+] Email Server Starts Done."
 fi
 
