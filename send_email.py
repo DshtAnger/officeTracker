@@ -99,13 +99,15 @@ async def run():
 			access_time = data.get('access_time')
 			access_ip = data.get('access_ip')
 			access_UA = data.get('access_UA')
+
+			logging.info(f'[+][{get_current_time()}][{user_id}] Get task data: {data}')
 			await send_email(user_id, upload_time, file_name, file_owner, access_time, access_ip, access_UA)
 
 			logging.info('-' * 50)
 
 		await asyncio.sleep(0.2)
 
-logging.info('Start send_emali...')
+logging.info('Start Email Server...')
 
 loop = asyncio.new_event_loop()
 asyncio.set_event_loop(loop)
