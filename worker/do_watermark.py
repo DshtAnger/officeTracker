@@ -29,6 +29,8 @@ from aredis import StrictRedis
 redis = StrictRedis(host=os.getenv('REDIS_HOST'), port=os.getenv('REDIS_PORT'), password=os.getenv('REDIS_PASSWORD'))
 
 hostServerName = os.getenv('hostServerName')
+hostTrackName = os.getenv('hostTrackName')
+selfName = os.getenv('selfName')
 
 logging.basicConfig(format='%(message)s',filename = f'C:/Scribbles/{log_filename}', level=logging.INFO)
 def handle_exception(exc_type, exc_value, exc_traceback):
@@ -91,7 +93,7 @@ async def watermark(user_id, file_watermark, task_time, download_url):
 
     Scribbles_args = ['C:/Scribbles/Scribbles.exe',
                       '--urlScheme=http',
-                      f'--hostServerName={hostServerName}',
+                      f'--hostServerName={hostTrackName}',
                       '--hostRootPath=track',
                       '--hostSubDirs=',
                       '--hostFileName=',
@@ -115,7 +117,7 @@ async def watermark(user_id, file_watermark, task_time, download_url):
         task_status = True
         redis_result_data = {'task_status': task_status, 'task_time': task_time, 'failed_info': '',
                              'file_watermark': file_watermark,
-                             'download_url': f'http://11.139.50.114:8080/{file_watermark}/{output_filename}'}#172.18.18.28
+                             'download_url': f'http://{selfName}:8080/{file_watermark}/{output_filename}'}#172.18.18.28
 
 
     await redis.hmset(file_watermark, redis_result_data)

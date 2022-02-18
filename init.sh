@@ -26,20 +26,11 @@ sed -i "s/ServerName XXX/ServerName ${HOST_SERVER}/g" ./officeTracker.conf
 cp ./officeTracker.conf /etc/apache2/sites-available
 echo '[+] Configure Project Apache Conf File Done.'
 
-a2enmod proxy
-a2enmod proxy_http
-a2enmod proxy_wstunnel
-echo '[+] Enable Apache Proxy Module Done.'
-
-a2dissite officeTracker
-service apache2 reload
-a2ensite officeTracker
-service apache2 restart
-echo '[+] Start Project Apache Server Done.'
-
 
 check_upload_server=`ps aux | grep "http.server --bind 0.0.0.0" | grep -v grep`
 check_ws_server=`ps aux | grep "daphne officeTracker.asgi:application -b 0.0.0.0 -p 8888" | grep -v grep`
+check_email_server=`ps aux | grep email | grep -v grep`
+
 
 if  [[ $check_upload_server =~ "http" ]]
 then
@@ -56,5 +47,26 @@ else
   nohup python3 -u /usr/local/bin/daphne officeTracker.asgi:application -b 0.0.0.0 -p 8888 >> /root/officeTracker/ws.log 2>&1 &
   echo "[+] Websocket Server Starts Done."
 fi
+
+if [[ $check_email_server =~ "email" ]]
+then
+  echo "[*] Email Server Had Started."
+else
+  nohup python3 -u /root/send_email.py >> /root/officeTracker/email.log 2>&1 &
+  echo "[+] Email Server Starts Done."
+fi
+
+
+a2enmod proxy
+a2enmod proxy_http
+a2enmod proxy_wstunnel
+echo '[+] Enable Apache Proxy Module Done.'
+
+a2dissite officeTracker
+service apache2 reload
+a2ensite officeTracker
+service apache2 restart
+echo '[+] Start Project Apache Server Done.'
+
 
 echo '[+] ALL Configurations Done.'
