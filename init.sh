@@ -1,9 +1,8 @@
 #!/bin/bash
 
-# 手工添加环境变量,~/.bashrc,/etc/apache2/envvars
-source /root/.bashrc
-source /etc/apache2/envvars
-echo '[+] Enable Computing Resource Envs Done.'
+# 最先手工添加敏感环境变量列表,到/root/.profile和/etc/apache2/envvars
+source /root/.profile
+echo '[+] Enable OS Computing Resource Envs Done.'
 
 sh ./install_requirements.sh
 echo '[+] Install OS And Python Requirements Done.'
@@ -22,12 +21,6 @@ python3 ./manage.py makemigrations
 python3 ./manage.py migrate
 echo '[+] Initialize Project Database Done.'
 
-#locale-gen zh_CN.utf8
-#cp /etc/apache2/envvars /etc/apache2/envvars.old
-#sed -i "s/export LANG=C/#export LANG=C/g" /etc/apache2/envvars
-#sed -i "s/export LANG/#export LANG/g" /etc/apache2/envvars
-#echo "export LANG=zh_CN.utf8" >> /etc/apache2/envvars
-#source /etc/apache2/envvars
 
 sed -i "s/ServerName XXX/ServerName ${HOST_SERVER}/g" ./officeTracker.conf
 cp ./officeTracker.conf /etc/apache2/sites-available
