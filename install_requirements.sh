@@ -4,4 +4,4 @@ apt install -y apache2 libapache2-mod-wsgi-py3 libapache2-mod-proxy-uwsgi libmys
 
 locale-gen zh_CN.utf8
 
-pip3 install mysqlclient aredis tornado websocket-client channels==3.0.4 channels_redis django_redis requests
+pip3 install mysqlclient aredis aiohttp tornado websocket-client channels==3.0.4 channels_redis django_redis requests
