@@ -22,7 +22,7 @@ python3 ./manage.py migrate
 echo '[+] Initialize Project Database Done.'
 
 
-sed -i "s/ServerName XXX/ServerName ${HOST_SERVER}/g" ./officeTracker.conf
+#sed -i "s/ServerName XXX/ServerName ${HOST_SERVER}/g" ./officeTracker.conf
 cp ./officeTracker.conf /etc/apache2/sites-available
 echo '[+] Configure Project Apache Conf File Done.'
 

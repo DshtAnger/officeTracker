@@ -136,10 +136,16 @@ class UserForm(forms.Form):
 
 
 def login(request):
-    #user_agent = request.META['HTTP_USER_AGENT']
+
     current_ip = request.META['REMOTE_ADDR']
 
-    if not INTERNAL_DEPLOY:
+    if INTERNAL_DEPLOY:
+        request.session['user_id'] = request.META['HTTP_STAFFNAME']
+        request.session['is_login'] = True
+        request.session['login_ip'] = request.META['HTTP_X_REAL_IP']
+
+        return HttpResponseRedirect('/index')
+    else:
         if not ip_filter(current_ip):
             raise Http404()
 
@@ -171,8 +177,8 @@ def login(request):
 
                         request.session['user_id'] = user_id
                         request.session['is_login'] = True
-                        request.session['login_ip'] = current_ip
-                        request.session['secret'] = sha256(user_id+user_passwd+current_ip)
+                        request.session['login_ip'] = current_ip                            #外网场景,未使用
+                        request.session['secret'] = sha256(user_id+user_passwd+current_ip)  #外网场景,未使用
                         request.session.set_expiry(SESSION_EXPIRY_TIME)
 
                         response = HttpResponseRedirect('/index')
@@ -198,7 +204,9 @@ def login(request):
 
 def logout(request):
 
-    if not INTERNAL_DEPLOY:
+    if INTERNAL_DEPLOY:
+        return HttpResponseRedirect('/_logout/?url=km.oa.com')
+    else:
         if not ip_filter(request.META['REMOTE_ADDR']):
             raise Http404()
 
@@ -210,7 +218,9 @@ def logout(request):
 
 def index(request):
 
-    if not INTERNAL_DEPLOY:
+    if INTERNAL_DEPLOY:
+        pass
+    else:
         if not ip_filter(request.META['REMOTE_ADDR']):
             raise Http404()
 
@@ -279,6 +289,8 @@ def index(request):
 @csrf_exempt
 def upload(request):
 
+    current_ip = request.META['REMOTE_ADDR']
+
     if not INTERNAL_DEPLOY:
         if not ip_filter(request.META['REMOTE_ADDR']):
             raise Http404()
@@ -286,7 +298,7 @@ def upload(request):
     context = {}
     if request.session.get("is_login", None):
         user_id = request.session['user_id']
-        upload_ip = request.session['login_ip']
+        upload_ip = current_ip
 
         if request.method == 'POST':
             #file = request.FILES.get('upload_file', None) #form提交场景，get from表单里input标签的name,这个name在构造js formData apped时指定key
