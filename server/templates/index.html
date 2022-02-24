@@ -398,8 +398,10 @@
 
         const user_id = document.getElementById('uid').textContent;
 
+        var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+
         const chatSocket = new WebSocket(
-            'ws://'
+            ws_scheme + "://"
             + window.location.host
             + '/ws/'
             + user_id

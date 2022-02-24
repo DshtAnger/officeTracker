@@ -32,7 +32,7 @@ def get_current_time():
 
 async def send_websocket_data(user_id, ws_data):
     try:
-        async with websockets.connect(f'ws://{hostServerName}/ws/{user_id}/') as websocket:
+        async with websockets.connect(f'wss://{hostServerName}/ws/{user_id}/') as websocket:
             await websocket.send(json.dumps(ws_data))
     except Exception:
         exception_info = traceback.format_exc()
