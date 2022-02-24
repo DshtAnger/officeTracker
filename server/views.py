@@ -143,6 +143,12 @@ def login(request):
         request.session['user_id'] = request.META['HTTP_STAFFNAME']
         request.session['is_login'] = True
         request.session['login_ip'] = request.META['HTTP_X_REAL_IP']
+        request.session.set_expiry(60*60*24*30)
+
+        try:
+            User.objects.get(user_id=request.session['user_id'])
+        except User.DoesNotExist:
+            User.objects.create(user_id=request.session['user_id'], user_passwd='', user_ip=request.session['login_ip'])
 
         return HttpResponseRedirect('/index')
     else:
@@ -205,6 +211,7 @@ def login(request):
 def logout(request):
 
     if INTERNAL_DEPLOY:
+        request.session.flush()
         return HttpResponseRedirect('/_logout/?url=km.oa.com')
     else:
         if not ip_filter(request.META['REMOTE_ADDR']):
@@ -289,10 +296,11 @@ def index(request):
 @csrf_exempt
 def upload(request):
 
-    current_ip = request.META['REMOTE_ADDR']
-
-    if not INTERNAL_DEPLOY:
-        if not ip_filter(request.META['REMOTE_ADDR']):
+    if INTERNAL_DEPLOY:
+        current_ip = request.session.get("login_ip", None)
+    else:
+        current_ip = request.META['REMOTE_ADDR']
+        if not ip_filter(current_ip):
             raise Http404()
 
     context = {}
@@ -357,7 +365,9 @@ def upload(request):
 
 def download(request, file_watermark):
 
-    if not INTERNAL_DEPLOY:
+    if INTERNAL_DEPLOY:
+        pass
+    else:
         if not ip_filter(request.META['REMOTE_ADDR']):
             raise Http404()
 
@@ -450,7 +460,7 @@ def track(request,file_watermark):
     except:
         pass
 
-    print(request.META['HTTP_USER_AGENT'])
+    #print(request.META['HTTP_USER_AGENT'])
 
     if not access_ip in WORK_SERVER:
 
@@ -489,14 +499,14 @@ def track(request,file_watermark):
 
             # TODO:同一个打标记的文档,被不同ip同一时刻访问,需要进一步加入ip信息组成二元组进一步区分
 
-            # 访问间隔默认值2s及以上，视为新的访问，进行该文件的访问记录再次记录
+            # 访问间隔默认值3s及以上，视为新的访问，进行该文件的访问记录再次记录
             if (access_time - lastest_access_list[0].access_time).total_seconds() >= ACCESS_INTERVAL:
                 new_track_obj = Track.objects.create(file_watermark=file_watermark, access_ip=access_ip, access_time=access_time, access_UA=access_UA, access_city=access_city, access_legitimacy=access_legitimacy)
                 redis.hmset(f'{file_watermark}[{access_time.strftime("%Y%m%d%H%M%S")}]', {'times':'1'})
                 update_time = access_time
                 TO_NOTIFY = True
             else:
-                # 访问间隔默认值2s以内，且本次访问缓存还没有刷新2次，则更新访问记录、并刷新缓存
+                # 访问间隔默认值3s以内，且本次访问缓存还没有刷新2次，则更新访问记录、并刷新缓存
                 if redis.hget(f'{file_watermark}[{lastest_access_list[0].access_time.strftime("%Y%m%d%H%M%S")}]','times').decode('utf-8') != '2':
 
                     lastest_access_list[0].access_UA = access_UA
