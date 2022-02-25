@@ -14,11 +14,13 @@ import traceback
 
 programe_id = int(sys.argv[1])#int(re.search('\d+',sys.argv[0]).group())
 psutil.Process().cpu_affinity([programe_id])
-print(f'programe_id: {programe_id}')
 
+print(f'programe_id: {programe_id}')
 log_filename = f'watermake{programe_id}.log'
+
 WATERMARK_QUEUE = f'watermark_task{programe_id}'
-TRACK_QUEUE = f'track_task{programe_id}'
+
+NOTIFY_QUEUE = 'nofity_task'
 
 ERROR_LOG = ['does not have a recognized extension']
 
@@ -124,13 +126,18 @@ async def watermark(user_id, file_watermark, task_time, download_url):
     logging.info(f'[+][{get_current_time()}][{file_watermark}] Done task and return redis Hash data: {redis_result_data}')
 
     try:
-        rsp = await AsyncHTTPClient().fetch(f'http://{hostServerName}/notify/task/{file_watermark}')
+        rsp = await AsyncHTTPClient().fetch(f'http://{hostServerName}:8081/notify/task/{file_watermark}')
         logging.info(f'[+][{get_current_time()}][{file_watermark}] Server {rsp.body.decode("utf-8")}')
     except:
         pass
 
-    await send_websocket_data(user_id, {'user_id':user_id, 'download_update':file_watermark, 'is_success': task_status})
-    logging.info(f'[+][{get_current_time()}][{file_watermark}] Server had notified the front end to refresh the download status.')
+    # 下发任务，通知前端刷新页面，显示下载图标，表明已经完成文档水印处理
+    notify_data = {'user_id':user_id, 'download_update':file_watermark, 'is_success': task_status}
+    redis.lpush(NOTIFY_QUEUE, json.dumps(task_data))
+    logging.info(f'[+][{get_current_time()}][{file_watermark}] Server had sent the task to notify the front end to refresh the download status.')
+
+    # await send_websocket_data(user_id, {'user_id':user_id, 'download_update':file_watermark, 'is_success': task_status})
+
 
 async def run():
 

@@ -29,7 +29,7 @@ echo '[+] Configure Project Apache Conf File Done.'
 
 check_upload_server=`ps aux | grep "http.server --bind 0.0.0.0" | grep -v grep`
 check_ws_server=`ps aux | grep "daphne officeTracker.asgi:application -b 0.0.0.0 -p 8888" | grep -v grep`
-check_email_server=`ps aux | grep email | grep -v grep`
+check_notify_server=`ps aux | grep notify | grep -v grep`
 
 
 if  [[ $check_upload_server =~ "http" ]]
@@ -48,11 +48,11 @@ else
   echo "[+] Websocket Server Starts Done."
 fi
 
-if [[ $check_email_server =~ "email" ]]
+if [[ $check_notify_server =~ "notify" ]]
 then
   echo "[*] Email Server Had Started."
 else
-  nohup python3 -u /root/officeTracker/send_email.py 2>&1 &
+  nohup python3 -u /root/officeTracker/notify.py 2>&1 &
   echo "[+] Email Server Starts Done."
 fi
 
