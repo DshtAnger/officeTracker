@@ -20,7 +20,7 @@ log_filename = f'watermake{programe_id}.log'
 
 WATERMARK_QUEUE = f'watermark_task{programe_id}'
 
-NOTIFY_QUEUE = 'nofity_task'
+NOTIFY_QUEUE = 'notify_task'
 
 ERROR_LOG = ['does not have a recognized extension']
 

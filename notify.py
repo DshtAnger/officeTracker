@@ -21,7 +21,7 @@ HOST_SERVER = os.getenv('HOST_SERVER')
 
 TRACK_QUEUE = 'track_task'
 
-NOTIFY_QUEUE = 'nofity_task'
+NOTIFY_QUEUE = 'notify_task'
 
 EMAIL_QUEUE = 'email_task'
 
@@ -133,7 +133,7 @@ async def run():
         if not await redis.exists(NOTIFY_QUEUE):
             pass
         else:
-            data = await redis.rpop(TRACK_QUEUE)
+            data = await redis.rpop(NOTIFY_QUEUE)
             data = json.loads(data.decode('utf-8'))
 
             user_id = data.get('user_id')
