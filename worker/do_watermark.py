@@ -133,7 +133,7 @@ async def watermark(user_id, file_watermark, task_time, download_url):
 
     # 下发任务，通知前端刷新页面，显示下载图标，表明已经完成文档水印处理
     notify_data = {'user_id':user_id, 'download_update':file_watermark, 'is_success': task_status}
-    redis.lpush(NOTIFY_QUEUE, json.dumps(task_data))
+    await redis.lpush(NOTIFY_QUEUE, json.dumps(notify_data))
     logging.info(f'[+][{get_current_time()}][{file_watermark}] Server had sent the task to notify the front end to refresh the download status.')
 
     # await send_websocket_data(user_id, {'user_id':user_id, 'download_update':file_watermark, 'is_success': task_status})
