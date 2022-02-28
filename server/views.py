@@ -491,15 +491,6 @@ def track(request,file_watermark):
                 task_data.update({'user_id':file_obj.user_id})
                 redis.lpush('track_task', json.dumps(task_data))
 
-            if not access_legitimacy:
-                # 向email_task队列下发邮件通知任务
-                email_data = {'user_id': file_obj.file_sharer, 'file_name': file_obj.file_name,
-                              'file_owner': file_obj.user_id if file_obj.user_id != file_obj.file_sharer else '',
-                              'upload_time': timezone_to_string(file_obj.upload_time),
-                              'access_time': timezone_to_string(access_time), 'access_ip': access_ip,
-                              'access_UA': access_UA}
-                redis.lpush('email_task', json.dumps(email_data))
-
         else:
             update_time = None
             TO_NOTIFY = None
@@ -524,6 +515,15 @@ def track(request,file_watermark):
                     update_time = lastest_access_list[0].access_time
                     TO_NOTIFY = True
 
+                    if not access_legitimacy:
+                        # 向email_task队列下发邮件通知任务
+                        email_data = {'user_id': file_obj.file_sharer, 'file_name': file_obj.file_name,
+                                      'file_owner': file_obj.user_id if file_obj.user_id != file_obj.file_sharer else '',
+                                      'upload_time': timezone_to_string(file_obj.upload_time),
+                                      'access_time': timezone_to_string(access_time), 'access_ip': access_ip,
+                                      'access_UA': access_UA}
+                        redis.lpush('email_task', json.dumps(email_data))
+
             if TO_NOTIFY:
 
                 # 前端进行访问记录更新.向队列(左插)下发任务，因为时序关系,notify程序取任务进行ws通信时,必须右取.
@@ -533,15 +533,6 @@ def track(request,file_watermark):
                 if file_obj.user_id != file_obj.file_sharer:
                     task_data.update({'user_id': file_obj.user_id})
                     redis.lpush('track_task', json.dumps(task_data))
-
-                if not access_legitimacy:
-                    # 向email_task队列下发邮件通知任务
-                    email_data = {'user_id': file_obj.file_sharer, 'file_name': file_obj.file_name,
-                                  'file_owner': file_obj.user_id if file_obj.user_id != file_obj.file_sharer else '',
-                                  'upload_time': timezone_to_string(file_obj.upload_time),
-                                  'access_time': timezone_to_string(access_time), 'access_ip': access_ip,
-                                  'access_UA': access_UA}
-                    redis.lpush('email_task', json.dumps(email_data))
 
         # win10打开doc,无论如何都只有一次访问记录.借助redis记录访问次数,当访问文档是doc时暂停2s再检测redis记录,如为达2则确定时win10打开doc场景,强制赋值并通知.
         # 判定access_UA是否为空的逻辑也可以整体修改为依靠redis的次数记录来判定
