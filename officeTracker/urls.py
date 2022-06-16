@@ -28,7 +28,7 @@ urlpatterns = [
     path('download/<str:file_watermark>',download),
     path('logout/',logout),
     path('notify/task/<str:file_watermark>', notify),
-    path('track/<str:file_watermark>', track),
+    path('track/<str:file_watermark>/<str:args>', track),
 ]
 
 if settings.DEBUG:

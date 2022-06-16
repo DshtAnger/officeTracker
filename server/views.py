@@ -22,6 +22,7 @@ import re
 import os
 import shutil
 import traceback
+import base64
 
 redis = get_redis_connection() # redis get出来的数据都是byte类型,使用前decode('utf-8')
 VALID_CHARS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -448,11 +449,19 @@ def notify(request,file_watermark):
     except:
         return HttpResponse(f"download watermarked file {file_name} failed.")
 
-def track(request,file_watermark):
+def track(request,file_watermark,args):
 
-    access_ip = request.META['REMOTE_ADDR']
+    data = json.loads(base64.b64decode(args))
+
+    access_ip = data.get('access_ip')
+    access_UA = data.get('access_UA')
     access_time = timezone.now()
-    access_UA = request.META['HTTP_USER_AGENT']
+
+    #access_ip = request.META['REMOTE_ADDR']
+    #access_time = timezone.now()
+    #access_UA = request.META['HTTP_USER_AGENT']
+
+    print('Ori:',access_UA)
 
     try:
         if 'Mozilla/4.0 (compatible; ' in access_UA and access_UA[-1] == ')':
@@ -462,6 +471,8 @@ def track(request,file_watermark):
 
     #print(request.META['HTTP_USER_AGENT'])
 
+    print('Aft:', access_UA)
+
     if not access_ip in WORK_SERVER:
 
         try:
@@ -469,13 +480,19 @@ def track(request,file_watermark):
         except File.DoesNotExist:
             raise Http404()
 
+        print(timezone_to_string(access_time))
+        print(access_ip)
         white_ip = ip_filter(access_ip)
+        print(white_ip)
+
         if white_ip:
             access_city = CompanyIp.objects.get(ip=white_ip).city
             access_legitimacy = True
         else:
-            access_city = 'Non-company address'
+            access_city = 'Non Tencent-Network'
             access_legitimacy = False
+
+        print(access_city)
 
         lastest_access_list = Track.objects.filter(file_watermark=file_watermark).order_by('-access_time')
 

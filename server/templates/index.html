@@ -377,9 +377,9 @@
                                     <tr class="center aligned">
                                     {% endif %}
 
-                                      <td class="one wide">{{ track.access_time }}</td>
-                                      <td class="one wide">{{ track.access_ip }}</td>
-                                      <td class="one wide">{{ track.access_city }}</td>
+                                      <td class="two wide">{{ track.access_time }}</td>
+                                      <td class="two wide">{{ track.access_ip }}</td>
+                                      <td class="three wide">{{ track.access_city }}</td>
                                       <td class="seven wide">{{ track.access_UA }}</td>
 
                                     </tr>
@@ -450,7 +450,7 @@
                     tr_obj.setAttribute('class','center aligned');
                     if(!data.access_legitimacy)
                         tr_obj.setAttribute('style','color:Red;');
-                    tr_obj.innerHTML = '<td class="one wide">' + data.access_time + '</td><td class="one wide">' + data.access_ip + '</td><td class="one wide">' + data.access_city + '</td><td class="seven wide"></td>'
+                    tr_obj.innerHTML = '<td class="two wide">' + data.access_time + '</td><td class="two wide">' + data.access_ip + '</td><td class="three wide">' + data.access_city + '</td><td class="seven wide"></td>'
                     tbody_obj.prepend(tr_obj);
                 }
 
